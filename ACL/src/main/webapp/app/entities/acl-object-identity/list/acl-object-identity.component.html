@@ -1,0 +1,100 @@
+<div>
+  <h2 id="page-heading" data-cy="AclObjectIdentityHeading">
+    <span jhiTranslate="securityApp.aclObjectIdentity.home.title">Acl Object Identities</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info mr-2" (click)="reset()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span jhiTranslate="securityApp.aclObjectIdentity.home.refreshListLabel">Refresh List</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-acl-object-identity"
+        [routerLink]="['/acl-object-identity/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span jhiTranslate="securityApp.aclObjectIdentity.home.createLabel"> Create a new Acl Object Identity </span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <div class="alert alert-warning" id="no-result" *ngIf="aclObjectIdentities?.length === 0">
+    <span jhiTranslate="securityApp.aclObjectIdentity.home.notFound">No aclObjectIdentities found</span>
+  </div>
+
+  <div class="table-responsive" id="entities" *ngIf="aclObjectIdentities && aclObjectIdentities.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="reset.bind(this)">
+          <th scope="col" jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="objectIdIdentity">
+            <span jhiTranslate="securityApp.aclObjectIdentity.objectIdIdentity">Object Id Identity</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="parentObject">
+            <span jhiTranslate="securityApp.aclObjectIdentity.parentObject">Parent Object</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="ownerSid">
+            <span jhiTranslate="securityApp.aclObjectIdentity.ownerSid">Owner Sid</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="entriesInheriting">
+            <span jhiTranslate="securityApp.aclObjectIdentity.entriesInheriting">Entries Inheriting</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="aclClass.className">
+            <span jhiTranslate="securityApp.aclObjectIdentity.aclClass">Acl Class</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page >= links['last']" [infiniteScrollDistance]="0">
+        <tr *ngFor="let aclObjectIdentity of aclObjectIdentities; trackBy: trackId" data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/acl-object-identity', aclObjectIdentity.id, 'view']">{{ aclObjectIdentity.id }}</a>
+          </td>
+          <td>{{ aclObjectIdentity.objectIdIdentity }}</td>
+          <td>{{ aclObjectIdentity.parentObject }}</td>
+          <td>{{ aclObjectIdentity.ownerSid }}</td>
+          <td>{{ aclObjectIdentity.entriesInheriting }}</td>
+          <td>
+            <div *ngIf="aclObjectIdentity.aclClass">
+              <a [routerLink]="['/acl-class', aclObjectIdentity.aclClass?.id, 'view']">{{ aclObjectIdentity.aclClass?.className }}</a>
+            </div>
+          </td>
+          <td class="text-right">
+            <div class="btn-group">
+              <button
+                type="submit"
+                [routerLink]="['/acl-object-identity', aclObjectIdentity.id, 'view']"
+                class="btn btn-info btn-sm"
+                data-cy="entityDetailsButton"
+              >
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+              </button>
+
+              <button
+                type="submit"
+                [routerLink]="['/acl-object-identity', aclObjectIdentity.id, 'edit']"
+                class="btn btn-primary btn-sm"
+                data-cy="entityEditButton"
+              >
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+              </button>
+
+              <button type="submit" (click)="delete(aclObjectIdentity)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

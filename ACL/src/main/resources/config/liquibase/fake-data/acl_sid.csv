@@ -1,0 +1,7 @@
+id;principal;sid
+1;true;anonymousUser
+2;true;admin
+3;false;ROLE_ADMIN
+4;true;user
+5;false;ROLE_USER
+6;false;user

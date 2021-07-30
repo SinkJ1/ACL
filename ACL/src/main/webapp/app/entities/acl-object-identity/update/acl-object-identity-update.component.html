@@ -1,0 +1,130 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2
+        id="jhi-acl-object-identity-heading"
+        data-cy="AclObjectIdentityCreateUpdateHeading"
+        jhiTranslate="securityApp.aclObjectIdentity.home.createOrEditLabel"
+      >
+        Create or edit a Acl Object Identity
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" jhiTranslate="global.field.id" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="securityApp.aclObjectIdentity.objectIdIdentity" for="field_objectIdIdentity"
+            >Object Id Identity</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            name="objectIdIdentity"
+            id="field_objectIdIdentity"
+            data-cy="objectIdIdentity"
+            formControlName="objectIdIdentity"
+          />
+          <div
+            *ngIf="
+              editForm.get('objectIdIdentity')!.invalid &&
+              (editForm.get('objectIdIdentity')!.dirty || editForm.get('objectIdIdentity')!.touched)
+            "
+          >
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('objectIdIdentity')?.errors?.required"
+              jhiTranslate="entity.validation.required"
+            >
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="securityApp.aclObjectIdentity.parentObject" for="field_parentObject"
+            >Parent Object</label
+          >
+          <input
+            type="number"
+            class="form-control"
+            name="parentObject"
+            id="field_parentObject"
+            data-cy="parentObject"
+            formControlName="parentObject"
+          />
+          <div
+            *ngIf="editForm.get('parentObject')!.invalid && (editForm.get('parentObject')!.dirty || editForm.get('parentObject')!.touched)"
+          >
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('parentObject')?.errors?.required"
+              jhiTranslate="entity.validation.required"
+            >
+              This field is required.
+            </small>
+            <small
+              class="form-text text-danger"
+              [hidden]="!editForm.get('parentObject')?.errors?.number"
+              jhiTranslate="entity.validation.number"
+            >
+              This field should be a number.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="securityApp.aclObjectIdentity.ownerSid" for="field_ownerSid">Owner Sid</label>
+          <input type="number" class="form-control" name="ownerSid" id="field_ownerSid" data-cy="ownerSid" formControlName="ownerSid" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="securityApp.aclObjectIdentity.entriesInheriting" for="field_entriesInheriting"
+            >Entries Inheriting</label
+          >
+          <input
+            type="checkbox"
+            class="form-check"
+            name="entriesInheriting"
+            id="field_entriesInheriting"
+            data-cy="entriesInheriting"
+            formControlName="entriesInheriting"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="securityApp.aclObjectIdentity.aclClass" for="field_aclClass">Acl Class</label>
+          <select class="form-control" id="field_aclClass" data-cy="aclClass" name="aclClass" formControlName="aclClass">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="aclClassOption.id === editForm.get('aclClass')!.value?.id ? editForm.get('aclClass')!.value : aclClassOption"
+              *ngFor="let aclClassOption of aclClassesSharedCollection; trackBy: trackAclClassById"
+            >
+              {{ aclClassOption.className }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

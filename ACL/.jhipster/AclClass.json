@@ -1,0 +1,33 @@
+{
+  "name": "AclClass",
+  "fields": [
+    {
+      "fieldName": "className",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "classIdType",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "aclObjectIdentity",
+      "otherEntityRelationshipName": "aclClass",
+      "relationshipName": "aclObjectIdentity"
+    }
+  ],
+  "entityTableName": "acl_class",
+  "dto": "mapstruct",
+  "pagination": "infinite-scroll",
+  "service": "serviceImpl",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": ["security"],
+  "changelogDate": "20210730074349"
+}

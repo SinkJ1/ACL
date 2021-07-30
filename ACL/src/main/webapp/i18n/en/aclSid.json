@@ -1,0 +1,26 @@
+{
+  "securityApp": {
+    "aclSid": {
+      "home": {
+        "title": "Acl Sids",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Acl Sid",
+        "createOrEditLabel": "Create or edit a Acl Sid",
+        "notFound": "No Acl Sids found"
+      },
+      "created": "A new Acl Sid is created with identifier {{ param }}",
+      "updated": "A Acl Sid is updated with identifier {{ param }}",
+      "deleted": "A Acl Sid is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Acl Sid {{ id }}?"
+      },
+      "detail": {
+        "title": "Acl Sid"
+      },
+      "id": "ID",
+      "principal": "Principal",
+      "sid": "Sid",
+      "aclEntry": "Acl Entry"
+    }
+  }
+}

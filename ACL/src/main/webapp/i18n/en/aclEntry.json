@@ -1,0 +1,30 @@
+{
+  "securityApp": {
+    "aclEntry": {
+      "home": {
+        "title": "Acl Entries",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Acl Entry",
+        "createOrEditLabel": "Create or edit a Acl Entry",
+        "notFound": "No Acl Entries found"
+      },
+      "created": "A new Acl Entry is created with identifier {{ param }}",
+      "updated": "A Acl Entry is updated with identifier {{ param }}",
+      "deleted": "A Acl Entry is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Acl Entry {{ id }}?"
+      },
+      "detail": {
+        "title": "Acl Entry"
+      },
+      "id": "ID",
+      "aceOrder": "Ace Order",
+      "mask": "Mask",
+      "granting": "Granting",
+      "auditSuccess": "Audit Success",
+      "auditFailure": "Audit Failure",
+      "aclSid": "Acl Sid",
+      "aclObjectIdentity": "Acl Object Identity"
+    }
+  }
+}

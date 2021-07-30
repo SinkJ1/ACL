@@ -1,0 +1,48 @@
+{
+  "name": "AclObjectIdentity",
+  "fields": [
+    {
+      "fieldName": "objectIdIdentity",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "parentObject",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "ownerSid",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "entriesInheriting",
+      "fieldType": "Boolean"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "aclEntry",
+      "otherEntityRelationshipName": "aclObjectIdentity",
+      "relationshipName": "aclEntry"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "aclClass",
+      "otherEntityRelationshipName": "aclObjectIdentity",
+      "relationshipName": "aclClass",
+      "otherEntityField": "className"
+    }
+  ],
+  "entityTableName": "acl_object_identity",
+  "dto": "mapstruct",
+  "pagination": "infinite-scroll",
+  "service": "serviceImpl",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": ["security"],
+  "changelogDate": "20210730074449"
+}

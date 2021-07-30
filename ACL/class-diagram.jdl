@@ -1,0 +1,49 @@
+
+application {
+  config {
+    baseName security,
+    applicationType monolith,
+    packageName sinkj1.security,
+    authenticationType jwt,
+    databaseType sql,
+    devDatabaseType postgresql,
+    prodDatabaseType postgresql,
+    clientFramework angular,
+  }
+  entities *
+  dto * with mapstruct
+  service * with serviceImpl
+  paginate * with infinite-scroll
+}
+
+entity AclSid{
+	principal Boolean required,
+    sid String required
+}
+
+entity AclClass{
+	className String required,
+    classIdType String required
+}
+
+entity AclObjectIdentity{
+    objectIdIdentity String required,
+    parentObject Integer required,
+    ownerSid Integer,
+    entriesInheriting Boolean
+}
+
+entity AclEntry{
+    aceOrder Integer required,
+    mask Integer,
+    granting Boolean,
+    auditSuccess Boolean,
+    auditFailure Boolean
+}
+
+relationship OneToMany {
+	AclClass to AclObjectIdentity{AclClass(className)}
+    AclSid to AclEntry{AclSid(sid)}
+    AclObjectIdentity to AclEntry{AclObjectIdentity(id)}
+}
+

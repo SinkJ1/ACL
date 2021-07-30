@@ -1,0 +1,52 @@
+{
+  "name": "AclEntry",
+  "fields": [
+    {
+      "fieldName": "aceOrder",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "mask",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "granting",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "auditSuccess",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "auditFailure",
+      "fieldType": "Boolean"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "aclSid",
+      "otherEntityRelationshipName": "aclEntry",
+      "relationshipName": "aclSid",
+      "otherEntityField": "sid"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "aclObjectIdentity",
+      "otherEntityRelationshipName": "aclEntry",
+      "relationshipName": "aclObjectIdentity",
+      "otherEntityField": "id"
+    }
+  ],
+  "entityTableName": "acl_entry",
+  "dto": "mapstruct",
+  "pagination": "infinite-scroll",
+  "service": "serviceImpl",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": ["security"],
+  "changelogDate": "20210730074549"
+}

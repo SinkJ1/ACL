@@ -1,0 +1,33 @@
+{
+  "name": "AclSid",
+  "fields": [
+    {
+      "fieldName": "principal",
+      "fieldType": "Boolean",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "sid",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "aclEntry",
+      "otherEntityRelationshipName": "aclSid",
+      "relationshipName": "aclEntry"
+    }
+  ],
+  "entityTableName": "acl_sid",
+  "dto": "mapstruct",
+  "pagination": "infinite-scroll",
+  "service": "serviceImpl",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": ["security"],
+  "changelogDate": "20210730074249"
+}

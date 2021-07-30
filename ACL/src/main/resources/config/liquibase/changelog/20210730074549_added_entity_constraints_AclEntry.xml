@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+    <!--
+        Added the constraints for entity AclEntry.
+    -->
+    <changeSet id="20210730074549-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="sid"
+                                 baseTableName="acl_entry"
+                                 constraintName="fk_acl_entry__acl_sid_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="acl_sid"/>
+
+        <addForeignKeyConstraint baseColumnNames="acl_object_identity"
+                                 baseTableName="acl_entry"
+                                 constraintName="fk_acl_entry__acl_object_identity_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="acl_object_identity"/>
+    </changeSet>
+</databaseChangeLog>

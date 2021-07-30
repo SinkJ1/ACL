@@ -1,0 +1,29 @@
+{
+  "securityApp": {
+    "aclObjectIdentity": {
+      "home": {
+        "title": "Acl Object Identities",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Acl Object Identity",
+        "createOrEditLabel": "Create or edit a Acl Object Identity",
+        "notFound": "No Acl Object Identities found"
+      },
+      "created": "A new Acl Object Identity is created with identifier {{ param }}",
+      "updated": "A Acl Object Identity is updated with identifier {{ param }}",
+      "deleted": "A Acl Object Identity is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Acl Object Identity {{ id }}?"
+      },
+      "detail": {
+        "title": "Acl Object Identity"
+      },
+      "id": "ID",
+      "objectIdIdentity": "Object Id Identity",
+      "parentObject": "Parent Object",
+      "ownerSid": "Owner Sid",
+      "entriesInheriting": "Entries Inheriting",
+      "aclEntry": "Acl Entry",
+      "aclClass": "Acl Class"
+    }
+  }
+}

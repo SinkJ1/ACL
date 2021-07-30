@@ -1,0 +1,26 @@
+{
+  "securityApp": {
+    "aclClass": {
+      "home": {
+        "title": "Acl Classes",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Acl Class",
+        "createOrEditLabel": "Create or edit a Acl Class",
+        "notFound": "No Acl Classes found"
+      },
+      "created": "A new Acl Class is created with identifier {{ param }}",
+      "updated": "A Acl Class is updated with identifier {{ param }}",
+      "deleted": "A Acl Class is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Acl Class {{ id }}?"
+      },
+      "detail": {
+        "title": "Acl Class"
+      },
+      "id": "ID",
+      "className": "Class Name",
+      "classIdType": "Class Id Type",
+      "aclObjectIdentity": "Acl Object Identity"
+    }
+  }
+}

@@ -1,0 +1,58 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-acl-sid-heading" data-cy="AclSidCreateUpdateHeading" jhiTranslate="securityApp.aclSid.home.createOrEditLabel">
+        Create or edit a Acl Sid
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" jhiTranslate="global.field.id" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="securityApp.aclSid.principal" for="field_principal">Principal</label>
+          <input type="checkbox" class="form-check" name="principal" id="field_principal" data-cy="principal" formControlName="principal" />
+          <div *ngIf="editForm.get('principal')!.invalid && (editForm.get('principal')!.dirty || editForm.get('principal')!.touched)">
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('principal')?.errors?.required"
+              jhiTranslate="entity.validation.required"
+            >
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="securityApp.aclSid.sid" for="field_sid">Sid</label>
+          <input type="text" class="form-control" name="sid" id="field_sid" data-cy="sid" formControlName="sid" />
+          <div *ngIf="editForm.get('sid')!.invalid && (editForm.get('sid')!.dirty || editForm.get('sid')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('sid')?.errors?.required" jhiTranslate="entity.validation.required">
+              This field is required.
+            </small>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
