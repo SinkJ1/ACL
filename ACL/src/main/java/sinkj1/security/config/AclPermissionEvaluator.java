@@ -28,6 +28,7 @@ import org.springframework.security.acls.model.SidRetrievalStrategy;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.client.RestTemplate;
 import sinkj1.security.domain.CustomObjectIdentity;
+import sinkj1.security.service.dto.CustomObjectIdentityImpl;
 
 @Configuration
 public class AclPermissionEvaluator implements PermissionEvaluator {
@@ -57,13 +58,13 @@ public class AclPermissionEvaluator implements PermissionEvaluator {
         if(domainObject instanceof Optional){
             domainObject = ((Optional<?>) domainObject).get();
         }
-        ObjectIdentity objectIdentity = null;//this.objectIdentityRetrievalStrategy.getObjectIdentity(domainObject);
+        ObjectIdentity objectIdentity = null;
         try {
-            objectIdentity = new CustomObjectIdentity((String)domainObject.getClass().getDeclaredFields()[0].get(domainObject),1L);
+            objectIdentity = new CustomObjectIdentity((String)domainObject.getClass().getDeclaredFields()[0].get(domainObject),(Integer)domainObject.getClass().getDeclaredFields()[1].get(domainObject));
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
-        return checkPermission(authentication, objectIdentity, permission);
+        return checkPermission(authentication, new CustomObjectIdentityImpl(objectIdentity.getType(),objectIdentity.getIdentifier()), permission);
     }
 
     @Override
