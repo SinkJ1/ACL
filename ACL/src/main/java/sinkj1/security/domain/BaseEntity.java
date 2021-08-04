@@ -1,4 +1,4 @@
-package sinkj1.library.domain;
+package sinkj1.security.domain;
 
 public interface BaseEntity {
 

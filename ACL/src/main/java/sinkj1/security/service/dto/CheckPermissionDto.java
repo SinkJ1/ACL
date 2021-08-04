@@ -1,26 +1,28 @@
-package sinkj1.library.service.dto;
+package sinkj1.security.service.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.security.acls.model.ObjectIdentity;
 import org.springframework.security.core.Authentication;
+import sinkj1.security.domain.CustomObjectIdentity;
 
-public class CheckPermissionDto {
+import java.io.Serializable;
 
-    private Authentication authentication;
-    private ObjectIdentity objectIdentity;
+public class CheckPermissionDto implements Serializable {
+
+    private CustomObjectIdentity customObjectIdentity;
     private Object permission;
 
-    public CheckPermissionDto(Authentication authentication, ObjectIdentity objectIdentity, Object permission) {
-        this.authentication = authentication;
-        this.objectIdentity = objectIdentity;
+    public CheckPermissionDto(){
+
+    }
+
+    public CheckPermissionDto(CustomObjectIdentity customObjectIdentity, Object permission) {
+        this.customObjectIdentity = customObjectIdentity;
         this.permission = permission;
     }
 
-    public Authentication getAuthentication() {
-        return authentication;
-    }
-
-    public ObjectIdentity getObjectIdentity() {
-        return objectIdentity;
+    public CustomObjectIdentity getCustomObjectIdentity() {
+        return customObjectIdentity;
     }
 
     public Object getPermission() {
