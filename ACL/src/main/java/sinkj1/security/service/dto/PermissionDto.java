@@ -1,21 +1,19 @@
 package sinkj1.security.service.dto;
 
-import org.springframework.security.acls.model.Sid;
-
 import java.io.Serializable;
 
 public class PermissionDto implements Serializable {
 
     private Long id;
     private String className;
-    private String permission;
+    private int permission;
     private String sid;
 
     public PermissionDto(){
 
     }
 
-    public PermissionDto(Long id, String className, String permission, String sid) {
+    public PermissionDto(Long id, String className, int permission, String sid) {
         this.id = id;
         this.className = className;
         this.permission = permission;
@@ -30,7 +28,7 @@ public class PermissionDto implements Serializable {
         return className;
     }
 
-    public String getPermission() {
+    public int getPermission() {
         return permission;
     }
 

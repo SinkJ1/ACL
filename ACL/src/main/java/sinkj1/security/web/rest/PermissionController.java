@@ -3,7 +3,6 @@ package sinkj1.security.web.rest;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.acls.domain.BasePermission;
-import org.springframework.security.acls.model.ObjectIdentity;
 import org.springframework.security.acls.model.Permission;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -33,7 +32,15 @@ public class PermissionController {
 
     @PostMapping("/permission/authority")
     public ResponseEntity<String> addPermissionForAuthority(@RequestBody PermissionDto permissionDto) {
-        permissionService.addPermissionForUser(permissionDto.getId(),permissionDto.getClassName(), convertFromStringToBasePermission(permissionDto.getPermission()), permissionDto.getSid());
+        permissionService.addPermissionForAuthority(permissionDto.getId(),permissionDto.getClassName(), convertFromIntToBasePermission(permissionDto.getPermission()), permissionDto.getSid());
+        return ResponseEntity
+            .noContent()
+            .build();
+    }
+
+    @PostMapping("/permission/user")
+    public ResponseEntity<String> addPermissionForUser(@RequestBody PermissionDto permissionDto) {
+        permissionService.addPermissionForUser(permissionDto.getId(),permissionDto.getClassName(), convertFromIntToBasePermission(permissionDto.getPermission()), permissionDto.getSid());
         return ResponseEntity
             .noContent()
             .build();
@@ -41,25 +48,21 @@ public class PermissionController {
 
     @PostMapping("/permission/check")
     public ResponseEntity<Boolean> checkPermission(@RequestBody CheckPermissionDto test) throws IllegalAccessException {
-
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Boolean ans = aclPermissionEvaluator.hasPermission(authentication,test.getCustomObjectIdentity(),test.getPermission());
         return ResponseEntity.ok(ans);
     }
 
-
-
-    private Permission convertFromStringToBasePermission(String permission){
-
+    private Permission convertFromIntToBasePermission(int permission){
         switch (permission) {
-            case "WRITE":
+            case 2:
                 return BasePermission.WRITE;
-            case "ADMINISTRATION":
-                return BasePermission.ADMINISTRATION;
-            case "CREATE":
+            case 4:
                 return BasePermission.CREATE;
-            case "DELETE":
+            case 8:
                 return BasePermission.DELETE;
+            case 16:
+                return BasePermission.ADMINISTRATION;
             default:
                 return BasePermission.READ;
         }

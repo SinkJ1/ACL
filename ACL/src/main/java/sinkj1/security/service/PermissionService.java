@@ -11,7 +11,6 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
-import sinkj1.security.domain.BaseEntity;
 
 @Service
 @Transactional
@@ -20,13 +19,14 @@ public class PermissionService {
     private MutableAclService aclService;
     @Autowired
     private PlatformTransactionManager transactionManager;
+
     public void addPermissionForUser(Long id, String className, Permission permission, String username) {
         final Sid sid = new PrincipalSid(username);
         addPermissionForSid(id, className, permission, sid);
     }
-    public void addPermissionForAuthority(BaseEntity targetObj, Permission permission, String authority) {
-//        final Sid sid = new GrantedAuthoritySid(authority);
-//        addPermissionForSid(targetObj, permission, sid);
+    public void addPermissionForAuthority(Long id, String className, Permission permission, String authority) {
+        final Sid sid = new GrantedAuthoritySid(authority);
+        addPermissionForSid(id, className, permission, sid);
     }
     private void addPermissionForSid(Long id, String className, Permission permission, Sid sid) {
         final TransactionTemplate tt = new TransactionTemplate(transactionManager);
