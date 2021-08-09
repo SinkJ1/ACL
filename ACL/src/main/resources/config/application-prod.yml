@@ -32,6 +32,7 @@ spring:
     livereload:
       enabled: false
   datasource:
+    initialization-mode: always
     type: com.zaxxer.hikari.HikariDataSource
     url: jdbc:postgresql://localhost:5432/acl.db
     username: postgres
@@ -41,6 +42,10 @@ spring:
       auto-commit: false
   jpa:
     database-platform: tech.jhipster.domain.util.FixedPostgreSQL10Dialect
+    properties:
+      hibernate:
+        ddl-auto: none
+        dialect: org.hibernate.dialect.PostgreSQLDialect
   # Replace by 'prod, faker' to add the faker context and have sample data loaded in production
   liquibase:
     contexts: prod

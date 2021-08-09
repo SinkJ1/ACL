@@ -14,6 +14,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.core.env.Environment;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.StatementCallback;
 import sinkj1.security.config.ApplicationProperties;
 import tech.jhipster.config.DefaultProfileUtil;
 import tech.jhipster.config.JHipsterConstants;
@@ -63,6 +65,8 @@ public class SecurityApp {
      *
      * @param args the command line arguments.
      */
+
+
     public static void main(String[] args) {
         SpringApplication app = new SpringApplication(SecurityApp.class);
         DefaultProfileUtil.addDefaultProfile(app);

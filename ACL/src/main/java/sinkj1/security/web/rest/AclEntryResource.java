@@ -2,9 +2,14 @@ package sinkj1.security.web.rest;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import javax.sql.DataSource;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import org.slf4j.Logger;
@@ -13,7 +18,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -42,10 +46,12 @@ public class AclEntryResource {
     private final AclEntryService aclEntryService;
 
     private final AclEntryRepository aclEntryRepository;
+    private final DataSource dataSource;
 
-    public AclEntryResource(AclEntryService aclEntryService, AclEntryRepository aclEntryRepository) {
+    public AclEntryResource(AclEntryService aclEntryService, AclEntryRepository aclEntryRepository, DataSource dataSource) {
         this.aclEntryService = aclEntryService;
         this.aclEntryRepository = aclEntryRepository;
+        this.dataSource = dataSource;
     }
 
     /**
@@ -159,8 +165,17 @@ public class AclEntryResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the aclEntryDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/acl-entries/{id}")
-    public ResponseEntity<AclEntryDTO> getAclEntry(@PathVariable Long id) {
+    public ResponseEntity<AclEntryDTO> getAclEntry(@PathVariable Long id) throws SQLException {
         log.debug("REST request to get AclEntry : {}", id);
+
+        Connection connection = dataSource.getConnection();
+        System.out.println(dataSource.getConnection().getSchema());
+        PreparedStatement statement = connection.prepareStatement("select * from acl_class where id = 1");
+        ResultSet rs = statement.executeQuery();
+        while (rs.next()){
+            System.out.println(rs.getString(2));
+        }
+
         Optional<AclEntryDTO> aclEntryDTO = aclEntryService.findOne(id);
         return ResponseUtil.wrapOrNotFound(aclEntryDTO);
     }

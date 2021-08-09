@@ -31,15 +31,25 @@ spring:
     serialization:
       indent-output: true
   datasource:
+    ucm:
+      default-auto-commit: false
     type: com.zaxxer.hikari.HikariDataSource
     url: jdbc:postgresql://localhost:5432/acl.db
     username: postgres
     password: 123
     hikari:
-      poolName: Hikari
+      connectionTimeout: 20000
+      maximumPoolSize: 5
+      poolName: hikari
       auto-commit: false
   jpa:
-    database-platform: tech.jhipster.domain.util.FixedPostgreSQL10Dialect
+    create-database-schemas: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        ddl-auto: none
+    open-in-view: false
+
   liquibase:
     # Remove 'faker' if you do not want the sample data to be loaded automatically
     contexts: dev, faker
@@ -52,6 +62,14 @@ spring:
     cache-duration: PT1S # 1 second, see the ISO 8601 standard
   thymeleaf:
     cache: false
+
+multitenancy:
+  master:
+    liquibase:
+      changeLog: classpath:config/liquibase/master.xml
+  tenant:
+    liquibase:
+      changeLog: classpath:config/liquibase/masterForTanont.xml
 
 server:
   port: 8085
