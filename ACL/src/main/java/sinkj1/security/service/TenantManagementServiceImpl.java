@@ -8,16 +8,12 @@ import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.StatementCallback;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import sinkj1.security.domain.Tenant;
-import sinkj1.security.repository.TenantRepository;
+import sinkj1.security.repository.TenantCrudRepository;
 
 import javax.sql.DataSource;
-import javax.swing.plaf.nimbus.State;
 import java.sql.*;
-import java.util.List;
 
 @Service
 public class TenantManagementServiceImpl implements TenantManagementService {
@@ -26,7 +22,7 @@ public class TenantManagementServiceImpl implements TenantManagementService {
     private final JdbcTemplate jdbcTemplate;
     private final LiquibaseProperties liquibaseProperties;
     private final ResourceLoader resourceLoader;
-    private final TenantRepository tenantRepository;
+    private final TenantCrudRepository tenantRepository;
 
     @Autowired
     public TenantManagementServiceImpl(DataSource dataSource,
@@ -34,7 +30,7 @@ public class TenantManagementServiceImpl implements TenantManagementService {
                                        @Qualifier("tenantLiquibaseProperties")
                                        LiquibaseProperties liquibaseProperties,
                                        ResourceLoader resourceLoader,
-                                       TenantRepository tenantRepository) {
+                                       TenantCrudRepository tenantRepository) {
         this.dataSource = dataSource;
         this.jdbcTemplate = jdbcTemplate;
         this.liquibaseProperties = liquibaseProperties;

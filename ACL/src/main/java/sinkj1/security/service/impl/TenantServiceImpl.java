@@ -3,16 +3,16 @@ package sinkj1.security.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sinkj1.security.domain.Tenant;
-import sinkj1.security.repository.TenantRepository;
+import sinkj1.security.repository.TenantCrudRepository;
 import sinkj1.security.service.TenantService;
 
 @Service
 public class TenantServiceImpl implements TenantService {
 
-    private final TenantRepository tenantRepository;
+    private final TenantCrudRepository tenantRepository;
 
     @Autowired
-    public TenantServiceImpl(TenantRepository tenantRepository) {
+    public TenantServiceImpl(TenantCrudRepository tenantRepository) {
         this.tenantRepository = tenantRepository;
     }
 

@@ -38,8 +38,6 @@ spring:
     username: postgres
     password: 123
     hikari:
-      connectionTimeout: 20000
-      maximumPoolSize: 5
       poolName: hikari
       auto-commit: false
   jpa:
@@ -53,6 +51,7 @@ spring:
   liquibase:
     # Remove 'faker' if you do not want the sample data to be loaded automatically
     contexts: dev, faker
+    change-log: classpath:config/liquibase/master.xml
   mail:
     host: localhost
     port: 25
@@ -64,10 +63,19 @@ spring:
     cache: false
 
 multitenancy:
+
   master:
+    repository:
+      packages: sinkj1.security.repository
+    entityManager:
+      packages: sinkj1.security.domain
     liquibase:
       changeLog: classpath:config/liquibase/master.xml
   tenant:
+    repository:
+      packages: sinkj1.security.repository
+    entityManager:
+      packages: sinkj1.security.domain
     liquibase:
       changeLog: classpath:config/liquibase/masterForTanont.xml
 

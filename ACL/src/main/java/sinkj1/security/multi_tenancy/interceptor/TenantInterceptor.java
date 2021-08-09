@@ -1,4 +1,4 @@
-package sinkj1.security.config;
+package sinkj1.security.multi_tenancy.interceptor;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -8,27 +8,21 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.context.request.WebRequestInterceptor;
-//import sinkj1.security.multi_tenancy.util.TenantContext;
-
-import javax.sql.DataSource;
-import java.sql.SQLException;
+import sinkj1.security.multi_tenancy.util.TenantContext;
 
 @Component
 public class TenantInterceptor implements WebRequestInterceptor {
 
     private final String defaultTenant;
 
-    private final DataSource dataSource;
-
     @Autowired
     public TenantInterceptor(
-        @Value("${multitenancy.tenant.default-tenant:#{null}}") String defaultTenant, DataSource dataSource) {
+            @Value("${multitenancy.tenant.default-tenant:#{null}}") String defaultTenant) {
         this.defaultTenant = defaultTenant;
-        this.dataSource = dataSource;
     }
 
     @Override
-    public void preHandle(WebRequest request) throws SQLException {
+    public void preHandle(WebRequest request) {
         String tenantId;
         if (request.getHeader("X-TENANT-ID") != null) {
             tenantId = request.getHeader("X-TENANT-ID");
@@ -38,13 +32,11 @@ public class TenantInterceptor implements WebRequestInterceptor {
             tenantId = ((ServletWebRequest)request).getRequest().getServerName().split("\\.")[0];
         }
         TenantContext.setTenantId(tenantId);
-        ThreadLocalStorage.setTenantName(tenantId);
-        dataSource.getConnection().setSchema(tenantId);
     }
 
     @Override
     public void postHandle(@NonNull WebRequest request, ModelMap model) {
-       // TenantContext.clear();
+        TenantContext.clear();
     }
 
     @Override
