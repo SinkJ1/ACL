@@ -34,7 +34,7 @@ spring:
     ucm:
       default-auto-commit: false
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:postgresql://localhost:5432/acl.db
+    url: jdbc:postgresql://localhost:5432/acl1.db
     username: postgres
     password: 123
     hikari:
@@ -50,7 +50,7 @@ spring:
 
   liquibase:
     # Remove 'faker' if you do not want the sample data to be loaded automatically
-    contexts: dev, faker
+    contexts: dev
     change-log: classpath:config/liquibase/master.xml
   mail:
     host: localhost
@@ -72,6 +72,7 @@ multitenancy:
     liquibase:
       changeLog: classpath:config/liquibase/master.xml
   tenant:
+    default-tenant: public
     repository:
       packages: sinkj1.security.repository
     entityManager:

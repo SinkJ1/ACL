@@ -17,19 +17,19 @@ public class TenantInterceptor implements WebRequestInterceptor {
 
     @Autowired
     public TenantInterceptor(
-            @Value("${multitenancy.tenant.default-tenant:#{null}}") String defaultTenant) {
+        @Value("${multitenancy.tenant.default-tenant:#{null}}") String defaultTenant) {
         this.defaultTenant = defaultTenant;
     }
 
     @Override
     public void preHandle(WebRequest request) {
         String tenantId;
-        if (request.getHeader("X-TENANT-ID") != null) {
+        if (request.getHeader("X-TENANT-ID123") != null) {
             tenantId = request.getHeader("X-TENANT-ID");
         } else if (this.defaultTenant != null) {
             tenantId = this.defaultTenant;
         } else {
-            tenantId = ((ServletWebRequest)request).getRequest().getServerName().split("\\.")[0];
+            tenantId = ((ServletWebRequest) request).getRequest().getServerName().split("\\.")[0];
         }
         TenantContext.setTenantId(tenantId);
     }

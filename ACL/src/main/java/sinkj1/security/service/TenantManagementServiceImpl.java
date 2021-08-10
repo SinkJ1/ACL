@@ -10,7 +10,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import sinkj1.security.domain.Tenant;
-import sinkj1.security.repository.TenantCrudRepository;
+import sinkj1.security.repository.TenantRepository;
 
 import javax.sql.DataSource;
 import java.sql.*;
@@ -22,7 +22,7 @@ public class TenantManagementServiceImpl implements TenantManagementService {
     private final JdbcTemplate jdbcTemplate;
     private final LiquibaseProperties liquibaseProperties;
     private final ResourceLoader resourceLoader;
-    private final TenantCrudRepository tenantRepository;
+    private final TenantRepository tenantRepository;
 
     @Autowired
     public TenantManagementServiceImpl(DataSource dataSource,
@@ -30,7 +30,7 @@ public class TenantManagementServiceImpl implements TenantManagementService {
                                        @Qualifier("tenantLiquibaseProperties")
                                        LiquibaseProperties liquibaseProperties,
                                        ResourceLoader resourceLoader,
-                                       TenantCrudRepository tenantRepository) {
+                                       TenantRepository tenantRepository) {
         this.dataSource = dataSource;
         this.jdbcTemplate = jdbcTemplate;
         this.liquibaseProperties = liquibaseProperties;

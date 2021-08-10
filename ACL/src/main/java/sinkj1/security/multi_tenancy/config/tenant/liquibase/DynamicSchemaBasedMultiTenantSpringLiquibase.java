@@ -10,11 +10,9 @@ import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
 import org.springframework.context.ResourceLoaderAware;
 import org.springframework.core.io.ResourceLoader;
 import sinkj1.security.domain.Tenant;
-import sinkj1.security.multi_tenancy.repository.TenantRepository;
-import sinkj1.security.repository.TenantCrudRepository;
+import sinkj1.security.repository.TenantRepository;
 
 import javax.sql.DataSource;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -24,7 +22,7 @@ import java.util.List;
 public class DynamicSchemaBasedMultiTenantSpringLiquibase implements InitializingBean, ResourceLoaderAware {
 
     @Autowired
-    private TenantCrudRepository masterTenantRepository;
+    private TenantRepository masterTenantRepository;
 
     @Autowired
     private DataSource dataSource;

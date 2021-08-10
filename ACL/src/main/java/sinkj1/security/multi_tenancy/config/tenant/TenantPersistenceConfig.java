@@ -71,7 +71,6 @@ public class TenantPersistenceConfig {
         return emfBean;
     }
 
-    @Primary
     @Bean
     public JpaTransactionManager tenantTransactionManager(
             @Qualifier("tenantEntityManagerFactory") EntityManagerFactory emf) {

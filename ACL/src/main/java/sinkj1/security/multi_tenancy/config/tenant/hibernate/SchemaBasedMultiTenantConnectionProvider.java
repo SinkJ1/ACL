@@ -8,8 +8,7 @@ import org.hibernate.service.UnknownUnwrapTypeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import sinkj1.security.multi_tenancy.domain.entity.Tenant;
-import sinkj1.security.multi_tenancy.repository.TenantRepository;
+import sinkj1.security.multi_tenancy.util.TenantContext;
 
 import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
@@ -24,7 +23,6 @@ public class SchemaBasedMultiTenantConnectionProvider implements MultiTenantConn
 
     private final String masterSchema;
     private final transient DataSource datasource;
-   // private final transient TenantRepository tenantRepository;
     private final Long maximumSize;
     private final Integer expireAfterAccess;
 
@@ -37,10 +35,7 @@ public class SchemaBasedMultiTenantConnectionProvider implements MultiTenantConn
                 .expireAfterAccess(expireAfterAccess, TimeUnit.MINUTES)
                 .build(new CacheLoader<String, String>() {
                     public String load(String key) {
-                        /*Tenant tenant = tenantRepository.findByTenantId(key)
-                                .orElseThrow(() -> new RuntimeException("No such tenant: " + key));*/
-                        //return tenant.getSchema();
-                        return "yuradb";
+                        return TenantContext.getTenantId();
                     }
                 });
     }
@@ -50,14 +45,12 @@ public class SchemaBasedMultiTenantConnectionProvider implements MultiTenantConn
             @Value("${multitenancy.master.schema:#{null}}")
             String masterSchema,
             DataSource datasource,
-           // TenantRepository tenantRepository,
             @Value("${multitenancy.schema-cache.maximumSize:1000}")
             Long maximumSize,
             @Value("${multitenancy.schema-cache.expireAfterAccess:10}")
             Integer expireAfterAccess) {
         this.masterSchema = masterSchema;
         this.datasource = datasource;
-       // this.tenantRepository = tenantRepository;
         this.maximumSize = maximumSize;
         this.expireAfterAccess = expireAfterAccess;
     }

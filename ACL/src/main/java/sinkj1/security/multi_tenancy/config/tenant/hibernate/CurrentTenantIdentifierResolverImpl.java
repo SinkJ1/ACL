@@ -1,9 +1,12 @@
 package sinkj1.security.multi_tenancy.config.tenant.hibernate;
 
 import org.hibernate.context.spi.CurrentTenantIdentifierResolver;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+import sinkj1.security.domain.Tenant;
 import sinkj1.security.multi_tenancy.util.TenantContext;
+import sinkj1.security.service.TenantService;
 
 @Component("currentTenantIdentifierResolver")
 public class CurrentTenantIdentifierResolverImpl implements CurrentTenantIdentifierResolver {

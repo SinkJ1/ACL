@@ -25,7 +25,7 @@ public class AclClass implements Serializable {
     private Long id;
 
     @NotNull
-    @Column(name = "class_name", nullable = false)
+    @Column(name = "class", nullable = false)
     private String className;
 
     @NotNull

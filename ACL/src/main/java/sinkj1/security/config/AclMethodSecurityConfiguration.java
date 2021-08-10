@@ -33,19 +33,19 @@ public class AclMethodSecurityConfiguration extends GlobalMethodSecurityConfigur
     private String insertClass = "insert into acl_class (class) values (?)";
     private String insertEntry = "insert into acl_entry "
         + "(acl_object_identity, ace_order, sid, mask, granting, audit_success, audit_failure)"
-        + "values (?::integer, ?::integer, ?::integer, ?::integer, ?::boolean, ?::boolean, ?::boolean)";
+        + "values (?, ?, ?, ?, ?, ?, ?)";
     private String insertObjectIdentity = "insert into acl_object_identity "
         + "(object_id_class, object_id_identity, owner_sid, entries_inheriting) "
-        + "values (?::integer, ?::integer, ?::integer, ?::boolean)";
-    private String insertSid = "insert into acl_sid (principal, sid) values (?::boolean, ?::text)";
+        + "values (?, ?, ?, ?)";
+    private String insertSid = "insert into acl_sid (principal, sid) values (?, ?)";
     private String selectClassPrimaryKey = "select id from acl_class where class=?";
-    private String selectObjectIdentityPrimaryKey = "select acl_object_identity.id::integer from acl_object_identity, acl_class "
-        + "where acl_object_identity.object_id_class::integer = acl_class.id::integer and acl_class.class=? "
-        + "and acl_object_identity.object_id_identity::integer = ?::integer";
-    private String selectSidPrimaryKey = "select acl_sid.id::integer  from acl_sid where principal=?::boolean and sid=?::varchar(100)";
+    private String selectObjectIdentityPrimaryKey = "select acl_object_identity.id from acl_object_identity, acl_class "
+        + "where acl_object_identity.object_id_class = acl_class.id and acl_class.class=? "
+        + "and acl_object_identity.object_id_identity = ?";
+    private String selectSidPrimaryKey = "select acl_sid.id from acl_sid where principal=? and sid=?";
     private String updateObjectIdentity = "update acl_object_identity set "
-        + "parent_object = ?::integer, owner_sid = ?::integer, entries_inheriting = ?::boolean"
-        + " where id = ?::integer";
+        + "parent_object = ?, owner_sid = ?, entries_inheriting = ?"
+        + " where id = ?";
 
     private final static String DEFAULT_LOOKUP_KEYS_WHERE_CLAUSE = "(acl_object_identity.id = ?)";
 
