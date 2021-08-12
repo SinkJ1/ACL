@@ -8,6 +8,9 @@ import java.util.Optional;
 import javax.sql.DataSource;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,6 +20,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import sinkj1.security.domain.MaskAndObject;
 import sinkj1.security.repository.AclClassRepository;
 import sinkj1.security.service.AclClassService;
 import sinkj1.security.service.dto.AclClassDTO;
@@ -161,6 +165,7 @@ public class AclClassResource {
      * @param id the id of the aclClassDTO to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the aclClassDTO, or with status {@code 404 (Not Found)}.
      */
+
     @GetMapping("/acl-classes/{id}")
     public ResponseEntity<AclClassDTO> getAclClass(@PathVariable Long id) {
         log.debug("REST request to get AclClass : {}", id);
@@ -183,4 +188,5 @@ public class AclClassResource {
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
     }
+
 }

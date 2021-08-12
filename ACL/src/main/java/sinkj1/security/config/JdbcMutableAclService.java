@@ -7,6 +7,7 @@ import java.util.List;
 import javax.sql.DataSource;
 
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.security.acls.domain.AccessControlEntryImpl;
 import org.springframework.security.acls.domain.GrantedAuthoritySid;
@@ -44,6 +45,8 @@ import org.springframework.util.Assert;
  * @author Ben Alex
  * @author Johannes Zlattinger
  */
+
+@EnableJpaRepositories
 public class JdbcMutableAclService extends JdbcAclService implements MutableAclService {
 
     private static final String DEFAULT_INSERT_INTO_ACL_CLASS = "insert into acl_class (class) values (?)";

@@ -37,6 +37,15 @@ public class AclClass implements Serializable {
     @JsonIgnoreProperties(value = { "aclEntries", "aclClass" }, allowSetters = true)
     private Set<AclObjectIdentity> aclObjectIdentities = new HashSet<>();
 
+
+    public AclClass() {
+    }
+
+    public AclClass(String className) {
+        this.className = className;
+        this.classIdType = "";
+    }
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
         return id;

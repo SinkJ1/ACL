@@ -24,7 +24,7 @@ public class TenantInterceptor implements WebRequestInterceptor {
     @Override
     public void preHandle(WebRequest request) {
         String tenantId;
-        if (request.getHeader("X-TENANT-ID123") != null) {
+        if (request.getHeader("X-TENANT-ID") != null) {
             tenantId = request.getHeader("X-TENANT-ID");
         } else if (this.defaultTenant != null) {
             tenantId = this.defaultTenant;

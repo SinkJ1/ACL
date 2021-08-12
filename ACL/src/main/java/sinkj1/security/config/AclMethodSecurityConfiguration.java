@@ -1,10 +1,13 @@
 package sinkj1.security.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
 import org.springframework.cache.ehcache.EhCacheFactoryBean;
 import org.springframework.cache.ehcache.EhCacheManagerFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler;
 import org.springframework.security.access.expression.method.MethodSecurityExpressionHandler;
 import org.springframework.security.acls.AclPermissionCacheOptimizer;
@@ -17,16 +20,22 @@ import org.springframework.security.acls.model.PermissionGrantingStrategy;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import sinkj1.security.multi_tenancy.util.TenantContext;
 
 import javax.sql.DataSource;
+import java.sql.SQLException;
 import java.util.Objects;
 
 @Configuration
+@EnableJpaRepositories
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class AclMethodSecurityConfiguration extends GlobalMethodSecurityConfiguration {
 
     @Autowired
     private DataSource dataSource;
+
+    @Autowired
+    private JdbcTemplate jpaProperties;
 
     private String deleteEntryByObjectIdentityForeignKey = "delete from acl_entry where acl_object_identity=?";
     private String deleteObjectIdentityByPrimaryKey = "delete from acl_object_identity where id=?";
@@ -53,9 +62,8 @@ public class AclMethodSecurityConfiguration extends GlobalMethodSecurityConfigur
         + " asc, acl_entry.ace_order asc";
 
     @Bean
-    public MutableAclService aclService() {
-
-        JdbcMutableAclService jdbcMutableAclService = new JdbcMutableAclService(dataSource, lookupStrategy(), aclCache());
+    public MutableAclService aclService() throws SQLException {
+        JdbcMutableAclService jdbcMutableAclService = new JdbcMutableAclService(jpaProperties.getDataSource(), lookupStrategy(), aclCache());
         jdbcMutableAclService.setSidIdentityQuery("SELECT currval('acl_sid_id_seq')");
         jdbcMutableAclService.setClassIdentityQuery("SELECT currval('acl_class_id_seq')");
         jdbcMutableAclService.setDeleteObjectIdentityByPrimaryKeySql(deleteObjectIdentityByPrimaryKey);
@@ -91,9 +99,18 @@ public class AclMethodSecurityConfiguration extends GlobalMethodSecurityConfigur
     @Override
     protected MethodSecurityExpressionHandler createExpressionHandler() {
         DefaultMethodSecurityExpressionHandler expressionHandler = new DefaultMethodSecurityExpressionHandler();
-        AclPermissionEvaluator permissionEvaluator = new AclPermissionEvaluator(aclService());
+        AclPermissionEvaluator permissionEvaluator = null;
+        try {
+            permissionEvaluator = new AclPermissionEvaluator(aclService());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         expressionHandler.setPermissionEvaluator(permissionEvaluator);
-        expressionHandler.setPermissionCacheOptimizer(new AclPermissionCacheOptimizer(aclService()));
+        try {
+            expressionHandler.setPermissionCacheOptimizer(new AclPermissionCacheOptimizer(aclService()));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return expressionHandler;
     }
 

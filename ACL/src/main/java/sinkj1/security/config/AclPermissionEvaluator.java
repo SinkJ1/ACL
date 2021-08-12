@@ -1,10 +1,8 @@
 package sinkj1.security.config;
 
 import java.io.Serializable;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -15,19 +13,15 @@ import org.springframework.security.access.PermissionEvaluator;
 import org.springframework.security.acls.domain.DefaultPermissionFactory;
 import org.springframework.security.acls.domain.ObjectIdentityRetrievalStrategyImpl;
 import org.springframework.security.acls.domain.PermissionFactory;
-import org.springframework.security.acls.domain.SidRetrievalStrategyImpl;
-import org.springframework.security.acls.model.Acl;
-import org.springframework.security.acls.model.AclService;
 import org.springframework.security.acls.model.NotFoundException;
 import org.springframework.security.acls.model.ObjectIdentity;
 import org.springframework.security.acls.model.ObjectIdentityGenerator;
-import org.springframework.security.acls.model.ObjectIdentityRetrievalStrategy;
 import org.springframework.security.acls.model.Permission;
-import org.springframework.security.acls.model.Sid;
-import org.springframework.security.acls.model.SidRetrievalStrategy;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.security.core.GrantedAuthority;
+import sinkj1.security.domain.AclEntry;
 import sinkj1.security.domain.CustomObjectIdentity;
+import sinkj1.security.service.AclEntryService;
 import sinkj1.security.service.dto.CustomObjectIdentityImpl;
 
 @Configuration
@@ -35,18 +29,14 @@ public class AclPermissionEvaluator implements PermissionEvaluator {
 
     private final Log logger = LogFactory.getLog(getClass());
 
-    private final AclService aclService;
-
-    private ObjectIdentityRetrievalStrategy objectIdentityRetrievalStrategy = new ObjectIdentityRetrievalStrategyImpl();
+    private final AclEntryService aclEntryService;
 
     private ObjectIdentityGenerator objectIdentityGenerator = new ObjectIdentityRetrievalStrategyImpl();
 
-    private SidRetrievalStrategy sidRetrievalStrategy = new SidRetrievalStrategyImpl();
-
     private PermissionFactory permissionFactory = new DefaultPermissionFactory();
 
-    public AclPermissionEvaluator(AclService aclService) {
-        this.aclService = aclService;
+    public AclPermissionEvaluator(AclEntryService aclEntryService) {
+        this.aclEntryService = aclEntryService;
     }
 
     @Override
@@ -55,16 +45,16 @@ public class AclPermissionEvaluator implements PermissionEvaluator {
             return false;
         }
 
-        if(domainObject instanceof Optional){
+        if (domainObject instanceof Optional) {
             domainObject = ((Optional<?>) domainObject).get();
         }
         ObjectIdentity objectIdentity = null;
         try {
-            objectIdentity = new CustomObjectIdentity((String)domainObject.getClass().getDeclaredFields()[0].get(domainObject),(Integer)domainObject.getClass().getDeclaredFields()[1].get(domainObject));
+            objectIdentity = new CustomObjectIdentity((String) domainObject.getClass().getDeclaredFields()[0].get(domainObject), (Integer) domainObject.getClass().getDeclaredFields()[1].get(domainObject));
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
-        return checkPermission(authentication, new CustomObjectIdentityImpl(objectIdentity.getType(),objectIdentity.getIdentifier()), permission);
+        return checkPermission(authentication, new CustomObjectIdentityImpl(objectIdentity.getType(), objectIdentity.getIdentifier()), permission);
     }
 
     @Override
@@ -77,39 +67,36 @@ public class AclPermissionEvaluator implements PermissionEvaluator {
 
     private boolean checkPermission(Authentication authentication, ObjectIdentity oid, Object permission) {
         // Obtain the SIDs applicable to the principal
-        List<Sid> sids = this.sidRetrievalStrategy.getSids(authentication);
-        List<Permission> requiredPermission = resolvePermission(permission);
+        Permission resolvePermission = resolvePermission(permission);
         this.logger.debug(LogMessage.of(() -> "Checking permission '" + permission + "' for object '" + oid + "'"));
         try {
+            List<GrantedAuthority> authorities = authentication.getAuthorities().stream().collect(Collectors.toList());
+            List<String> authoritiesStrings = authorities.stream().map(grantedAuthority -> grantedAuthority.getAuthority()).collect(Collectors.toList());
+            Optional<AclEntry> aclEntry = aclEntryService.findEntryForUser(resolvePermission.getMask(), String.valueOf(oid.getIdentifier()), oid.getType(), authorities.get(0).toString());
 
-            Acl acl = this.aclService.readAclById(oid, sids);
-            if (acl.isGranted(requiredPermission, sids, false)) {
+            if (aclEntry.isPresent() && (aclEntry.get().getAclSid().getSid().equals(authentication.getName()) || authoritiesStrings.contains(aclEntry.get().getAclSid().getSid()))) {
                 this.logger.debug("Access is granted");
                 return true;
             }
             this.logger.debug("Returning false - ACLs returned, but insufficient permissions for this principal");
-        }
-        catch (NotFoundException nfe) {
+        } catch (NotFoundException nfe) {
             this.logger.debug("Returning false - no ACLs apply for this principal");
         }
         return false;
     }
 
-    List<Permission> resolvePermission(Object permission) {
+    Permission resolvePermission(Object permission) {
         if (permission instanceof Integer) {
-            return Arrays.asList(this.permissionFactory.buildFromMask((Integer) permission));
+            return this.permissionFactory.buildFromMask((Integer) permission);
         }
         if (permission instanceof Permission) {
-            return Arrays.asList((Permission) permission);
-        }
-        if (permission instanceof Permission[]) {
-            return Arrays.asList((Permission[]) permission);
+            return (Permission) permission;
         }
         if (permission instanceof String) {
             String permString = (String) permission;
             Permission p = buildPermission(permString);
             if (p != null) {
-                return Arrays.asList(p);
+                return p;
             }
         }
         throw new IllegalArgumentException("Unsupported permission: " + permission);
@@ -118,26 +105,9 @@ public class AclPermissionEvaluator implements PermissionEvaluator {
     private Permission buildPermission(String permString) {
         try {
             return this.permissionFactory.buildFromName(permString);
-        }
-        catch (IllegalArgumentException notfound) {
+        } catch (IllegalArgumentException notfound) {
             return this.permissionFactory.buildFromName(permString.toUpperCase(Locale.ENGLISH));
         }
-    }
-
-    public void setObjectIdentityRetrievalStrategy(ObjectIdentityRetrievalStrategy objectIdentityRetrievalStrategy) {
-        this.objectIdentityRetrievalStrategy = objectIdentityRetrievalStrategy;
-    }
-
-    public void setObjectIdentityGenerator(ObjectIdentityGenerator objectIdentityGenerator) {
-        this.objectIdentityGenerator = objectIdentityGenerator;
-    }
-
-    public void setSidRetrievalStrategy(SidRetrievalStrategy sidRetrievalStrategy) {
-        this.sidRetrievalStrategy = sidRetrievalStrategy;
-    }
-
-    public void setPermissionFactory(PermissionFactory permissionFactory) {
-        this.permissionFactory = permissionFactory;
     }
 
 }

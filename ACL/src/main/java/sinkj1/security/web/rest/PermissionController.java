@@ -33,17 +33,13 @@ public class PermissionController {
     @PostMapping("/permission/authority")
     public ResponseEntity<String> addPermissionForAuthority(@RequestBody PermissionDto permissionDto) {
         permissionService.addPermissionForAuthority(permissionDto.getId(),permissionDto.getClassName(), convertFromIntToBasePermission(permissionDto.getPermission()), permissionDto.getSid());
-        return ResponseEntity
-            .noContent()
-            .build();
+        return ResponseEntity.ok("ok");
     }
 
     @PostMapping("/permission/user")
     public ResponseEntity<String> addPermissionForUser(@RequestBody PermissionDto permissionDto) {
         permissionService.addPermissionForUser(permissionDto.getId(),permissionDto.getClassName(), convertFromIntToBasePermission(permissionDto.getPermission()), permissionDto.getSid());
-        return ResponseEntity
-            .noContent()
-            .build();
+        return ResponseEntity.ok("ok");
     }
 
     @PostMapping("/permission/check")

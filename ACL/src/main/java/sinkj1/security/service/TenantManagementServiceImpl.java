@@ -72,6 +72,7 @@ public class TenantManagementServiceImpl implements TenantManagementService {
         PreparedStatement statement = connection.prepareStatement("CREATE SCHEMA " + schema.toLowerCase());
         statement.execute();
         connection.commit();
+        connection.close();
     }
 
     protected SpringLiquibase getSpringLiquibase(DataSource dataSource, String schema) throws SQLException {

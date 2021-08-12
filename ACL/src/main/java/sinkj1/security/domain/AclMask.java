@@ -1,21 +1,21 @@
 package sinkj1.security.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
-import javax.persistence.*;
-import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
+
 /**
- * A AclSid.
+ * A AclMask.
  */
 @Entity
-@Table(name = "acl_sid")
+@Table(name = "acl_mask")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-public class AclSid implements Serializable {
+public class AclMask implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -24,28 +24,13 @@ public class AclSid implements Serializable {
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
-    @NotNull
-    @Column(name = "principal", nullable = false)
-    private Boolean principal;
+    @Column(name = "name")
+    private String name;
 
-    @NotNull
-    @Column(name = "sid", nullable = false)
-    private String sid;
-
-    @OneToMany(mappedBy = "aclSid")
+    @OneToMany(mappedBy = "aclMask")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "aclSid", "aclObjectIdentity" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "aclSid", "aclObjectIdentity", "aclMask" }, allowSetters = true)
     private Set<AclEntry> aclEntries = new HashSet<>();
-
-
-    public AclSid() {
-    }
-
-    public AclSid(Boolean principal, String sid) {
-        this.principal = principal;
-        this.sid = sid;
-    }
-
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -56,64 +41,51 @@ public class AclSid implements Serializable {
         this.id = id;
     }
 
-    public AclSid id(Long id) {
+    public AclMask id(Long id) {
         this.id = id;
         return this;
     }
 
-    public Boolean getPrincipal() {
-        return this.principal;
+    public String getName() {
+        return this.name;
     }
 
-    public AclSid principal(Boolean principal) {
-        this.principal = principal;
+    public AclMask name(String name) {
+        this.name = name;
         return this;
     }
 
-    public void setPrincipal(Boolean principal) {
-        this.principal = principal;
-    }
-
-    public String getSid() {
-        return this.sid;
-    }
-
-    public AclSid sid(String sid) {
-        this.sid = sid;
-        return this;
-    }
-
-    public void setSid(String sid) {
-        this.sid = sid;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Set<AclEntry> getAclEntries() {
         return this.aclEntries;
     }
 
-    public AclSid aclEntries(Set<AclEntry> aclEntries) {
+    public AclMask aclEntries(Set<AclEntry> aclEntries) {
         this.setAclEntries(aclEntries);
         return this;
     }
 
-    public AclSid addAclEntry(AclEntry aclEntry) {
+    public AclMask addAclEntry(AclEntry aclEntry) {
         this.aclEntries.add(aclEntry);
-        aclEntry.setAclSid(this);
+        aclEntry.setAclMask(this);
         return this;
     }
 
-    public AclSid removeAclEntry(AclEntry aclEntry) {
+    public AclMask removeAclEntry(AclEntry aclEntry) {
         this.aclEntries.remove(aclEntry);
-        aclEntry.setAclSid(null);
+        aclEntry.setAclMask(null);
         return this;
     }
 
     public void setAclEntries(Set<AclEntry> aclEntries) {
         if (this.aclEntries != null) {
-            this.aclEntries.forEach(i -> i.setAclSid(null));
+            this.aclEntries.forEach(i -> i.setAclMask(null));
         }
         if (aclEntries != null) {
-            aclEntries.forEach(i -> i.setAclSid(this));
+            aclEntries.forEach(i -> i.setAclMask(this));
         }
         this.aclEntries = aclEntries;
     }
@@ -125,10 +97,10 @@ public class AclSid implements Serializable {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof AclSid)) {
+        if (!(o instanceof AclMask)) {
             return false;
         }
-        return id != null && id.equals(((AclSid) o).id);
+        return id != null && id.equals(((AclMask) o).id);
     }
 
     @Override
@@ -140,10 +112,9 @@ public class AclSid implements Serializable {
     // prettier-ignore
     @Override
     public String toString() {
-        return "AclSid{" +
+        return "AclMask{" +
             "id=" + getId() +
-            ", principal='" + getPrincipal() + "'" +
-            ", sid='" + getSid() + "'" +
+            ", name='" + getName() + "'" +
             "}";
     }
 }

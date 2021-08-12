@@ -1,5 +1,4 @@
 package sinkj1.security.web.rest;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -33,9 +32,6 @@ class AclEntryResourceIT {
 
     private static final Integer DEFAULT_ACE_ORDER = 1;
     private static final Integer UPDATED_ACE_ORDER = 2;
-
-    private static final Integer DEFAULT_MASK = 1;
-    private static final Integer UPDATED_MASK = 2;
 
     private static final Boolean DEFAULT_GRANTING = false;
     private static final Boolean UPDATED_GRANTING = true;
@@ -75,7 +71,6 @@ class AclEntryResourceIT {
     public static AclEntry createEntity(EntityManager em) {
         AclEntry aclEntry = new AclEntry()
             .aceOrder(DEFAULT_ACE_ORDER)
-            .mask(DEFAULT_MASK)
             .granting(DEFAULT_GRANTING)
             .auditSuccess(DEFAULT_AUDIT_SUCCESS)
             .auditFailure(DEFAULT_AUDIT_FAILURE);
@@ -91,7 +86,6 @@ class AclEntryResourceIT {
     public static AclEntry createUpdatedEntity(EntityManager em) {
         AclEntry aclEntry = new AclEntry()
             .aceOrder(UPDATED_ACE_ORDER)
-            .mask(UPDATED_MASK)
             .granting(UPDATED_GRANTING)
             .auditSuccess(UPDATED_AUDIT_SUCCESS)
             .auditFailure(UPDATED_AUDIT_FAILURE);
@@ -118,7 +112,6 @@ class AclEntryResourceIT {
         assertThat(aclEntryList).hasSize(databaseSizeBeforeCreate + 1);
         AclEntry testAclEntry = aclEntryList.get(aclEntryList.size() - 1);
         assertThat(testAclEntry.getAceOrder()).isEqualTo(DEFAULT_ACE_ORDER);
-        assertThat(testAclEntry.getMask()).isEqualTo(DEFAULT_MASK);
         assertThat(testAclEntry.getGranting()).isEqualTo(DEFAULT_GRANTING);
         assertThat(testAclEntry.getAuditSuccess()).isEqualTo(DEFAULT_AUDIT_SUCCESS);
         assertThat(testAclEntry.getAuditFailure()).isEqualTo(DEFAULT_AUDIT_FAILURE);
@@ -174,7 +167,6 @@ class AclEntryResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(aclEntry.getId().intValue())))
             .andExpect(jsonPath("$.[*].aceOrder").value(hasItem(DEFAULT_ACE_ORDER)))
-            .andExpect(jsonPath("$.[*].mask").value(hasItem(DEFAULT_MASK)))
             .andExpect(jsonPath("$.[*].granting").value(hasItem(DEFAULT_GRANTING.booleanValue())))
             .andExpect(jsonPath("$.[*].auditSuccess").value(hasItem(DEFAULT_AUDIT_SUCCESS.booleanValue())))
             .andExpect(jsonPath("$.[*].auditFailure").value(hasItem(DEFAULT_AUDIT_FAILURE.booleanValue())));
@@ -193,7 +185,6 @@ class AclEntryResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(aclEntry.getId().intValue()))
             .andExpect(jsonPath("$.aceOrder").value(DEFAULT_ACE_ORDER))
-            .andExpect(jsonPath("$.mask").value(DEFAULT_MASK))
             .andExpect(jsonPath("$.granting").value(DEFAULT_GRANTING.booleanValue()))
             .andExpect(jsonPath("$.auditSuccess").value(DEFAULT_AUDIT_SUCCESS.booleanValue()))
             .andExpect(jsonPath("$.auditFailure").value(DEFAULT_AUDIT_FAILURE.booleanValue()));
@@ -220,7 +211,6 @@ class AclEntryResourceIT {
         em.detach(updatedAclEntry);
         updatedAclEntry
             .aceOrder(UPDATED_ACE_ORDER)
-            .mask(UPDATED_MASK)
             .granting(UPDATED_GRANTING)
             .auditSuccess(UPDATED_AUDIT_SUCCESS)
             .auditFailure(UPDATED_AUDIT_FAILURE);
@@ -239,7 +229,6 @@ class AclEntryResourceIT {
         assertThat(aclEntryList).hasSize(databaseSizeBeforeUpdate);
         AclEntry testAclEntry = aclEntryList.get(aclEntryList.size() - 1);
         assertThat(testAclEntry.getAceOrder()).isEqualTo(UPDATED_ACE_ORDER);
-        assertThat(testAclEntry.getMask()).isEqualTo(UPDATED_MASK);
         assertThat(testAclEntry.getGranting()).isEqualTo(UPDATED_GRANTING);
         assertThat(testAclEntry.getAuditSuccess()).isEqualTo(UPDATED_AUDIT_SUCCESS);
         assertThat(testAclEntry.getAuditFailure()).isEqualTo(UPDATED_AUDIT_FAILURE);
@@ -322,7 +311,7 @@ class AclEntryResourceIT {
         AclEntry partialUpdatedAclEntry = new AclEntry();
         partialUpdatedAclEntry.setId(aclEntry.getId());
 
-        partialUpdatedAclEntry.granting(UPDATED_GRANTING).auditSuccess(UPDATED_AUDIT_SUCCESS).auditFailure(UPDATED_AUDIT_FAILURE);
+        partialUpdatedAclEntry.auditSuccess(UPDATED_AUDIT_SUCCESS).auditFailure(UPDATED_AUDIT_FAILURE);
 
         restAclEntryMockMvc
             .perform(
@@ -337,8 +326,7 @@ class AclEntryResourceIT {
         assertThat(aclEntryList).hasSize(databaseSizeBeforeUpdate);
         AclEntry testAclEntry = aclEntryList.get(aclEntryList.size() - 1);
         assertThat(testAclEntry.getAceOrder()).isEqualTo(DEFAULT_ACE_ORDER);
-        assertThat(testAclEntry.getMask()).isEqualTo(DEFAULT_MASK);
-        assertThat(testAclEntry.getGranting()).isEqualTo(UPDATED_GRANTING);
+        assertThat(testAclEntry.getGranting()).isEqualTo(DEFAULT_GRANTING);
         assertThat(testAclEntry.getAuditSuccess()).isEqualTo(UPDATED_AUDIT_SUCCESS);
         assertThat(testAclEntry.getAuditFailure()).isEqualTo(UPDATED_AUDIT_FAILURE);
     }
@@ -357,7 +345,6 @@ class AclEntryResourceIT {
 
         partialUpdatedAclEntry
             .aceOrder(UPDATED_ACE_ORDER)
-            .mask(UPDATED_MASK)
             .granting(UPDATED_GRANTING)
             .auditSuccess(UPDATED_AUDIT_SUCCESS)
             .auditFailure(UPDATED_AUDIT_FAILURE);
@@ -375,7 +362,6 @@ class AclEntryResourceIT {
         assertThat(aclEntryList).hasSize(databaseSizeBeforeUpdate);
         AclEntry testAclEntry = aclEntryList.get(aclEntryList.size() - 1);
         assertThat(testAclEntry.getAceOrder()).isEqualTo(UPDATED_ACE_ORDER);
-        assertThat(testAclEntry.getMask()).isEqualTo(UPDATED_MASK);
         assertThat(testAclEntry.getGranting()).isEqualTo(UPDATED_GRANTING);
         assertThat(testAclEntry.getAuditSuccess()).isEqualTo(UPDATED_AUDIT_SUCCESS);
         assertThat(testAclEntry.getAuditFailure()).isEqualTo(UPDATED_AUDIT_FAILURE);

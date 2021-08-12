@@ -21,6 +21,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import sinkj1.security.domain.MaskAndObject;
 import sinkj1.security.repository.AclEntryRepository;
 import sinkj1.security.service.AclEntryService;
 import sinkj1.security.service.dto.AclEntryDTO;
@@ -195,4 +196,12 @@ public class AclEntryResource {
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
     }
+
+    @GetMapping("/get")
+    public ResponseEntity<List<MaskAndObject>> getMaskObj(@RequestParam("role") String role, @RequestParam("objE") String objE) {
+        List<Object> obj = aclEntryService.getMaskAndObjectId(role, objE);
+        List<MaskAndObject> maskAndObjects = (List<MaskAndObject>) (Object) obj;
+        return ResponseEntity.ok( maskAndObjects);
+    }
+
 }

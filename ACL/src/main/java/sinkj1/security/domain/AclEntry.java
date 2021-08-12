@@ -1,9 +1,11 @@
 package sinkj1.security.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.io.Serializable;
 import javax.persistence.*;
 import javax.validation.constraints.*;
+
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -26,8 +28,10 @@ public class AclEntry implements Serializable {
     @Column(name = "ace_order", nullable = false)
     private Integer aceOrder;
 
-    @Column(name = "mask")
-    private Integer mask;
+    @ManyToOne
+    @JoinColumn(name = "mask")
+    @JsonIgnoreProperties(value = {"aclEntries"}, allowSetters = true)
+    private AclMask aclMask;
 
     @Column(name = "granting")
     private Boolean granting;
@@ -40,13 +44,26 @@ public class AclEntry implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "sid")
-    @JsonIgnoreProperties(value = { "aclEntries" }, allowSetters = true)
+    @JsonIgnoreProperties(value = {"aclEntries"}, allowSetters = true)
     private AclSid aclSid;
 
     @ManyToOne
     @JoinColumn(name = "acl_object_identity")
-    @JsonIgnoreProperties(value = { "aclEntries", "aclClass" }, allowSetters = true)
+    @JsonIgnoreProperties(value = {"aclEntries", "aclClass"}, allowSetters = true)
     private AclObjectIdentity aclObjectIdentity;
+
+    public AclEntry() {
+    }
+
+    public AclEntry(Integer aceOrder, AclMask aclMask, Boolean granting, Boolean auditSuccess, Boolean auditFailure, AclSid aclSid, AclObjectIdentity aclObjectIdentity) {
+        this.aceOrder = aceOrder;
+        this.aclMask = aclMask;
+        this.granting = granting;
+        this.auditSuccess = auditSuccess;
+        this.auditFailure = auditFailure;
+        this.aclSid = aclSid;
+        this.aclObjectIdentity = aclObjectIdentity;
+    }
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -73,19 +90,6 @@ public class AclEntry implements Serializable {
 
     public void setAceOrder(Integer aceOrder) {
         this.aceOrder = aceOrder;
-    }
-
-    public Integer getMask() {
-        return this.mask;
-    }
-
-    public AclEntry mask(Integer mask) {
-        this.mask = mask;
-        return this;
-    }
-
-    public void setMask(Integer mask) {
-        this.mask = mask;
     }
 
     public Boolean getGranting() {
@@ -121,6 +125,19 @@ public class AclEntry implements Serializable {
     public AclEntry auditFailure(Boolean auditFailure) {
         this.auditFailure = auditFailure;
         return this;
+    }
+
+    public AclMask getAclMask() {
+        return this.aclMask;
+    }
+
+    public AclEntry aclMask(AclMask aclMask) {
+        this.setAclMask(aclMask);
+        return this;
+    }
+
+    public void setAclMask(AclMask aclMask) {
+        this.aclMask = aclMask;
     }
 
     public void setAuditFailure(Boolean auditFailure) {
@@ -178,7 +195,6 @@ public class AclEntry implements Serializable {
         return "AclEntry{" +
             "id=" + getId() +
             ", aceOrder=" + getAceOrder() +
-            ", mask=" + getMask() +
             ", granting='" + getGranting() + "'" +
             ", auditSuccess='" + getAuditSuccess() + "'" +
             ", auditFailure='" + getAuditFailure() + "'" +

@@ -1,10 +1,14 @@
 package sinkj1.security.service.impl;
 
+import java.util.List;
 import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sinkj1.security.domain.AclEntry;
@@ -75,4 +79,16 @@ public class AclEntryServiceImpl implements AclEntryService {
         log.debug("Request to delete AclEntry : {}", id);
         aclEntryRepository.deleteById(id);
     }
+
+    @Override
+    public List<Object> getMaskAndObjectId(String sid, String objectIdIdentity) {
+        //Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return aclEntryRepository.findByMaskAndAclObjectIdentityNative(sid, objectIdIdentity);
+    }
+
+    @Override
+    public Optional<AclEntry> findEntryForUser(int mask, String objectIdentity, String className, String userAuthority) {
+        return aclEntryRepository.findEntryForUser(mask, objectIdentity, className, userAuthority);
+    }
+
 }

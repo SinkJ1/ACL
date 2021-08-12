@@ -1,8 +1,10 @@
 package sinkj1.security.service;
 
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import sinkj1.security.domain.AclEntry;
 import sinkj1.security.service.dto.AclEntryDTO;
 
 /**
@@ -47,4 +49,10 @@ public interface AclEntryService {
      * @param id the id of the entity.
      */
     void delete(Long id);
+
+    List<Object> getMaskAndObjectId(String role, String objE);
+
+
+    Optional<AclEntry> findEntryForUser(int mask, String objectIdentity, String className, String userAuthority);
+
 }

@@ -28,8 +28,7 @@ public class AclObjectIdentity implements Serializable {
     @Column(name = "object_id_identity", nullable = false)
     private String objectIdIdentity;
 
-    @NotNull
-    @Column(name = "parent_object", nullable = false)
+    @Column(name = "parent_object")
     private Integer parentObject;
 
     @Column(name = "owner_sid")
@@ -47,6 +46,16 @@ public class AclObjectIdentity implements Serializable {
     @JoinColumn(name = "object_id_class")
     @JsonIgnoreProperties(value = { "aclObjectIdentities" }, allowSetters = true)
     private AclClass aclClass;
+
+    public AclObjectIdentity() {
+    }
+
+    public AclObjectIdentity(String objectIdIdentity, Integer ownerSid, Boolean entriesInheriting, AclClass aclClass) {
+        this.objectIdIdentity = objectIdIdentity;
+        this.ownerSid = ownerSid;
+        this.entriesInheriting = entriesInheriting;
+        this.aclClass = aclClass;
+    }
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
