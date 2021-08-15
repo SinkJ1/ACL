@@ -3,7 +3,7 @@ import { IAclClass } from 'app/entities/acl-class/acl-class.model';
 
 export interface IAclObjectIdentity {
   id?: number;
-  objectIdIdentity?: string;
+  objectIdIdentity?: number;
   parentObject?: number;
   ownerSid?: number | null;
   entriesInheriting?: boolean | null;
@@ -14,7 +14,7 @@ export interface IAclObjectIdentity {
 export class AclObjectIdentity implements IAclObjectIdentity {
   constructor(
     public id?: number,
-    public objectIdIdentity?: string,
+    public objectIdIdentity?: number,
     public parentObject?: number,
     public ownerSid?: number | null,
     public entriesInheriting?: boolean | null,

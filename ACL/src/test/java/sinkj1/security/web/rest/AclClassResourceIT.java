@@ -34,9 +34,6 @@ class AclClassResourceIT {
     private static final String DEFAULT_CLASS_NAME = "AAAAAAAAAA";
     private static final String UPDATED_CLASS_NAME = "BBBBBBBBBB";
 
-    private static final String DEFAULT_CLASS_ID_TYPE = "AAAAAAAAAA";
-    private static final String UPDATED_CLASS_ID_TYPE = "BBBBBBBBBB";
-
     private static final String ENTITY_API_URL = "/api/acl-classes";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
@@ -64,7 +61,7 @@ class AclClassResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static AclClass createEntity(EntityManager em) {
-        AclClass aclClass = new AclClass().className(DEFAULT_CLASS_NAME).classIdType(DEFAULT_CLASS_ID_TYPE);
+        AclClass aclClass = new AclClass().className(DEFAULT_CLASS_NAME);
         return aclClass;
     }
 
@@ -75,7 +72,7 @@ class AclClassResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static AclClass createUpdatedEntity(EntityManager em) {
-        AclClass aclClass = new AclClass().className(UPDATED_CLASS_NAME).classIdType(UPDATED_CLASS_ID_TYPE);
+        AclClass aclClass = new AclClass().className(UPDATED_CLASS_NAME);
         return aclClass;
     }
 
@@ -99,7 +96,6 @@ class AclClassResourceIT {
         assertThat(aclClassList).hasSize(databaseSizeBeforeCreate + 1);
         AclClass testAclClass = aclClassList.get(aclClassList.size() - 1);
         assertThat(testAclClass.getClassName()).isEqualTo(DEFAULT_CLASS_NAME);
-        assertThat(testAclClass.getClassIdType()).isEqualTo(DEFAULT_CLASS_ID_TYPE);
     }
 
     @Test
@@ -141,24 +137,6 @@ class AclClassResourceIT {
 
     @Test
     @Transactional
-    void checkClassIdTypeIsRequired() throws Exception {
-        int databaseSizeBeforeTest = aclClassRepository.findAll().size();
-        // set the field null
-        aclClass.setClassIdType(null);
-
-        // Create the AclClass, which fails.
-        AclClassDTO aclClassDTO = aclClassMapper.toDto(aclClass);
-
-        restAclClassMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(aclClassDTO)))
-            .andExpect(status().isBadRequest());
-
-        List<AclClass> aclClassList = aclClassRepository.findAll();
-        assertThat(aclClassList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
     void getAllAclClasses() throws Exception {
         // Initialize the database
         aclClassRepository.saveAndFlush(aclClass);
@@ -169,8 +147,7 @@ class AclClassResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(aclClass.getId().intValue())))
-            .andExpect(jsonPath("$.[*].className").value(hasItem(DEFAULT_CLASS_NAME)))
-            .andExpect(jsonPath("$.[*].classIdType").value(hasItem(DEFAULT_CLASS_ID_TYPE)));
+            .andExpect(jsonPath("$.[*].className").value(hasItem(DEFAULT_CLASS_NAME)));
     }
 
     @Test
@@ -185,8 +162,7 @@ class AclClassResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(aclClass.getId().intValue()))
-            .andExpect(jsonPath("$.className").value(DEFAULT_CLASS_NAME))
-            .andExpect(jsonPath("$.classIdType").value(DEFAULT_CLASS_ID_TYPE));
+            .andExpect(jsonPath("$.className").value(DEFAULT_CLASS_NAME));
     }
 
     @Test
@@ -208,7 +184,7 @@ class AclClassResourceIT {
         AclClass updatedAclClass = aclClassRepository.findById(aclClass.getId()).get();
         // Disconnect from session so that the updates on updatedAclClass are not directly saved in db
         em.detach(updatedAclClass);
-        updatedAclClass.className(UPDATED_CLASS_NAME).classIdType(UPDATED_CLASS_ID_TYPE);
+        updatedAclClass.className(UPDATED_CLASS_NAME);
         AclClassDTO aclClassDTO = aclClassMapper.toDto(updatedAclClass);
 
         restAclClassMockMvc
@@ -224,7 +200,6 @@ class AclClassResourceIT {
         assertThat(aclClassList).hasSize(databaseSizeBeforeUpdate);
         AclClass testAclClass = aclClassList.get(aclClassList.size() - 1);
         assertThat(testAclClass.getClassName()).isEqualTo(UPDATED_CLASS_NAME);
-        assertThat(testAclClass.getClassIdType()).isEqualTo(UPDATED_CLASS_ID_TYPE);
     }
 
     @Test
@@ -304,7 +279,7 @@ class AclClassResourceIT {
         AclClass partialUpdatedAclClass = new AclClass();
         partialUpdatedAclClass.setId(aclClass.getId());
 
-        partialUpdatedAclClass.className(UPDATED_CLASS_NAME).classIdType(UPDATED_CLASS_ID_TYPE);
+        partialUpdatedAclClass.className(UPDATED_CLASS_NAME);
 
         restAclClassMockMvc
             .perform(
@@ -319,7 +294,6 @@ class AclClassResourceIT {
         assertThat(aclClassList).hasSize(databaseSizeBeforeUpdate);
         AclClass testAclClass = aclClassList.get(aclClassList.size() - 1);
         assertThat(testAclClass.getClassName()).isEqualTo(UPDATED_CLASS_NAME);
-        assertThat(testAclClass.getClassIdType()).isEqualTo(UPDATED_CLASS_ID_TYPE);
     }
 
     @Test
@@ -334,7 +308,7 @@ class AclClassResourceIT {
         AclClass partialUpdatedAclClass = new AclClass();
         partialUpdatedAclClass.setId(aclClass.getId());
 
-        partialUpdatedAclClass.className(UPDATED_CLASS_NAME).classIdType(UPDATED_CLASS_ID_TYPE);
+        partialUpdatedAclClass.className(UPDATED_CLASS_NAME);
 
         restAclClassMockMvc
             .perform(
@@ -349,7 +323,6 @@ class AclClassResourceIT {
         assertThat(aclClassList).hasSize(databaseSizeBeforeUpdate);
         AclClass testAclClass = aclClassList.get(aclClassList.size() - 1);
         assertThat(testAclClass.getClassName()).isEqualTo(UPDATED_CLASS_NAME);
-        assertThat(testAclClass.getClassIdType()).isEqualTo(UPDATED_CLASS_ID_TYPE);
     }
 
     @Test

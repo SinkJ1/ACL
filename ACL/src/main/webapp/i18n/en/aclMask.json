@@ -1,0 +1,25 @@
+{
+  "securityApp": {
+    "aclMask": {
+      "home": {
+        "title": "Acl Masks",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Acl Mask",
+        "createOrEditLabel": "Create or edit a Acl Mask",
+        "notFound": "No Acl Masks found"
+      },
+      "created": "A new Acl Mask is created with identifier {{ param }}",
+      "updated": "A Acl Mask is updated with identifier {{ param }}",
+      "deleted": "A Acl Mask is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Acl Mask {{ id }}?"
+      },
+      "detail": {
+        "title": "Acl Mask"
+      },
+      "id": "ID",
+      "name": "Name",
+      "aclEntry": "Acl Entry"
+    }
+  }
+}

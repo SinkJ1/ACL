@@ -33,9 +33,6 @@
       <thead>
         <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="reset.bind(this)">
           <th scope="col" jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="principal">
-            <span jhiTranslate="securityApp.aclSid.principal">Principal</span> <fa-icon icon="sort"></fa-icon>
-          </th>
           <th scope="col" jhiSortBy="sid"><span jhiTranslate="securityApp.aclSid.sid">Sid</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
         </tr>
@@ -45,7 +42,6 @@
           <td>
             <a [routerLink]="['/acl-sid', aclSid.id, 'view']">{{ aclSid.id }}</a>
           </td>
-          <td>{{ aclSid.principal }}</td>
           <td>{{ aclSid.sid }}</td>
           <td class="text-right">
             <div class="btn-group">

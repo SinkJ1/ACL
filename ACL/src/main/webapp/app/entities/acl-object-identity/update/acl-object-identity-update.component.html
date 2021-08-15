@@ -22,7 +22,7 @@
             >Object Id Identity</label
           >
           <input
-            type="text"
+            type="number"
             class="form-control"
             name="objectIdIdentity"
             id="field_objectIdIdentity"
@@ -41,6 +41,13 @@
               jhiTranslate="entity.validation.required"
             >
               This field is required.
+            </small>
+            <small
+              class="form-text text-danger"
+              [hidden]="!editForm.get('objectIdIdentity')?.errors?.number"
+              jhiTranslate="entity.validation.number"
+            >
+              This field should be a number.
             </small>
           </div>
         </div>

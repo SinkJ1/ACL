@@ -14,8 +14,6 @@ import sinkj1.security.domain.AclSid;
 @Service
 @Transactional
 public class PermissionService {
-    /*/@Autowired
-    private MutableAclService aclService;*/
 
     @Autowired
     private final AclService aclService;
@@ -28,20 +26,24 @@ public class PermissionService {
     }
 
     public void addPermissionForUser(Long id, String className, Permission permission, String username) {
-        AclSid aclSid = new AclSid(true, username);
+        AclSid aclSid = new AclSid(username);
         addPermissionForSid(id, className, permission, aclSid);
     }
+
     public void addPermissionForAuthority(Long id, String className, Permission permission, String authority) {
-        AclSid aclSid = new AclSid(false, authority);
+        AclSid aclSid = new AclSid(authority);
         addPermissionForSid(id, className, permission, aclSid);
     }
+
     private void addPermissionForSid(Long id, String className, Permission permission, AclSid sid) {
         final TransactionTemplate tt = new TransactionTemplate(transactionManager);
-        tt.execute(new TransactionCallbackWithoutResult() {
-            @Override
-            protected void doInTransactionWithoutResult(TransactionStatus status) {
-                aclService.createPermission(id, className,permission,sid);
+        tt.execute(
+            new TransactionCallbackWithoutResult() {
+                @Override
+                protected void doInTransactionWithoutResult(TransactionStatus status) {
+                    aclService.createPermission(id, className, permission, sid);
+                }
             }
-        });
+        );
     }
 }

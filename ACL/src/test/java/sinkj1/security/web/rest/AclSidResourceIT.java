@@ -31,9 +31,6 @@ import sinkj1.security.service.mapper.AclSidMapper;
 @WithMockUser
 class AclSidResourceIT {
 
-    private static final Boolean DEFAULT_PRINCIPAL = false;
-    private static final Boolean UPDATED_PRINCIPAL = true;
-
     private static final String DEFAULT_SID = "AAAAAAAAAA";
     private static final String UPDATED_SID = "BBBBBBBBBB";
 
@@ -64,7 +61,7 @@ class AclSidResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static AclSid createEntity(EntityManager em) {
-        AclSid aclSid = new AclSid().principal(DEFAULT_PRINCIPAL).sid(DEFAULT_SID);
+        AclSid aclSid = new AclSid().sid(DEFAULT_SID);
         return aclSid;
     }
 
@@ -75,7 +72,7 @@ class AclSidResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static AclSid createUpdatedEntity(EntityManager em) {
-        AclSid aclSid = new AclSid().principal(UPDATED_PRINCIPAL).sid(UPDATED_SID);
+        AclSid aclSid = new AclSid().sid(UPDATED_SID);
         return aclSid;
     }
 
@@ -98,7 +95,6 @@ class AclSidResourceIT {
         List<AclSid> aclSidList = aclSidRepository.findAll();
         assertThat(aclSidList).hasSize(databaseSizeBeforeCreate + 1);
         AclSid testAclSid = aclSidList.get(aclSidList.size() - 1);
-        assertThat(testAclSid.getPrincipal()).isEqualTo(DEFAULT_PRINCIPAL);
         assertThat(testAclSid.getSid()).isEqualTo(DEFAULT_SID);
     }
 
@@ -119,24 +115,6 @@ class AclSidResourceIT {
         // Validate the AclSid in the database
         List<AclSid> aclSidList = aclSidRepository.findAll();
         assertThat(aclSidList).hasSize(databaseSizeBeforeCreate);
-    }
-
-    @Test
-    @Transactional
-    void checkPrincipalIsRequired() throws Exception {
-        int databaseSizeBeforeTest = aclSidRepository.findAll().size();
-        // set the field null
-        aclSid.setPrincipal(null);
-
-        // Create the AclSid, which fails.
-        AclSidDTO aclSidDTO = aclSidMapper.toDto(aclSid);
-
-        restAclSidMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(aclSidDTO)))
-            .andExpect(status().isBadRequest());
-
-        List<AclSid> aclSidList = aclSidRepository.findAll();
-        assertThat(aclSidList).hasSize(databaseSizeBeforeTest);
     }
 
     @Test
@@ -169,7 +147,6 @@ class AclSidResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(aclSid.getId().intValue())))
-            .andExpect(jsonPath("$.[*].principal").value(hasItem(DEFAULT_PRINCIPAL.booleanValue())))
             .andExpect(jsonPath("$.[*].sid").value(hasItem(DEFAULT_SID)));
     }
 
@@ -185,7 +162,6 @@ class AclSidResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(aclSid.getId().intValue()))
-            .andExpect(jsonPath("$.principal").value(DEFAULT_PRINCIPAL.booleanValue()))
             .andExpect(jsonPath("$.sid").value(DEFAULT_SID));
     }
 
@@ -208,7 +184,7 @@ class AclSidResourceIT {
         AclSid updatedAclSid = aclSidRepository.findById(aclSid.getId()).get();
         // Disconnect from session so that the updates on updatedAclSid are not directly saved in db
         em.detach(updatedAclSid);
-        updatedAclSid.principal(UPDATED_PRINCIPAL).sid(UPDATED_SID);
+        updatedAclSid.sid(UPDATED_SID);
         AclSidDTO aclSidDTO = aclSidMapper.toDto(updatedAclSid);
 
         restAclSidMockMvc
@@ -223,7 +199,6 @@ class AclSidResourceIT {
         List<AclSid> aclSidList = aclSidRepository.findAll();
         assertThat(aclSidList).hasSize(databaseSizeBeforeUpdate);
         AclSid testAclSid = aclSidList.get(aclSidList.size() - 1);
-        assertThat(testAclSid.getPrincipal()).isEqualTo(UPDATED_PRINCIPAL);
         assertThat(testAclSid.getSid()).isEqualTo(UPDATED_SID);
     }
 
@@ -304,7 +279,7 @@ class AclSidResourceIT {
         AclSid partialUpdatedAclSid = new AclSid();
         partialUpdatedAclSid.setId(aclSid.getId());
 
-        partialUpdatedAclSid.principal(UPDATED_PRINCIPAL).sid(UPDATED_SID);
+        partialUpdatedAclSid.sid(UPDATED_SID);
 
         restAclSidMockMvc
             .perform(
@@ -318,7 +293,6 @@ class AclSidResourceIT {
         List<AclSid> aclSidList = aclSidRepository.findAll();
         assertThat(aclSidList).hasSize(databaseSizeBeforeUpdate);
         AclSid testAclSid = aclSidList.get(aclSidList.size() - 1);
-        assertThat(testAclSid.getPrincipal()).isEqualTo(UPDATED_PRINCIPAL);
         assertThat(testAclSid.getSid()).isEqualTo(UPDATED_SID);
     }
 
@@ -334,7 +308,7 @@ class AclSidResourceIT {
         AclSid partialUpdatedAclSid = new AclSid();
         partialUpdatedAclSid.setId(aclSid.getId());
 
-        partialUpdatedAclSid.principal(UPDATED_PRINCIPAL).sid(UPDATED_SID);
+        partialUpdatedAclSid.sid(UPDATED_SID);
 
         restAclSidMockMvc
             .perform(
@@ -348,7 +322,6 @@ class AclSidResourceIT {
         List<AclSid> aclSidList = aclSidRepository.findAll();
         assertThat(aclSidList).hasSize(databaseSizeBeforeUpdate);
         AclSid testAclSid = aclSidList.get(aclSidList.size() - 1);
-        assertThat(testAclSid.getPrincipal()).isEqualTo(UPDATED_PRINCIPAL);
         assertThat(testAclSid.getSid()).isEqualTo(UPDATED_SID);
     }
 

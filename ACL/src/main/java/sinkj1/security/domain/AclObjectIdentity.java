@@ -26,9 +26,10 @@ public class AclObjectIdentity implements Serializable {
 
     @NotNull
     @Column(name = "object_id_identity", nullable = false)
-    private String objectIdIdentity;
+    private Integer objectIdIdentity;
 
-    @Column(name = "parent_object")
+    @NotNull
+    @Column(name = "parent_object", nullable = false)
     private Integer parentObject;
 
     @Column(name = "owner_sid")
@@ -39,20 +40,18 @@ public class AclObjectIdentity implements Serializable {
 
     @OneToMany(mappedBy = "aclObjectIdentity")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "aclSid", "aclObjectIdentity" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "aclSid", "aclObjectIdentity", "aclMask" }, allowSetters = true)
     private Set<AclEntry> aclEntries = new HashSet<>();
 
     @ManyToOne
-    @JoinColumn(name = "object_id_class")
     @JsonIgnoreProperties(value = { "aclObjectIdentities" }, allowSetters = true)
     private AclClass aclClass;
 
-    public AclObjectIdentity() {
-    }
+    public AclObjectIdentity() {}
 
-    public AclObjectIdentity(String objectIdIdentity, Integer ownerSid, Boolean entriesInheriting, AclClass aclClass) {
+    public AclObjectIdentity(Integer objectIdIdentity, Integer parentObject, Boolean entriesInheriting, AclClass aclClass) {
         this.objectIdIdentity = objectIdIdentity;
-        this.ownerSid = ownerSid;
+        this.parentObject = parentObject;
         this.entriesInheriting = entriesInheriting;
         this.aclClass = aclClass;
     }
@@ -71,16 +70,16 @@ public class AclObjectIdentity implements Serializable {
         return this;
     }
 
-    public String getObjectIdIdentity() {
+    public Integer getObjectIdIdentity() {
         return this.objectIdIdentity;
     }
 
-    public AclObjectIdentity objectIdIdentity(String objectIdIdentity) {
+    public AclObjectIdentity objectIdIdentity(Integer objectIdIdentity) {
         this.objectIdIdentity = objectIdIdentity;
         return this;
     }
 
-    public void setObjectIdIdentity(String objectIdIdentity) {
+    public void setObjectIdIdentity(Integer objectIdIdentity) {
         this.objectIdIdentity = objectIdIdentity;
     }
 
@@ -191,7 +190,7 @@ public class AclObjectIdentity implements Serializable {
     public String toString() {
         return "AclObjectIdentity{" +
             "id=" + getId() +
-            ", objectIdIdentity='" + getObjectIdIdentity() + "'" +
+            ", objectIdIdentity=" + getObjectIdIdentity() +
             ", parentObject=" + getParentObject() +
             ", ownerSid=" + getOwnerSid() +
             ", entriesInheriting='" + getEntriesInheriting() + "'" +

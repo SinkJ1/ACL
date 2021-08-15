@@ -23,7 +23,6 @@ describe('Service Tests', () => {
       elemDefault = {
         id: 0,
         className: 'AAAAAAA',
-        classIdType: 'AAAAAAA',
       };
     });
 
@@ -60,7 +59,6 @@ describe('Service Tests', () => {
           {
             id: 1,
             className: 'BBBBBB',
-            classIdType: 'BBBBBB',
           },
           elemDefault
         );
@@ -75,12 +73,7 @@ describe('Service Tests', () => {
       });
 
       it('should partial update a AclClass', () => {
-        const patchObject = Object.assign(
-          {
-            classIdType: 'BBBBBB',
-          },
-          new AclClass()
-        );
+        const patchObject = Object.assign({}, new AclClass());
 
         const returnedFromService = Object.assign(patchObject, elemDefault);
 
@@ -98,7 +91,6 @@ describe('Service Tests', () => {
           {
             id: 1,
             className: 'BBBBBB',
-            classIdType: 'BBBBBB',
           },
           elemDefault
         );
@@ -150,7 +142,7 @@ describe('Service Tests', () => {
         });
 
         it('should add only unique AclClass to an array', () => {
-          const aclClassArray: IAclClass[] = [{ id: 123 }, { id: 456 }, { id: 21880 }];
+          const aclClassArray: IAclClass[] = [{ id: 123 }, { id: 456 }, { id: 90719 }];
           const aclClassCollection: IAclClass[] = [{ id: 123 }];
           expectedResult = service.addAclClassToCollectionIfMissing(aclClassCollection, ...aclClassArray);
           expect(expectedResult).toHaveLength(3);

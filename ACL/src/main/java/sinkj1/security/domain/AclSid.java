@@ -8,6 +8,7 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.springframework.security.acls.model.Acl;
 
 /**
  * A AclSid.
@@ -25,27 +26,19 @@ public class AclSid implements Serializable {
     private Long id;
 
     @NotNull
-    @Column(name = "principal", nullable = false)
-    private Boolean principal;
-
-    @NotNull
     @Column(name = "sid", nullable = false)
     private String sid;
 
     @OneToMany(mappedBy = "aclSid")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "aclSid", "aclObjectIdentity" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "aclSid", "aclObjectIdentity", "aclMask" }, allowSetters = true)
     private Set<AclEntry> aclEntries = new HashSet<>();
 
+    public AclSid() {}
 
-    public AclSid() {
-    }
-
-    public AclSid(Boolean principal, String sid) {
-        this.principal = principal;
+    public AclSid(String sid) {
         this.sid = sid;
     }
-
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -59,19 +52,6 @@ public class AclSid implements Serializable {
     public AclSid id(Long id) {
         this.id = id;
         return this;
-    }
-
-    public Boolean getPrincipal() {
-        return this.principal;
-    }
-
-    public AclSid principal(Boolean principal) {
-        this.principal = principal;
-        return this;
-    }
-
-    public void setPrincipal(Boolean principal) {
-        this.principal = principal;
     }
 
     public String getSid() {
@@ -142,7 +122,6 @@ public class AclSid implements Serializable {
     public String toString() {
         return "AclSid{" +
             "id=" + getId() +
-            ", principal='" + getPrincipal() + "'" +
             ", sid='" + getSid() + "'" +
             "}";
     }

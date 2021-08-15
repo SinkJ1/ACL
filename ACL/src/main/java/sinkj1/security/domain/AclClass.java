@@ -28,22 +28,15 @@ public class AclClass implements Serializable {
     @Column(name = "class", nullable = false)
     private String className;
 
-    @NotNull
-    @Column(name = "class_id_type", nullable = false)
-    private String classIdType;
-
     @OneToMany(mappedBy = "aclClass")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "aclEntries", "aclClass" }, allowSetters = true)
     private Set<AclObjectIdentity> aclObjectIdentities = new HashSet<>();
 
-
-    public AclClass() {
-    }
+    public AclClass() {}
 
     public AclClass(String className) {
         this.className = className;
-        this.classIdType = "";
     }
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
@@ -71,19 +64,6 @@ public class AclClass implements Serializable {
 
     public void setClassName(String className) {
         this.className = className;
-    }
-
-    public String getClassIdType() {
-        return this.classIdType;
-    }
-
-    public AclClass classIdType(String classIdType) {
-        this.classIdType = classIdType;
-        return this;
-    }
-
-    public void setClassIdType(String classIdType) {
-        this.classIdType = classIdType;
     }
 
     public Set<AclObjectIdentity> getAclObjectIdentities() {
@@ -142,7 +122,6 @@ public class AclClass implements Serializable {
         return "AclClass{" +
             "id=" + getId() +
             ", className='" + getClassName() + "'" +
-            ", classIdType='" + getClassIdType() + "'" +
             "}";
     }
 }

@@ -1,11 +1,8 @@
 package sinkj1.security.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import java.io.Serializable;
 import javax.persistence.*;
-import javax.validation.constraints.*;
-
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -24,45 +21,28 @@ public class AclEntry implements Serializable {
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
-    @NotNull
-    @Column(name = "ace_order", nullable = false)
-    private Integer aceOrder;
-
-    @ManyToOne
-    @JoinColumn(name = "mask")
-    @JsonIgnoreProperties(value = {"aclEntries"}, allowSetters = true)
-    private AclMask aclMask;
-
     @Column(name = "granting")
     private Boolean granting;
 
-    @Column(name = "audit_success")
-    private Boolean auditSuccess;
-
-    @Column(name = "audit_failure")
-    private Boolean auditFailure;
-
     @ManyToOne
-    @JoinColumn(name = "sid")
-    @JsonIgnoreProperties(value = {"aclEntries"}, allowSetters = true)
+    @JsonIgnoreProperties(value = { "aclEntries" }, allowSetters = true)
     private AclSid aclSid;
 
     @ManyToOne
-    @JoinColumn(name = "acl_object_identity")
-    @JsonIgnoreProperties(value = {"aclEntries", "aclClass"}, allowSetters = true)
+    @JsonIgnoreProperties(value = { "aclEntries", "aclClass" }, allowSetters = true)
     private AclObjectIdentity aclObjectIdentity;
 
-    public AclEntry() {
-    }
+    @ManyToOne
+    @JsonIgnoreProperties(value = { "aclEntries" }, allowSetters = true)
+    private AclMask aclMask;
 
-    public AclEntry(Integer aceOrder, AclMask aclMask, Boolean granting, Boolean auditSuccess, Boolean auditFailure, AclSid aclSid, AclObjectIdentity aclObjectIdentity) {
-        this.aceOrder = aceOrder;
-        this.aclMask = aclMask;
+    public AclEntry() {}
+
+    public AclEntry(Boolean granting, AclSid aclSid, AclObjectIdentity aclObjectIdentity, AclMask aclMask) {
         this.granting = granting;
-        this.auditSuccess = auditSuccess;
-        this.auditFailure = auditFailure;
         this.aclSid = aclSid;
         this.aclObjectIdentity = aclObjectIdentity;
+        this.aclMask = aclMask;
     }
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
@@ -79,19 +59,6 @@ public class AclEntry implements Serializable {
         return this;
     }
 
-    public Integer getAceOrder() {
-        return this.aceOrder;
-    }
-
-    public AclEntry aceOrder(Integer aceOrder) {
-        this.aceOrder = aceOrder;
-        return this;
-    }
-
-    public void setAceOrder(Integer aceOrder) {
-        this.aceOrder = aceOrder;
-    }
-
     public Boolean getGranting() {
         return this.granting;
     }
@@ -103,45 +70,6 @@ public class AclEntry implements Serializable {
 
     public void setGranting(Boolean granting) {
         this.granting = granting;
-    }
-
-    public Boolean getAuditSuccess() {
-        return this.auditSuccess;
-    }
-
-    public AclEntry auditSuccess(Boolean auditSuccess) {
-        this.auditSuccess = auditSuccess;
-        return this;
-    }
-
-    public void setAuditSuccess(Boolean auditSuccess) {
-        this.auditSuccess = auditSuccess;
-    }
-
-    public Boolean getAuditFailure() {
-        return this.auditFailure;
-    }
-
-    public AclEntry auditFailure(Boolean auditFailure) {
-        this.auditFailure = auditFailure;
-        return this;
-    }
-
-    public AclMask getAclMask() {
-        return this.aclMask;
-    }
-
-    public AclEntry aclMask(AclMask aclMask) {
-        this.setAclMask(aclMask);
-        return this;
-    }
-
-    public void setAclMask(AclMask aclMask) {
-        this.aclMask = aclMask;
-    }
-
-    public void setAuditFailure(Boolean auditFailure) {
-        this.auditFailure = auditFailure;
     }
 
     public AclSid getAclSid() {
@@ -170,6 +98,19 @@ public class AclEntry implements Serializable {
         this.aclObjectIdentity = aclObjectIdentity;
     }
 
+    public AclMask getAclMask() {
+        return this.aclMask;
+    }
+
+    public AclEntry aclMask(AclMask aclMask) {
+        this.setAclMask(aclMask);
+        return this;
+    }
+
+    public void setAclMask(AclMask aclMask) {
+        this.aclMask = aclMask;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -194,10 +135,7 @@ public class AclEntry implements Serializable {
     public String toString() {
         return "AclEntry{" +
             "id=" + getId() +
-            ", aceOrder=" + getAceOrder() +
             ", granting='" + getGranting() + "'" +
-            ", auditSuccess='" + getAuditSuccess() + "'" +
-            ", auditFailure='" + getAuditFailure() + "'" +
             "}";
     }
 }

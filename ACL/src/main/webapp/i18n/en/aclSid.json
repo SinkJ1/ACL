@@ -18,7 +18,6 @@
         "title": "Acl Sid"
       },
       "id": "ID",
-      "principal": "Principal",
       "sid": "Sid",
       "aclEntry": "Acl Entry"
     }

@@ -19,7 +19,6 @@
       },
       "id": "ID",
       "className": "Class Name",
-      "classIdType": "Class Id Type",
       "aclObjectIdentity": "Acl Object Identity"
     }
   }

@@ -20,9 +20,19 @@ import { RouterModule } from '@angular/router';
         loadChildren: () => import('./acl-object-identity/acl-object-identity.module').then(m => m.AclObjectIdentityModule),
       },
       {
+        path: 'acl-mask',
+        data: { pageTitle: 'securityApp.aclMask.home.title' },
+        loadChildren: () => import('./acl-mask/acl-mask.module').then(m => m.AclMaskModule),
+      },
+      {
         path: 'acl-entry',
         data: { pageTitle: 'securityApp.aclEntry.home.title' },
         loadChildren: () => import('./acl-entry/acl-entry.module').then(m => m.AclEntryModule),
+      },
+      {
+        path: 'tenant',
+        data: { pageTitle: 'securityApp.tenant.home.title' },
+        loadChildren: () => import('./tenant/tenant.module').then(m => m.TenantModule),
       },
       /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
     ]),

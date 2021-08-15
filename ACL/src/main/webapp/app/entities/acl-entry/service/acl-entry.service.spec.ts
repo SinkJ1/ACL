@@ -22,11 +22,7 @@ describe('Service Tests', () => {
 
       elemDefault = {
         id: 0,
-        aceOrder: 0,
-        mask: 0,
         granting: false,
-        auditSuccess: false,
-        auditFailure: false,
       };
     });
 
@@ -62,11 +58,7 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign(
           {
             id: 1,
-            aceOrder: 1,
-            mask: 1,
             granting: true,
-            auditSuccess: true,
-            auditFailure: true,
           },
           elemDefault
         );
@@ -81,12 +73,7 @@ describe('Service Tests', () => {
       });
 
       it('should partial update a AclEntry', () => {
-        const patchObject = Object.assign(
-          {
-            auditSuccess: true,
-          },
-          new AclEntry()
-        );
+        const patchObject = Object.assign({}, new AclEntry());
 
         const returnedFromService = Object.assign(patchObject, elemDefault);
 
@@ -103,11 +90,7 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign(
           {
             id: 1,
-            aceOrder: 1,
-            mask: 1,
             granting: true,
-            auditSuccess: true,
-            auditFailure: true,
           },
           elemDefault
         );
@@ -159,7 +142,7 @@ describe('Service Tests', () => {
         });
 
         it('should add only unique AclEntry to an array', () => {
-          const aclEntryArray: IAclEntry[] = [{ id: 123 }, { id: 456 }, { id: 18798 }];
+          const aclEntryArray: IAclEntry[] = [{ id: 123 }, { id: 456 }, { id: 47799 }];
           const aclEntryCollection: IAclEntry[] = [{ id: 123 }];
           expectedResult = service.addAclEntryToCollectionIfMissing(aclEntryCollection, ...aclEntryArray);
           expect(expectedResult).toHaveLength(3);

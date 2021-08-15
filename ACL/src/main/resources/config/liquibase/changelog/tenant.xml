@@ -11,8 +11,11 @@
     -->
     <changeSet id="20210730074249-2" author="yury">
         <createTable tableName="tenant">
-            <column name="tenant_id" type="VARCHAR(30)">
+            <column name="id" type="bigint">
                 <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="tenant_id" type="VARCHAR(30)">
+                <constraints primaryKey="false" nullable="false"/>
             </column>
             <column name="schema" type="VARCHAR(30)">
                 <constraints nullable="false" />

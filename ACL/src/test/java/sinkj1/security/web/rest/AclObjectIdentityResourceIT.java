@@ -31,8 +31,8 @@ import sinkj1.security.service.mapper.AclObjectIdentityMapper;
 @WithMockUser
 class AclObjectIdentityResourceIT {
 
-    private static final String DEFAULT_OBJECT_ID_IDENTITY = "AAAAAAAAAA";
-    private static final String UPDATED_OBJECT_ID_IDENTITY = "BBBBBBBBBB";
+    private static final Integer DEFAULT_OBJECT_ID_IDENTITY = 1;
+    private static final Integer UPDATED_OBJECT_ID_IDENTITY = 2;
 
     private static final Integer DEFAULT_PARENT_OBJECT = 1;
     private static final Integer UPDATED_PARENT_OBJECT = 2;

@@ -63,7 +63,6 @@ spring:
     cache: false
 
 multitenancy:
-
   master:
     repository:
       packages: sinkj1.security.repository
@@ -81,7 +80,7 @@ multitenancy:
       changeLog: classpath:config/liquibase/masterForTanont.xml
 
 server:
-  port: 8085
+  port: 8080
 
 # ===================================================================
 # JHipster specific properties

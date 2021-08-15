@@ -22,7 +22,7 @@ describe('Service Tests', () => {
 
       elemDefault = {
         id: 0,
-        objectIdIdentity: 'AAAAAAA',
+        objectIdIdentity: 0,
         parentObject: 0,
         ownerSid: 0,
         entriesInheriting: false,
@@ -61,7 +61,7 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign(
           {
             id: 1,
-            objectIdIdentity: 'BBBBBB',
+            objectIdIdentity: 1,
             parentObject: 1,
             ownerSid: 1,
             entriesInheriting: true,
@@ -81,7 +81,7 @@ describe('Service Tests', () => {
       it('should partial update a AclObjectIdentity', () => {
         const patchObject = Object.assign(
           {
-            objectIdIdentity: 'BBBBBB',
+            objectIdIdentity: 1,
             ownerSid: 1,
             entriesInheriting: true,
           },
@@ -103,7 +103,7 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign(
           {
             id: 1,
-            objectIdIdentity: 'BBBBBB',
+            objectIdIdentity: 1,
             parentObject: 1,
             ownerSid: 1,
             entriesInheriting: true,

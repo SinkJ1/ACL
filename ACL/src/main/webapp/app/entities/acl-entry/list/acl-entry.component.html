@@ -33,24 +33,17 @@
       <thead>
         <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="reset.bind(this)">
           <th scope="col" jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="aceOrder">
-            <span jhiTranslate="securityApp.aclEntry.aceOrder">Ace Order</span> <fa-icon icon="sort"></fa-icon>
-          </th>
-          <th scope="col" jhiSortBy="mask"><span jhiTranslate="securityApp.aclEntry.mask">Mask</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="granting">
             <span jhiTranslate="securityApp.aclEntry.granting">Granting</span> <fa-icon icon="sort"></fa-icon>
-          </th>
-          <th scope="col" jhiSortBy="auditSuccess">
-            <span jhiTranslate="securityApp.aclEntry.auditSuccess">Audit Success</span> <fa-icon icon="sort"></fa-icon>
-          </th>
-          <th scope="col" jhiSortBy="auditFailure">
-            <span jhiTranslate="securityApp.aclEntry.auditFailure">Audit Failure</span> <fa-icon icon="sort"></fa-icon>
           </th>
           <th scope="col" jhiSortBy="aclSid.sid">
             <span jhiTranslate="securityApp.aclEntry.aclSid">Acl Sid</span> <fa-icon icon="sort"></fa-icon>
           </th>
           <th scope="col" jhiSortBy="aclObjectIdentity.id">
             <span jhiTranslate="securityApp.aclEntry.aclObjectIdentity">Acl Object Identity</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="aclMask.mask">
+            <span jhiTranslate="securityApp.aclEntry.aclMask">Acl Mask</span> <fa-icon icon="sort"></fa-icon>
           </th>
           <th scope="col"></th>
         </tr>
@@ -60,11 +53,7 @@
           <td>
             <a [routerLink]="['/acl-entry', aclEntry.id, 'view']">{{ aclEntry.id }}</a>
           </td>
-          <td>{{ aclEntry.aceOrder }}</td>
-          <td>{{ aclEntry.mask }}</td>
           <td>{{ aclEntry.granting }}</td>
-          <td>{{ aclEntry.auditSuccess }}</td>
-          <td>{{ aclEntry.auditFailure }}</td>
           <td>
             <div *ngIf="aclEntry.aclSid">
               <a [routerLink]="['/acl-sid', aclEntry.aclSid?.id, 'view']">{{ aclEntry.aclSid?.sid }}</a>
@@ -73,6 +62,11 @@
           <td>
             <div *ngIf="aclEntry.aclObjectIdentity">
               <a [routerLink]="['/acl-object-identity', aclEntry.aclObjectIdentity?.id, 'view']">{{ aclEntry.aclObjectIdentity?.id }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="aclEntry.aclMask">
+              <a [routerLink]="['/acl-mask', aclEntry.aclMask?.id, 'view']">{{ aclEntry.aclMask?.name }}</a>
             </div>
           </td>
           <td class="text-right">

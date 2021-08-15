@@ -18,7 +18,6 @@ export class AclClassUpdateComponent implements OnInit {
   editForm = this.fb.group({
     id: [],
     className: [null, [Validators.required]],
-    classIdType: [null, [Validators.required]],
   });
 
   constructor(protected aclClassService: AclClassService, protected activatedRoute: ActivatedRoute, protected fb: FormBuilder) {}
@@ -66,7 +65,6 @@ export class AclClassUpdateComponent implements OnInit {
     this.editForm.patchValue({
       id: aclClass.id,
       className: aclClass.className,
-      classIdType: aclClass.classIdType,
     });
   }
 
@@ -75,7 +73,6 @@ export class AclClassUpdateComponent implements OnInit {
       ...new AclClass(),
       id: this.editForm.get(['id'])!.value,
       className: this.editForm.get(['className'])!.value,
-      classIdType: this.editForm.get(['classIdType'])!.value,
     };
   }
 }

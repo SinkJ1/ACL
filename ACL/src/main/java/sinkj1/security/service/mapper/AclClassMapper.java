@@ -1,7 +1,10 @@
 package sinkj1.security.service.mapper;
 
-import org.mapstruct.*;
-import sinkj1.security.domain.*;
+import org.mapstruct.BeanMapping;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Named;
+import sinkj1.security.domain.AclClass;
 import sinkj1.security.service.dto.AclClassDTO;
 
 /**

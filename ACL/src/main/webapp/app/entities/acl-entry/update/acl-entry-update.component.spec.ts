@@ -13,6 +13,8 @@ import { IAclSid } from 'app/entities/acl-sid/acl-sid.model';
 import { AclSidService } from 'app/entities/acl-sid/service/acl-sid.service';
 import { IAclObjectIdentity } from 'app/entities/acl-object-identity/acl-object-identity.model';
 import { AclObjectIdentityService } from 'app/entities/acl-object-identity/service/acl-object-identity.service';
+import { IAclMask } from 'app/entities/acl-mask/acl-mask.model';
+import { AclMaskService } from 'app/entities/acl-mask/service/acl-mask.service';
 
 import { AclEntryUpdateComponent } from './acl-entry-update.component';
 
@@ -24,6 +26,7 @@ describe('Component Tests', () => {
     let aclEntryService: AclEntryService;
     let aclSidService: AclSidService;
     let aclObjectIdentityService: AclObjectIdentityService;
+    let aclMaskService: AclMaskService;
 
     beforeEach(() => {
       TestBed.configureTestingModule({
@@ -39,6 +42,7 @@ describe('Component Tests', () => {
       aclEntryService = TestBed.inject(AclEntryService);
       aclSidService = TestBed.inject(AclSidService);
       aclObjectIdentityService = TestBed.inject(AclObjectIdentityService);
+      aclMaskService = TestBed.inject(AclMaskService);
 
       comp = fixture.componentInstance;
     });
@@ -85,12 +89,33 @@ describe('Component Tests', () => {
         expect(comp.aclObjectIdentitiesSharedCollection).toEqual(expectedCollection);
       });
 
+      it('Should call AclMask query and add missing value', () => {
+        const aclEntry: IAclEntry = { id: 456 };
+        const aclMask: IAclMask = { id: 50536 };
+        aclEntry.aclMask = aclMask;
+
+        const aclMaskCollection: IAclMask[] = [{ id: 71532 }];
+        jest.spyOn(aclMaskService, 'query').mockReturnValue(of(new HttpResponse({ body: aclMaskCollection })));
+        const additionalAclMasks = [aclMask];
+        const expectedCollection: IAclMask[] = [...additionalAclMasks, ...aclMaskCollection];
+        jest.spyOn(aclMaskService, 'addAclMaskToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+        activatedRoute.data = of({ aclEntry });
+        comp.ngOnInit();
+
+        expect(aclMaskService.query).toHaveBeenCalled();
+        expect(aclMaskService.addAclMaskToCollectionIfMissing).toHaveBeenCalledWith(aclMaskCollection, ...additionalAclMasks);
+        expect(comp.aclMasksSharedCollection).toEqual(expectedCollection);
+      });
+
       it('Should update editForm', () => {
         const aclEntry: IAclEntry = { id: 456 };
         const aclSid: IAclSid = { id: 27607 };
         aclEntry.aclSid = aclSid;
         const aclObjectIdentity: IAclObjectIdentity = { id: 6642 };
         aclEntry.aclObjectIdentity = aclObjectIdentity;
+        const aclMask: IAclMask = { id: 94526 };
+        aclEntry.aclMask = aclMask;
 
         activatedRoute.data = of({ aclEntry });
         comp.ngOnInit();
@@ -98,6 +123,7 @@ describe('Component Tests', () => {
         expect(comp.editForm.value).toEqual(expect.objectContaining(aclEntry));
         expect(comp.aclSidsSharedCollection).toContain(aclSid);
         expect(comp.aclObjectIdentitiesSharedCollection).toContain(aclObjectIdentity);
+        expect(comp.aclMasksSharedCollection).toContain(aclMask);
       });
     });
 
@@ -178,6 +204,14 @@ describe('Component Tests', () => {
         it('Should return tracked AclObjectIdentity primary key', () => {
           const entity = { id: 123 };
           const trackResult = comp.trackAclObjectIdentityById(0, entity);
+          expect(trackResult).toEqual(entity.id);
+        });
+      });
+
+      describe('trackAclMaskById', () => {
+        it('Should return tracked AclMask primary key', () => {
+          const entity = { id: 123 };
+          const trackResult = comp.trackAclMaskById(0, entity);
           expect(trackResult).toEqual(entity.id);
         });
       });

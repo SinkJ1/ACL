@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
@@ -11,6 +11,8 @@ import { IAclSid } from 'app/entities/acl-sid/acl-sid.model';
 import { AclSidService } from 'app/entities/acl-sid/service/acl-sid.service';
 import { IAclObjectIdentity } from 'app/entities/acl-object-identity/acl-object-identity.model';
 import { AclObjectIdentityService } from 'app/entities/acl-object-identity/service/acl-object-identity.service';
+import { IAclMask } from 'app/entities/acl-mask/acl-mask.model';
+import { AclMaskService } from 'app/entities/acl-mask/service/acl-mask.service';
 
 @Component({
   selector: 'jhi-acl-entry-update',
@@ -21,22 +23,21 @@ export class AclEntryUpdateComponent implements OnInit {
 
   aclSidsSharedCollection: IAclSid[] = [];
   aclObjectIdentitiesSharedCollection: IAclObjectIdentity[] = [];
+  aclMasksSharedCollection: IAclMask[] = [];
 
   editForm = this.fb.group({
     id: [],
-    aceOrder: [null, [Validators.required]],
-    mask: [],
     granting: [],
-    auditSuccess: [],
-    auditFailure: [],
     aclSid: [],
     aclObjectIdentity: [],
+    aclMask: [],
   });
 
   constructor(
     protected aclEntryService: AclEntryService,
     protected aclSidService: AclSidService,
     protected aclObjectIdentityService: AclObjectIdentityService,
+    protected aclMaskService: AclMaskService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
   ) {}
@@ -71,6 +72,10 @@ export class AclEntryUpdateComponent implements OnInit {
     return item.id!;
   }
 
+  trackAclMaskById(index: number, item: IAclMask): number {
+    return item.id!;
+  }
+
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IAclEntry>>): void {
     result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
       () => this.onSaveSuccess(),
@@ -93,13 +98,10 @@ export class AclEntryUpdateComponent implements OnInit {
   protected updateForm(aclEntry: IAclEntry): void {
     this.editForm.patchValue({
       id: aclEntry.id,
-      aceOrder: aclEntry.aceOrder,
-      mask: aclEntry.mask,
       granting: aclEntry.granting,
-      auditSuccess: aclEntry.auditSuccess,
-      auditFailure: aclEntry.auditFailure,
       aclSid: aclEntry.aclSid,
       aclObjectIdentity: aclEntry.aclObjectIdentity,
+      aclMask: aclEntry.aclMask,
     });
 
     this.aclSidsSharedCollection = this.aclSidService.addAclSidToCollectionIfMissing(this.aclSidsSharedCollection, aclEntry.aclSid);
@@ -107,6 +109,7 @@ export class AclEntryUpdateComponent implements OnInit {
       this.aclObjectIdentitiesSharedCollection,
       aclEntry.aclObjectIdentity
     );
+    this.aclMasksSharedCollection = this.aclMaskService.addAclMaskToCollectionIfMissing(this.aclMasksSharedCollection, aclEntry.aclMask);
   }
 
   protected loadRelationshipsOptions(): void {
@@ -128,19 +131,24 @@ export class AclEntryUpdateComponent implements OnInit {
         )
       )
       .subscribe((aclObjectIdentities: IAclObjectIdentity[]) => (this.aclObjectIdentitiesSharedCollection = aclObjectIdentities));
+
+    this.aclMaskService
+      .query()
+      .pipe(map((res: HttpResponse<IAclMask[]>) => res.body ?? []))
+      .pipe(
+        map((aclMasks: IAclMask[]) => this.aclMaskService.addAclMaskToCollectionIfMissing(aclMasks, this.editForm.get('aclMask')!.value))
+      )
+      .subscribe((aclMasks: IAclMask[]) => (this.aclMasksSharedCollection = aclMasks));
   }
 
   protected createFromForm(): IAclEntry {
     return {
       ...new AclEntry(),
       id: this.editForm.get(['id'])!.value,
-      aceOrder: this.editForm.get(['aceOrder'])!.value,
-      mask: this.editForm.get(['mask'])!.value,
       granting: this.editForm.get(['granting'])!.value,
-      auditSuccess: this.editForm.get(['auditSuccess'])!.value,
-      auditFailure: this.editForm.get(['auditFailure'])!.value,
       aclSid: this.editForm.get(['aclSid'])!.value,
       aclObjectIdentity: this.editForm.get(['aclObjectIdentity'])!.value,
+      aclMask: this.editForm.get(['aclMask'])!.value,
     };
   }
 }

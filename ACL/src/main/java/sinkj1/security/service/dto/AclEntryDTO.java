@@ -14,7 +14,7 @@ public class AclEntryDTO implements Serializable {
     @NotNull
     private Integer aceOrder;
 
-    private Integer mask;
+    private AclMaskDTO mask;
 
     private Boolean granting;
 
@@ -42,11 +42,11 @@ public class AclEntryDTO implements Serializable {
         this.aceOrder = aceOrder;
     }
 
-    public Integer getMask() {
+    public AclMaskDTO getMask() {
         return mask;
     }
 
-    public void setMask(Integer mask) {
+    public void setMask(AclMaskDTO mask) {
         this.mask = mask;
     }
 

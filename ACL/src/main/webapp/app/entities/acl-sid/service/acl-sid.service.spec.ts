@@ -22,7 +22,6 @@ describe('Service Tests', () => {
 
       elemDefault = {
         id: 0,
-        principal: false,
         sid: 'AAAAAAA',
       };
     });
@@ -59,7 +58,6 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign(
           {
             id: 1,
-            principal: true,
             sid: 'BBBBBB',
           },
           elemDefault
@@ -77,7 +75,7 @@ describe('Service Tests', () => {
       it('should partial update a AclSid', () => {
         const patchObject = Object.assign(
           {
-            principal: true,
+            sid: 'BBBBBB',
           },
           new AclSid()
         );
@@ -97,7 +95,6 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign(
           {
             id: 1,
-            principal: true,
             sid: 'BBBBBB',
           },
           elemDefault
@@ -150,7 +147,7 @@ describe('Service Tests', () => {
         });
 
         it('should add only unique AclSid to an array', () => {
-          const aclSidArray: IAclSid[] = [{ id: 123 }, { id: 456 }, { id: 61433 }];
+          const aclSidArray: IAclSid[] = [{ id: 123 }, { id: 456 }, { id: 48959 }];
           const aclSidCollection: IAclSid[] = [{ id: 123 }];
           expectedResult = service.addAclSidToCollectionIfMissing(aclSidCollection, ...aclSidArray);
           expect(expectedResult).toHaveLength(3);

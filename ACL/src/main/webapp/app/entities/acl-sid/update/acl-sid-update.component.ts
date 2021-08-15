@@ -17,7 +17,6 @@ export class AclSidUpdateComponent implements OnInit {
 
   editForm = this.fb.group({
     id: [],
-    principal: [null, [Validators.required]],
     sid: [null, [Validators.required]],
   });
 
@@ -65,7 +64,6 @@ export class AclSidUpdateComponent implements OnInit {
   protected updateForm(aclSid: IAclSid): void {
     this.editForm.patchValue({
       id: aclSid.id,
-      principal: aclSid.principal,
       sid: aclSid.sid,
     });
   }
@@ -74,7 +72,6 @@ export class AclSidUpdateComponent implements OnInit {
     return {
       ...new AclSid(),
       id: this.editForm.get(['id'])!.value,
-      principal: this.editForm.get(['principal'])!.value,
       sid: this.editForm.get(['sid'])!.value,
     };
   }

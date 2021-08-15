@@ -14,25 +14,9 @@
         <dd>
           <span>{{ aclEntry.id }}</span>
         </dd>
-        <dt><span jhiTranslate="securityApp.aclEntry.aceOrder">Ace Order</span></dt>
-        <dd>
-          <span>{{ aclEntry.aceOrder }}</span>
-        </dd>
-        <dt><span jhiTranslate="securityApp.aclEntry.mask">Mask</span></dt>
-        <dd>
-          <span>{{ aclEntry.mask }}</span>
-        </dd>
         <dt><span jhiTranslate="securityApp.aclEntry.granting">Granting</span></dt>
         <dd>
           <span>{{ aclEntry.granting }}</span>
-        </dd>
-        <dt><span jhiTranslate="securityApp.aclEntry.auditSuccess">Audit Success</span></dt>
-        <dd>
-          <span>{{ aclEntry.auditSuccess }}</span>
-        </dd>
-        <dt><span jhiTranslate="securityApp.aclEntry.auditFailure">Audit Failure</span></dt>
-        <dd>
-          <span>{{ aclEntry.auditFailure }}</span>
         </dd>
         <dt><span jhiTranslate="securityApp.aclEntry.aclSid">Acl Sid</span></dt>
         <dd>
@@ -44,6 +28,12 @@
         <dd>
           <div *ngIf="aclEntry.aclObjectIdentity">
             <a [routerLink]="['/acl-object-identity', aclEntry.aclObjectIdentity?.id, 'view']">{{ aclEntry.aclObjectIdentity?.id }}</a>
+          </div>
+        </dd>
+        <dt><span jhiTranslate="securityApp.aclEntry.aclMask">Acl Mask</span></dt>
+        <dd>
+          <div *ngIf="aclEntry.aclMask">
+            <a [routerLink]="['/acl-mask', aclEntry.aclMask?.id, 'view']">{{ aclEntry.aclMask?.name }}</a>
           </div>
         </dd>
       </dl>

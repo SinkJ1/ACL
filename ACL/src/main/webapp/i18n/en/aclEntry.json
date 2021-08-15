@@ -18,13 +18,10 @@
         "title": "Acl Entry"
       },
       "id": "ID",
-      "aceOrder": "Ace Order",
-      "mask": "Mask",
       "granting": "Granting",
-      "auditSuccess": "Audit Success",
-      "auditFailure": "Audit Failure",
       "aclSid": "Acl Sid",
-      "aclObjectIdentity": "Acl Object Identity"
+      "aclObjectIdentity": "Acl Object Identity",
+      "aclMask": "Acl Mask"
     }
   }
 }

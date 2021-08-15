@@ -36,9 +36,6 @@
           <th scope="col" jhiSortBy="className">
             <span jhiTranslate="securityApp.aclClass.className">Class Name</span> <fa-icon icon="sort"></fa-icon>
           </th>
-          <th scope="col" jhiSortBy="classIdType">
-            <span jhiTranslate="securityApp.aclClass.classIdType">Class Id Type</span> <fa-icon icon="sort"></fa-icon>
-          </th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -48,7 +45,6 @@
             <a [routerLink]="['/acl-class', aclClass.id, 'view']">{{ aclClass.id }}</a>
           </td>
           <td>{{ aclClass.className }}</td>
-          <td>{{ aclClass.classIdType }}</td>
           <td class="text-right">
             <div class="btn-group">
               <button
