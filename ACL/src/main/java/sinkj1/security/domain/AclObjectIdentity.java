@@ -44,6 +44,7 @@ public class AclObjectIdentity implements Serializable {
     private Set<AclEntry> aclEntries = new HashSet<>();
 
     @ManyToOne
+    @JoinColumn(name = "object_id_class")
     @JsonIgnoreProperties(value = { "aclObjectIdentities" }, allowSetters = true)
     private AclClass aclClass;
 

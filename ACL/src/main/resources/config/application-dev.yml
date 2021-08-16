@@ -80,7 +80,7 @@ multitenancy:
       changeLog: classpath:config/liquibase/masterForTanont.xml
 
 server:
-  port: 8080
+  port: 8085
 
 # ===================================================================
 # JHipster specific properties

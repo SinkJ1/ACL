@@ -173,7 +173,7 @@ public class AclEntryResource {
         System.out.println(dataSource.getConnection().getSchema());
         PreparedStatement statement = connection.prepareStatement("select * from acl_class where id = 1");
         ResultSet rs = statement.executeQuery();
-        while (rs.next()){
+        while (rs.next()) {
             System.out.println(rs.getString(2));
         }
 
@@ -197,11 +197,8 @@ public class AclEntryResource {
             .build();
     }
 
-    @GetMapping("/get")
-    public ResponseEntity<List<MaskAndObject>> getMaskObj(@RequestParam("role") String role, @RequestParam("objE") String objE) {
-        List<Object> obj = aclEntryService.getMaskAndObjectId(role, objE);
-        List<MaskAndObject> maskAndObjects = (List<MaskAndObject>) (Object) obj;
-        return ResponseEntity.ok( maskAndObjects);
+    @GetMapping("/get-acl-entries")
+    public ResponseEntity<List<MaskAndObject>> getMaskObj(@RequestParam("objE") String objE) {
+        return ResponseEntity.ok(aclEntryService.getMaskAndObjectId(objE));
     }
-
 }

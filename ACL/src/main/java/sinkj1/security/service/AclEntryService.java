@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import sinkj1.security.domain.AclEntry;
+import sinkj1.security.domain.MaskAndObject;
 import sinkj1.security.service.dto.AclEntryDTO;
 
 /**
@@ -50,9 +51,7 @@ public interface AclEntryService {
      */
     void delete(Long id);
 
-    List<Object> getMaskAndObjectId(String role, String objE);
+    List<MaskAndObject> getMaskAndObjectId(String objectIdIdentity);
 
-
-    Optional<AclEntry> findEntryForUser(int mask, String objectIdentity, String className, String userAuthority);
-
+    Optional<AclEntry> findEntryForUser(int mask, int objectIdentity, String className, String userAuthority);
 }

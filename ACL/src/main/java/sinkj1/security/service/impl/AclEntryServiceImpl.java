@@ -1,17 +1,20 @@
 package sinkj1.security.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sinkj1.security.domain.AclEntry;
+import sinkj1.security.domain.MaskAndObject;
 import sinkj1.security.repository.AclEntryRepository;
 import sinkj1.security.service.AclEntryService;
 import sinkj1.security.service.dto.AclEntryDTO;
@@ -81,14 +84,27 @@ public class AclEntryServiceImpl implements AclEntryService {
     }
 
     @Override
-    public List<Object> getMaskAndObjectId(String sid, String objectIdIdentity) {
-        //Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return aclEntryRepository.findByMaskAndAclObjectIdentityNative(sid, objectIdIdentity);
+    public List<MaskAndObject> getMaskAndObjectId(String objectIdIdentity) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        List<GrantedAuthority> authorities = new ArrayList<>(authentication.getAuthorities());
+        List<String> authoritiesStrings = authorities.stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
+        List<AclEntry> objectList = aclEntryRepository.findByMaskAndAclObjectIdentityNative(
+            objectIdIdentity,
+            authentication.getName(),
+            authoritiesStrings
+        );
+
+        return objectList
+            .stream()
+            .map(
+                aclEntry ->
+                    new MaskAndObject(aclEntry.getAclObjectIdentity().getObjectIdIdentity(), (int) (long) aclEntry.getAclMask().getId())
+            )
+            .collect(Collectors.toList());
     }
 
     @Override
-    public Optional<AclEntry> findEntryForUser(int mask, String objectIdentity, String className, String userAuthority) {
+    public Optional<AclEntry> findEntryForUser(int mask, int objectIdentity, String className, String userAuthority) {
         return aclEntryRepository.findEntryForUser(mask, objectIdentity, className, userAuthority);
     }
-
 }

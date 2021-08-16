@@ -25,14 +25,17 @@ public class AclEntry implements Serializable {
     private Boolean granting;
 
     @ManyToOne
+    @JoinColumn(name = "sid")
     @JsonIgnoreProperties(value = { "aclEntries" }, allowSetters = true)
     private AclSid aclSid;
 
     @ManyToOne
+    @JoinColumn(name = "acl_object_identity")
     @JsonIgnoreProperties(value = { "aclEntries", "aclClass" }, allowSetters = true)
     private AclObjectIdentity aclObjectIdentity;
 
     @ManyToOne
+    @JoinColumn(name = "mask")
     @JsonIgnoreProperties(value = { "aclEntries" }, allowSetters = true)
     private AclMask aclMask;
 

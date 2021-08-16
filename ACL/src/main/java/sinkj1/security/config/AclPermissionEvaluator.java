@@ -3,10 +3,8 @@ package sinkj1.security.config;
 import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.log.LogMessage;
 import org.springframework.security.access.PermissionEvaluator;
@@ -50,16 +48,23 @@ public class AclPermissionEvaluator implements PermissionEvaluator {
         }
         ObjectIdentity objectIdentity = null;
         try {
-            objectIdentity = new CustomObjectIdentity((String) domainObject.getClass().getDeclaredFields()[0].get(domainObject), (Integer) domainObject.getClass().getDeclaredFields()[1].get(domainObject));
+            objectIdentity =
+                new CustomObjectIdentity(
+                    (String) domainObject.getClass().getDeclaredFields()[0].get(domainObject),
+                    (Integer) domainObject.getClass().getDeclaredFields()[1].get(domainObject)
+                );
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
-        return checkPermission(authentication, new CustomObjectIdentityImpl(objectIdentity.getType(), objectIdentity.getIdentifier()), permission);
+        return checkPermission(
+            authentication,
+            new CustomObjectIdentityImpl(objectIdentity.getType(), objectIdentity.getIdentifier()),
+            permission
+        );
     }
 
     @Override
-    public boolean hasPermission(Authentication authentication, Serializable targetId, String targetType,
-                                 Object permission) {
+    public boolean hasPermission(Authentication authentication, Serializable targetId, String targetType, Object permission) {
         ObjectIdentity objectIdentity = this.objectIdentityGenerator.createObjectIdentity(targetId, targetType);
 
         return checkPermission(authentication, objectIdentity, permission);
@@ -71,10 +76,24 @@ public class AclPermissionEvaluator implements PermissionEvaluator {
         this.logger.debug(LogMessage.of(() -> "Checking permission '" + permission + "' for object '" + oid + "'"));
         try {
             List<GrantedAuthority> authorities = authentication.getAuthorities().stream().collect(Collectors.toList());
-            List<String> authoritiesStrings = authorities.stream().map(grantedAuthority -> grantedAuthority.getAuthority()).collect(Collectors.toList());
-            Optional<AclEntry> aclEntry = aclEntryService.findEntryForUser(resolvePermission.getMask(), String.valueOf(oid.getIdentifier()), oid.getType(), authorities.get(0).toString());
+            List<String> authoritiesStrings = authorities
+                .stream()
+                .map(grantedAuthority -> grantedAuthority.getAuthority())
+                .collect(Collectors.toList());
+            Optional<AclEntry> aclEntry = aclEntryService.findEntryForUser(
+                resolvePermission.getMask(),
+                (int) oid.getIdentifier(),
+                oid.getType(),
+                authorities.get(0).toString()
+            );
 
-            if (aclEntry.isPresent() && (aclEntry.get().getAclSid().getSid().equals(authentication.getName()) || authoritiesStrings.contains(aclEntry.get().getAclSid().getSid()))) {
+            if (
+                aclEntry.isPresent() &&
+                (
+                    aclEntry.get().getAclSid().getSid().equals(authentication.getName()) ||
+                    authoritiesStrings.contains(aclEntry.get().getAclSid().getSid())
+                )
+            ) {
                 this.logger.debug("Access is granted");
                 return true;
             }
@@ -109,5 +128,4 @@ public class AclPermissionEvaluator implements PermissionEvaluator {
             return this.permissionFactory.buildFromName(permString.toUpperCase(Locale.ENGLISH));
         }
     }
-
 }
