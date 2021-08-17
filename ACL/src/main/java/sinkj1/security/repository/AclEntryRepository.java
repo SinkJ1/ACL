@@ -30,11 +30,8 @@ public interface AclEntryRepository extends JpaRepository<AclEntry, Long> {
         "inner join acl_object_identity aoi ON aoi.id = ae.acl_object_identity\n" +
         "inner join acl_class ON acl_class.id = aoi.object_id_class\n" +
         "inner join acl_sid ON acl_sid.id = ae.sid\n" +
-        "where ae.mask = ?1 and aoi.object_id_identity = ?2 and acl_class.class like ?3 ",
+        "where ae.mask = ?1 and aoi.object_id_identity = ?2 and acl_class.class like ?3 and acl_sid.sid in ?4",
         nativeQuery = true
     )
-    Optional<AclEntry> findEntryForUser(int mask, int objectIdentity, String className, String userAuthority);
+    Optional<AclEntry> findEntryForUser(int mask, int objectIdentity, String className, List<String> userAuthority);
 }
-/*
- * and acl_sid.sid like ?4
- * */

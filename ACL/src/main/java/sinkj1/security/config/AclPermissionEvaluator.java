@@ -75,16 +75,14 @@ public class AclPermissionEvaluator implements PermissionEvaluator {
         Permission resolvePermission = resolvePermission(permission);
         this.logger.debug(LogMessage.of(() -> "Checking permission '" + permission + "' for object '" + oid + "'"));
         try {
-            List<GrantedAuthority> authorities = authentication.getAuthorities().stream().collect(Collectors.toList());
-            List<String> authoritiesStrings = authorities
-                .stream()
-                .map(grantedAuthority -> grantedAuthority.getAuthority())
-                .collect(Collectors.toList());
+            List<GrantedAuthority> authorities = new ArrayList<>(authentication.getAuthorities());
+            List<String> authoritiesStrings = authorities.stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
+            authoritiesStrings.add(authentication.getName());
             Optional<AclEntry> aclEntry = aclEntryService.findEntryForUser(
                 resolvePermission.getMask(),
                 (int) oid.getIdentifier(),
                 oid.getType(),
-                authorities.get(0).toString()
+                authoritiesStrings
             );
 
             if (

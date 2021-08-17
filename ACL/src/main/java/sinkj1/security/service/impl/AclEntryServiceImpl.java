@@ -93,7 +93,6 @@ public class AclEntryServiceImpl implements AclEntryService {
             authentication.getName(),
             authoritiesStrings
         );
-
         return objectList
             .stream()
             .map(
@@ -104,7 +103,7 @@ public class AclEntryServiceImpl implements AclEntryService {
     }
 
     @Override
-    public Optional<AclEntry> findEntryForUser(int mask, int objectIdentity, String className, String userAuthority) {
+    public Optional<AclEntry> findEntryForUser(int mask, int objectIdentity, String className, List<String> userAuthority) {
         return aclEntryRepository.findEntryForUser(mask, objectIdentity, className, userAuthority);
     }
 }
