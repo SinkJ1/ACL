@@ -13,5 +13,17 @@
             relativeToChangelogFile="false"
             splitStatements="true"
             stripComments="true"/>
+
+        <loadData
+            file="config/liquibase/fake-data/acl_mask.csv"
+            separator=";"
+            tableName="acl_mask">
+            <column name="id" type="NUMERIC"/>
+            <column name="name" type="STRING"/>
+        </loadData>
+
     </changeSet>
+
+
+
 </databaseChangeLog>
