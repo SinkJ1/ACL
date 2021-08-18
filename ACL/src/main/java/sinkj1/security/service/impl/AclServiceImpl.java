@@ -52,6 +52,9 @@ public class AclServiceImpl implements AclService {
         if (!findAclSid.isPresent()) {
             aclSidRepository.save(sid);
         }
+        if (permission.getMask() == 4) {
+            id = 0000L;
+        }
         Optional<AclObjectIdentity> aclObjectIdentity = aclObjectIdentityRepository.getByClassIdAndIdIdentityFields(
             (int) (long) id,
             (int) (long) aclClassRepository.findByName(className).get().getId()

@@ -103,7 +103,7 @@ public class AclEntryServiceImpl implements AclEntryService {
     }
 
     @Override
-    public Optional<AclEntry> findEntryForUser(int mask, int objectIdentity, String className, List<String> userAuthority) {
+    public Optional<AclEntry> findEntryForUser(List<Integer> mask, int objectIdentity, String className, List<String> userAuthority) {
         return aclEntryRepository.findEntryForUser(mask, objectIdentity, className, userAuthority);
     }
 }

@@ -6,9 +6,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import javax.sql.DataSource;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -19,6 +21,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import sinkj1.security.domain.MaskAndObject;
@@ -200,5 +205,13 @@ public class AclEntryResource {
     @GetMapping("/get-acl-entries")
     public ResponseEntity<List<MaskAndObject>> getMaskObj(@RequestParam("objE") String objE) {
         return ResponseEntity.ok(aclEntryService.getMaskAndObjectId(objE));
+    }
+
+    @GetMapping("/check-role")
+    public ResponseEntity<Boolean> check() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        List<GrantedAuthority> authorities = new ArrayList<>(authentication.getAuthorities());
+        List<String> authoritiesStrings = authorities.stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
+        return ResponseEntity.ok(authoritiesStrings.contains("ROLE_ADMIN"));
     }
 }

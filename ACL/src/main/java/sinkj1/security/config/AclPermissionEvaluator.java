@@ -72,26 +72,23 @@ public class AclPermissionEvaluator implements PermissionEvaluator {
 
     private boolean checkPermission(Authentication authentication, ObjectIdentity oid, Object permission) {
         // Obtain the SIDs applicable to the principal
+
         Permission resolvePermission = resolvePermission(permission);
         this.logger.debug(LogMessage.of(() -> "Checking permission '" + permission + "' for object '" + oid + "'"));
         try {
+            int oidIdentifier = (int) oid.getIdentifier();
+            if (resolvePermission.getMask() == 4) {
+                oidIdentifier = 0000;
+            }
             List<GrantedAuthority> authorities = new ArrayList<>(authentication.getAuthorities());
             List<String> authoritiesStrings = authorities.stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
             authoritiesStrings.add(authentication.getName());
-            Optional<AclEntry> aclEntry = aclEntryService.findEntryForUser(
-                resolvePermission.getMask(),
-                (int) oid.getIdentifier(),
-                oid.getType(),
-                authoritiesStrings
-            );
 
-            if (
-                aclEntry.isPresent() &&
-                (
-                    aclEntry.get().getAclSid().getSid().equals(authentication.getName()) ||
-                    authoritiesStrings.contains(aclEntry.get().getAclSid().getSid())
-                )
-            ) {
+            List<Integer> masks = List.of(resolvePermission.getMask(), 16);
+
+            Optional<AclEntry> aclEntry = aclEntryService.findEntryForUser(masks, oidIdentifier, oid.getType(), authoritiesStrings);
+
+            if (aclEntry.isPresent() || authoritiesStrings.contains("ROLE_ADMIN")) {
                 this.logger.debug("Access is granted");
                 return true;
             }
