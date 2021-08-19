@@ -34,7 +34,7 @@ spring:
     ucm:
       default-auto-commit: false
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:postgresql://localhost:5432/acl1.db
+    url: jdbc:postgresql://localhost:5432/acl.db
     username: postgres
     password: 123
     hikari:

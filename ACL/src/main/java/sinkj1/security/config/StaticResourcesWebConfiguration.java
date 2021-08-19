@@ -39,6 +39,8 @@ public class StaticResourcesWebConfiguration implements WebMvcConfigurer {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         ResourceHandlerRegistration resourceHandlerRegistration = appendResourceHandler(registry);
         initializeResourceHandler(resourceHandlerRegistration);
+        registry.addResourceHandler("swagger-ui.html").addResourceLocations("classpath:/META-INF/resources/");
+        registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
     }
 
     protected ResourceHandlerRegistration appendResourceHandler(ResourceHandlerRegistry registry) {

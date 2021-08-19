@@ -58,7 +58,10 @@ public class AccountResource {
      */
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
-    public void registerAccount(@Valid @RequestBody ManagedUserVM managedUserVM) {
+    public void registerAccount(
+        @RequestHeader(value = "X-TENANT-ID", required = false) String tenantId,
+        @Valid @RequestBody ManagedUserVM managedUserVM
+    ) {
         if (isPasswordLengthInvalid(managedUserVM.getPassword())) {
             throw new InvalidPasswordException();
         }
@@ -73,7 +76,10 @@ public class AccountResource {
      * @throws RuntimeException {@code 500 (Internal Server Error)} if the user couldn't be activated.
      */
     @GetMapping("/activate")
-    public void activateAccount(@RequestParam(value = "key") String key) {
+    public void activateAccount(
+        @RequestHeader(value = "X-TENANT-ID", required = false) String tenantId,
+        @RequestParam(value = "key") String key
+    ) {
         Optional<User> user = userService.activateRegistration(key);
         if (!user.isPresent()) {
             throw new AccountResourceException("No user was found for this activation key");
@@ -87,7 +93,7 @@ public class AccountResource {
      * @return the login if the user is authenticated.
      */
     @GetMapping("/authenticate")
-    public String isAuthenticated(HttpServletRequest request) {
+    public String isAuthenticated(@RequestHeader(value = "X-TENANT-ID", required = false) String tenantId, HttpServletRequest request) {
         log.debug("REST request to check if the current user is authenticated");
         return request.getRemoteUser();
     }
@@ -99,7 +105,7 @@ public class AccountResource {
      * @throws RuntimeException {@code 500 (Internal Server Error)} if the user couldn't be returned.
      */
     @GetMapping("/account")
-    public AdminUserDTO getAccount() {
+    public AdminUserDTO getAccount(@RequestHeader(value = "X-TENANT-ID", required = false) String tenantId) {
         return userService
             .getUserWithAuthorities()
             .map(AdminUserDTO::new)
@@ -114,7 +120,10 @@ public class AccountResource {
      * @throws RuntimeException {@code 500 (Internal Server Error)} if the user login wasn't found.
      */
     @PostMapping("/account")
-    public void saveAccount(@Valid @RequestBody AdminUserDTO userDTO) {
+    public void saveAccount(
+        @RequestHeader(value = "X-TENANT-ID", required = false) String tenantId,
+        @Valid @RequestBody AdminUserDTO userDTO
+    ) {
         String userLogin = SecurityUtils
             .getCurrentUserLogin()
             .orElseThrow(() -> new AccountResourceException("Current user login not found"));
@@ -142,7 +151,10 @@ public class AccountResource {
      * @throws InvalidPasswordException {@code 400 (Bad Request)} if the new password is incorrect.
      */
     @PostMapping(path = "/account/change-password")
-    public void changePassword(@RequestBody PasswordChangeDTO passwordChangeDto) {
+    public void changePassword(
+        @RequestHeader(value = "X-TENANT-ID", required = false) String tenantId,
+        @RequestBody PasswordChangeDTO passwordChangeDto
+    ) {
         if (isPasswordLengthInvalid(passwordChangeDto.getNewPassword())) {
             throw new InvalidPasswordException();
         }
@@ -155,7 +167,7 @@ public class AccountResource {
      * @param mail the mail of the user.
      */
     @PostMapping(path = "/account/reset-password/init")
-    public void requestPasswordReset(@RequestBody String mail) {
+    public void requestPasswordReset(@RequestHeader(value = "X-TENANT-ID", required = false) String tenantId, @RequestBody String mail) {
         Optional<User> user = userService.requestPasswordReset(mail);
         if (user.isPresent()) {
             mailService.sendPasswordResetMail(user.get());
@@ -174,7 +186,10 @@ public class AccountResource {
      * @throws RuntimeException {@code 500 (Internal Server Error)} if the password could not be reset.
      */
     @PostMapping(path = "/account/reset-password/finish")
-    public void finishPasswordReset(@RequestBody KeyAndPasswordVM keyAndPassword) {
+    public void finishPasswordReset(
+        @RequestHeader(value = "X-TENANT-ID", required = false) String tenantId,
+        @RequestBody KeyAndPasswordVM keyAndPassword
+    ) {
         if (isPasswordLengthInvalid(keyAndPassword.getNewPassword())) {
             throw new InvalidPasswordException();
         }

@@ -59,8 +59,10 @@ public class AclObjectIdentityResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/acl-object-identities")
-    public ResponseEntity<AclObjectIdentityDTO> createAclObjectIdentity(@Valid @RequestBody AclObjectIdentityDTO aclObjectIdentityDTO)
-        throws URISyntaxException {
+    public ResponseEntity<AclObjectIdentityDTO> createAclObjectIdentity(
+        @RequestHeader(value = "X-TENANT-ID", required = false) String tenantId,
+        @Valid @RequestBody AclObjectIdentityDTO aclObjectIdentityDTO
+    ) throws URISyntaxException {
         log.debug("REST request to save AclObjectIdentity : {}", aclObjectIdentityDTO);
         if (aclObjectIdentityDTO.getId() != null) {
             throw new BadRequestAlertException("A new aclObjectIdentity cannot already have an ID", ENTITY_NAME, "idexists");
@@ -84,6 +86,7 @@ public class AclObjectIdentityResource {
      */
     @PutMapping("/acl-object-identities/{id}")
     public ResponseEntity<AclObjectIdentityDTO> updateAclObjectIdentity(
+        @RequestHeader(value = "X-TENANT-ID", required = false) String tenantId,
         @PathVariable(value = "id", required = false) final Long id,
         @Valid @RequestBody AclObjectIdentityDTO aclObjectIdentityDTO
     ) throws URISyntaxException {
@@ -119,6 +122,7 @@ public class AclObjectIdentityResource {
      */
     @PatchMapping(value = "/acl-object-identities/{id}", consumes = "application/merge-patch+json")
     public ResponseEntity<AclObjectIdentityDTO> partialUpdateAclObjectIdentity(
+        @RequestHeader(value = "X-TENANT-ID", required = false) String tenantId,
         @PathVariable(value = "id", required = false) final Long id,
         @NotNull @RequestBody AclObjectIdentityDTO aclObjectIdentityDTO
     ) throws URISyntaxException {
@@ -149,7 +153,10 @@ public class AclObjectIdentityResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of aclObjectIdentities in body.
      */
     @GetMapping("/acl-object-identities")
-    public ResponseEntity<List<AclObjectIdentityDTO>> getAllAclObjectIdentities(Pageable pageable) {
+    public ResponseEntity<List<AclObjectIdentityDTO>> getAllAclObjectIdentities(
+        @RequestHeader(value = "X-TENANT-ID", required = false) String tenantId,
+        Pageable pageable
+    ) {
         log.debug("REST request to get a page of AclObjectIdentities");
         Page<AclObjectIdentityDTO> page = aclObjectIdentityService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
@@ -163,7 +170,10 @@ public class AclObjectIdentityResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the aclObjectIdentityDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/acl-object-identities/{id}")
-    public ResponseEntity<AclObjectIdentityDTO> getAclObjectIdentity(@PathVariable Long id) {
+    public ResponseEntity<AclObjectIdentityDTO> getAclObjectIdentity(
+        @RequestHeader(value = "X-TENANT-ID", required = false) String tenantId,
+        @PathVariable Long id
+    ) {
         log.debug("REST request to get AclObjectIdentity : {}", id);
         Optional<AclObjectIdentityDTO> aclObjectIdentityDTO = aclObjectIdentityService.findOne(id);
         return ResponseUtil.wrapOrNotFound(aclObjectIdentityDTO);
@@ -176,7 +186,10 @@ public class AclObjectIdentityResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/acl-object-identities/{id}")
-    public ResponseEntity<Void> deleteAclObjectIdentity(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteAclObjectIdentity(
+        @RequestHeader(value = "X-TENANT-ID", required = false) String tenantId,
+        @PathVariable Long id
+    ) {
         log.debug("REST request to delete AclObjectIdentity : {}", id);
         aclObjectIdentityService.delete(id);
         return ResponseEntity

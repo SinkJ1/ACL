@@ -17,10 +17,12 @@ import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.StatementCallback;
 import sinkj1.security.config.ApplicationProperties;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 import tech.jhipster.config.DefaultProfileUtil;
 import tech.jhipster.config.JHipsterConstants;
 
 @SpringBootApplication
+@EnableSwagger2
 @EnableConfigurationProperties({ LiquibaseProperties.class, ApplicationProperties.class })
 public class SecurityApp {
 
@@ -65,7 +67,6 @@ public class SecurityApp {
      *
      * @param args the command line arguments.
      */
-
 
     public static void main(String[] args) {
         SpringApplication app = new SpringApplication(SecurityApp.class);

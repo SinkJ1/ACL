@@ -1,5 +1,7 @@
 package sinkj1.security.web.rest;
 
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Authorization;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.sql.SQLException;

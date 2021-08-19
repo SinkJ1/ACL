@@ -1,5 +1,7 @@
 package sinkj1.security.web.rest;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -8,9 +10,6 @@ import java.util.Optional;
 import javax.sql.DataSource;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -63,7 +62,10 @@ public class AclClassResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/acl-classes")
-    public ResponseEntity<AclClassDTO> createAclClass(@Valid @RequestBody AclClassDTO aclClassDTO) throws URISyntaxException {
+    public ResponseEntity<AclClassDTO> createAclClass(
+        @RequestHeader(value = "X-TENANT-ID", required = false) String tenantId,
+        @Valid @RequestBody AclClassDTO aclClassDTO
+    ) throws URISyntaxException {
         log.debug("REST request to save AclClass : {}", aclClassDTO);
         if (aclClassDTO.getId() != null) {
             throw new BadRequestAlertException("A new aclClass cannot already have an ID", ENTITY_NAME, "idexists");
@@ -87,6 +89,7 @@ public class AclClassResource {
      */
     @PutMapping("/acl-classes/{id}")
     public ResponseEntity<AclClassDTO> updateAclClass(
+        @RequestHeader(value = "X-TENANT-ID", required = false) String tenantId,
         @PathVariable(value = "id", required = false) final Long id,
         @Valid @RequestBody AclClassDTO aclClassDTO
     ) throws URISyntaxException {
@@ -122,6 +125,7 @@ public class AclClassResource {
      */
     @PatchMapping(value = "/acl-classes/{id}", consumes = "application/merge-patch+json")
     public ResponseEntity<AclClassDTO> partialUpdateAclClass(
+        @RequestHeader(value = "X-TENANT-ID", required = false) String tenantId,
         @PathVariable(value = "id", required = false) final Long id,
         @NotNull @RequestBody AclClassDTO aclClassDTO
     ) throws URISyntaxException {
@@ -152,7 +156,10 @@ public class AclClassResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of aclClasses in body.
      */
     @GetMapping("/acl-classes")
-    public ResponseEntity<List<AclClassDTO>> getAllAclClasses(Pageable pageable) {
+    public ResponseEntity<List<AclClassDTO>> getAllAclClasses(
+        @RequestHeader(value = "X-TENANT-ID", required = false) String tenantId,
+        Pageable pageable
+    ) {
         log.debug("REST request to get a page of AclClasses");
         Page<AclClassDTO> page = aclClassService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
@@ -167,7 +174,10 @@ public class AclClassResource {
      */
 
     @GetMapping("/acl-classes/{id}")
-    public ResponseEntity<AclClassDTO> getAclClass(@PathVariable Long id) {
+    public ResponseEntity<AclClassDTO> getAclClass(
+        @RequestHeader(value = "X-TENANT-ID", required = false) String tenantId,
+        @PathVariable Long id
+    ) {
         log.debug("REST request to get AclClass : {}", id);
         Optional<AclClassDTO> aclClassDTO = aclClassService.findOne(id);
         return ResponseUtil.wrapOrNotFound(aclClassDTO);
@@ -180,7 +190,10 @@ public class AclClassResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/acl-classes/{id}")
-    public ResponseEntity<Void> deleteAclClass(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteAclClass(
+        @RequestHeader(value = "X-TENANT-ID", required = false) String tenantId,
+        @PathVariable Long id
+    ) {
         log.debug("REST request to delete AclClass : {}", id);
         aclClassService.delete(id);
         return ResponseEntity
@@ -188,5 +201,4 @@ public class AclClassResource {
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
     }
-
 }

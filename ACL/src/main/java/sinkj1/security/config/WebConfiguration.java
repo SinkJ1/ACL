@@ -3,6 +3,7 @@ package sinkj1.security.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import sinkj1.security.multi_tenancy.interceptor.TenantInterceptor;
 
@@ -20,5 +21,4 @@ public class WebConfiguration implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addWebRequestInterceptor(tenantInterceptor);
     }
-
 }

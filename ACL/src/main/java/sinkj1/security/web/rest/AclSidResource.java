@@ -56,7 +56,10 @@ public class AclSidResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/acl-sids")
-    public ResponseEntity<AclSidDTO> createAclSid(@Valid @RequestBody AclSidDTO aclSidDTO) throws URISyntaxException {
+    public ResponseEntity<AclSidDTO> createAclSid(
+        @RequestHeader(value = "X-TENANT-ID", required = false) String tenantId,
+        @Valid @RequestBody AclSidDTO aclSidDTO
+    ) throws URISyntaxException {
         log.debug("REST request to save AclSid : {}", aclSidDTO);
         if (aclSidDTO.getId() != null) {
             throw new BadRequestAlertException("A new aclSid cannot already have an ID", ENTITY_NAME, "idexists");
@@ -80,6 +83,7 @@ public class AclSidResource {
      */
     @PutMapping("/acl-sids/{id}")
     public ResponseEntity<AclSidDTO> updateAclSid(
+        @RequestHeader(value = "X-TENANT-ID", required = false) String tenantId,
         @PathVariable(value = "id", required = false) final Long id,
         @Valid @RequestBody AclSidDTO aclSidDTO
     ) throws URISyntaxException {
@@ -115,6 +119,7 @@ public class AclSidResource {
      */
     @PatchMapping(value = "/acl-sids/{id}", consumes = "application/merge-patch+json")
     public ResponseEntity<AclSidDTO> partialUpdateAclSid(
+        @RequestHeader(value = "X-TENANT-ID", required = false) String tenantId,
         @PathVariable(value = "id", required = false) final Long id,
         @NotNull @RequestBody AclSidDTO aclSidDTO
     ) throws URISyntaxException {
@@ -145,7 +150,10 @@ public class AclSidResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of aclSids in body.
      */
     @GetMapping("/acl-sids")
-    public ResponseEntity<List<AclSidDTO>> getAllAclSids(Pageable pageable) {
+    public ResponseEntity<List<AclSidDTO>> getAllAclSids(
+        @RequestHeader(value = "X-TENANT-ID", required = false) String tenantId,
+        Pageable pageable
+    ) {
         log.debug("REST request to get a page of AclSids");
         Page<AclSidDTO> page = aclSidService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
@@ -159,7 +167,10 @@ public class AclSidResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the aclSidDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/acl-sids/{id}")
-    public ResponseEntity<AclSidDTO> getAclSid(@PathVariable Long id) {
+    public ResponseEntity<AclSidDTO> getAclSid(
+        @RequestHeader(value = "X-TENANT-ID", required = false) String tenantId,
+        @PathVariable Long id
+    ) {
         log.debug("REST request to get AclSid : {}", id);
         Optional<AclSidDTO> aclSidDTO = aclSidService.findOne(id);
         return ResponseUtil.wrapOrNotFound(aclSidDTO);
@@ -172,7 +183,10 @@ public class AclSidResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/acl-sids/{id}")
-    public ResponseEntity<Void> deleteAclSid(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteAclSid(
+        @RequestHeader(value = "X-TENANT-ID", required = false) String tenantId,
+        @PathVariable Long id
+    ) {
         log.debug("REST request to delete AclSid : {}", id);
         aclSidService.delete(id);
         return ResponseEntity

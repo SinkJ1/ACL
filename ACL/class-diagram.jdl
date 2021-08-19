@@ -17,33 +17,37 @@ application {
 }
 
 entity AclSid{
-	principal Boolean required,
     sid String required
 }
 
+entity AclMask{
+	name String
+}
+
 entity AclClass{
-	className String required,
-    classIdType String required
+	className String required
 }
 
 entity AclObjectIdentity{
-    objectIdIdentity String required,
+    objectIdIdentity Integer required,
     parentObject Integer required,
     ownerSid Integer,
     entriesInheriting Boolean
 }
 
 entity AclEntry{
-    aceOrder Integer required,
-    mask Integer,
     granting Boolean,
-    auditSuccess Boolean,
-    auditFailure Boolean
+}
+
+entity Tenant {
+ tenantId String,
+ schema String
 }
 
 relationship OneToMany {
 	AclClass to AclObjectIdentity{AclClass(className)}
     AclSid to AclEntry{AclSid(sid)}
     AclObjectIdentity to AclEntry{AclObjectIdentity(id)}
+    AclMask to AclEntry{AclMask(id)}
 }
 

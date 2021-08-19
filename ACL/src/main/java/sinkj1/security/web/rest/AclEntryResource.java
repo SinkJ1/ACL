@@ -68,7 +68,10 @@ public class AclEntryResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/acl-entries")
-    public ResponseEntity<AclEntryDTO> createAclEntry(@Valid @RequestBody AclEntryDTO aclEntryDTO) throws URISyntaxException {
+    public ResponseEntity<AclEntryDTO> createAclEntry(
+        @RequestHeader(value = "X-TENANT-ID", required = false) String tenantId,
+        @Valid @RequestBody AclEntryDTO aclEntryDTO
+    ) throws URISyntaxException {
         log.debug("REST request to save AclEntry : {}", aclEntryDTO);
         if (aclEntryDTO.getId() != null) {
             throw new BadRequestAlertException("A new aclEntry cannot already have an ID", ENTITY_NAME, "idexists");
@@ -92,6 +95,7 @@ public class AclEntryResource {
      */
     @PutMapping("/acl-entries/{id}")
     public ResponseEntity<AclEntryDTO> updateAclEntry(
+        @RequestHeader(value = "X-TENANT-ID", required = false) String tenantId,
         @PathVariable(value = "id", required = false) final Long id,
         @Valid @RequestBody AclEntryDTO aclEntryDTO
     ) throws URISyntaxException {
@@ -127,6 +131,7 @@ public class AclEntryResource {
      */
     @PatchMapping(value = "/acl-entries/{id}", consumes = "application/merge-patch+json")
     public ResponseEntity<AclEntryDTO> partialUpdateAclEntry(
+        @RequestHeader(value = "X-TENANT-ID", required = false) String tenantId,
         @PathVariable(value = "id", required = false) final Long id,
         @NotNull @RequestBody AclEntryDTO aclEntryDTO
     ) throws URISyntaxException {
@@ -157,7 +162,10 @@ public class AclEntryResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of aclEntries in body.
      */
     @GetMapping("/acl-entries")
-    public ResponseEntity<List<AclEntryDTO>> getAllAclEntries(Pageable pageable) {
+    public ResponseEntity<List<AclEntryDTO>> getAllAclEntries(
+        @RequestHeader(value = "X-TENANT-ID", required = false) String tenantId,
+        Pageable pageable
+    ) {
         log.debug("REST request to get a page of AclEntries");
         Page<AclEntryDTO> page = aclEntryService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
@@ -171,7 +179,10 @@ public class AclEntryResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the aclEntryDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/acl-entries/{id}")
-    public ResponseEntity<AclEntryDTO> getAclEntry(@PathVariable Long id) throws SQLException {
+    public ResponseEntity<AclEntryDTO> getAclEntry(
+        @RequestHeader(value = "X-TENANT-ID", required = false) String tenantId,
+        @PathVariable Long id
+    ) throws SQLException {
         log.debug("REST request to get AclEntry : {}", id);
 
         Connection connection = dataSource.getConnection();
@@ -193,7 +204,10 @@ public class AclEntryResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/acl-entries/{id}")
-    public ResponseEntity<Void> deleteAclEntry(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteAclEntry(
+        @RequestHeader(value = "X-TENANT-ID", required = false) String tenantId,
+        @PathVariable Long id
+    ) {
         log.debug("REST request to delete AclEntry : {}", id);
         aclEntryService.delete(id);
         return ResponseEntity
@@ -203,7 +217,10 @@ public class AclEntryResource {
     }
 
     @GetMapping("/get-acl-entries")
-    public ResponseEntity<List<MaskAndObject>> getMaskObj(@RequestParam("objE") String objE) {
+    public ResponseEntity<List<MaskAndObject>> getMaskObj(
+        @RequestHeader(value = "X-TENANT-ID", required = false) String tenantId,
+        @RequestParam("objE") String objE
+    ) {
         return ResponseEntity.ok(aclEntryService.getMaskAndObjectId(objE));
     }
 

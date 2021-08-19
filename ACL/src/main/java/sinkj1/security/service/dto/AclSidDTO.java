@@ -12,9 +12,6 @@ public class AclSidDTO implements Serializable {
     private Long id;
 
     @NotNull
-    private Boolean principal;
-
-    @NotNull
     private String sid;
 
     public Long getId() {
@@ -23,14 +20,6 @@ public class AclSidDTO implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Boolean getPrincipal() {
-        return principal;
-    }
-
-    public void setPrincipal(Boolean principal) {
-        this.principal = principal;
     }
 
     public String getSid() {
@@ -67,7 +56,6 @@ public class AclSidDTO implements Serializable {
     public String toString() {
         return "AclSidDTO{" +
             "id=" + getId() +
-            ", principal='" + getPrincipal() + "'" +
             ", sid='" + getSid() + "'" +
             "}";
     }
