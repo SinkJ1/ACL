@@ -13,7 +13,7 @@ function setupProxy() {
         '/auth',
         '/health',
       ],
-      target: `http${tls ? 's' : ''}://localhost:8085`,
+      target: `http${tls ? 's' : ''}://localhost:8085/internship/yury_sinkevich/acl/`,
       secure: false,
       changeOrigin: tls,
     },

@@ -34,8 +34,7 @@ spring:
     ucm:
       default-auto-commit: false
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:postgresql://localhost:5432/acl.db
-    #url: jdbc:postgresql://acl_db:5432/acl.db
+    url: jdbc:postgresql://ACL:5432/acl.db
     username: postgres
     password: 123
     hikari:
@@ -81,8 +80,11 @@ multitenancy:
       changeLog: classpath:config/liquibase/masterForTanont.xml
 
 server:
-  use-forward-headers: true
-  context-path: http://localhost
+  servlet:
+    session:
+      cookie:
+        http-only: false
+    context-path: /internship/yury_sinkevich/acl/
   port: 8085
 
 # ===================================================================

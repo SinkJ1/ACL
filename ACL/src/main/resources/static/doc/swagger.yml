@@ -6,8 +6,9 @@ info:
   contact: {}
   license:
     name: unlicensed
-host: localhost:8085
-basePath: /
+servers:
+  - url: https://practice.sqilsoft.by/internship/yury_sinkevich/acl/
+    description: Inferred Url
 tags:
   - name: account-resource
     description: Account Resource
