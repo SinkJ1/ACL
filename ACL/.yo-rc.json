@@ -44,6 +44,11 @@
     "creationTimestamp": 1627630909650,
     "jwtSecretKey": "YTE1OTY1MjhmYjE4M2VhNWJiNmU1YTMwZGZkOGEyYTZkOGEyYzE5MWM3YTE5ODk4ODBlMjcwMDQxNGQwMmFmYjI4OWM3NTk0ZTVmMWNjMGM1OGM0ZjQ1ZGNlNjc1MjA1ZDM0MGE1MmFjN2QzZjk4MWRjYmJiY2M0OTU2MjBlNDU=",
     "devServerPort": 4200,
-    "lastLiquibaseTimestamp": 1627631149000
+    "lastLiquibaseTimestamp": 1627631149000,
+    "appsFolders": ["ACL"],
+    "directoryPath": "../",
+    "gatewayType": "SpringCloudGateway",
+    "clusteredDbApps": {},
+    "monitoring": "no"
   }
 }

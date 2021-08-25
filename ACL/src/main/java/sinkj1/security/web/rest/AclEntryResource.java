@@ -38,6 +38,7 @@ import tech.jhipster.web.util.ResponseUtil;
 /**
  * REST controller for managing {@link sinkj1.security.domain.AclEntry}.
  */
+@CrossOrigin(methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.DELETE, RequestMethod.PUT })
 @RestController
 @RequestMapping("/api")
 public class AclEntryResource {
