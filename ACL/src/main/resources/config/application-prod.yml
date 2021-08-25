@@ -34,7 +34,7 @@ spring:
   datasource:
     initialization-mode: always
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:postgresql://ACL:5432/acl.db
+    url: jdbc:postgresql://acl_db:5432/acl.db
     username: postgres
     password: 123
     hikari:
