@@ -36,7 +36,7 @@ spring:
     type: com.zaxxer.hikari.HikariDataSource
     url: jdbc:postgresql://acl_db:5432/acl.db
     username: postgres
-    password: 123
+    password: 1111
     hikari:
       poolName: Hikari
       auto-commit: false
@@ -82,7 +82,7 @@ server:
       cookie:
         http-only: false
     context-path: /internship/yury_sinkevich/acl/
-  port: 8085
+  port: 8080
   shutdown: graceful # see https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-graceful-shutdown
   compression:
     enabled: true
