@@ -1,0 +1,1870 @@
+{
+  'openapi': '3.0.3',
+  'info':
+    {
+      'title': 'Api Documentation',
+      'description': 'Api Documentation',
+      'termsOfService': 'urn:tos',
+      'contact': {},
+      'license': { 'name': 'Apache 2.0', 'url': 'http://www.apache.org/licenses/LICENSE-2.0' },
+      'version': '1.0',
+    },
+  'servers': [{ 'url': 'https://practice.sqilsoft.by/internship/yury_sinkevich/acl/', 'description': 'Inferred Url' }],
+  'tags':
+    [
+      { 'name': 'account-resource', 'description': 'Account Resource' },
+      { 'name': 'acl-class-resource', 'description': 'Acl Class Resource' },
+      { 'name': 'acl-entry-resource', 'description': 'Acl Entry Resource' },
+      { 'name': 'acl-mask-resource', 'description': 'Acl Mask Resource' },
+      { 'name': 'acl-object-identity-resource', 'description': 'Acl Object Identity Resource' },
+      { 'name': 'acl-sid-resource', 'description': 'Acl Sid Resource' },
+      { 'name': 'permission-controller', 'description': 'Permission Controller' },
+      { 'name': 'public-user-resource', 'description': 'Public User Resource' },
+      { 'name': 'tenant-resource', 'description': 'Tenant Resource' },
+      { 'name': 'user-jwt-controller', 'description': 'User JWT Controller' },
+      { 'name': 'user-resource', 'description': 'User Resource' },
+    ],
+  'paths':
+    {
+      '/api/account':
+        {
+          'get':
+            {
+              'tags': ['account-resource'],
+              'summary': 'getAccount',
+              'operationId': 'getAccountUsingGET_1',
+              'parameters':
+                [
+                  {
+                    'name': 'X-TENANT-ID',
+                    'in': 'header',
+                    'description': 'X-TENANT-ID',
+                    'required': false,
+                    'schema': { 'type': 'string' },
+                  },
+                ],
+              'responses':
+                { '200': { 'description': 'OK', 'content': { '*/*': { 'schema': { '$ref': '#/components/schemas/AdminUserDTO' } } } } },
+              'security': [{ 'Authorization': ['global'] }],
+            },
+          'post':
+            {
+              'tags': ['account-resource'],
+              'summary': 'saveAccount',
+              'operationId': 'saveAccountUsingPOST_1',
+              'parameters':
+                [
+                  {
+                    'name': 'X-TENANT-ID',
+                    'in': 'header',
+                    'description': 'X-TENANT-ID',
+                    'required': false,
+                    'schema': { 'type': 'string' },
+                  },
+                ],
+              'requestBody': { 'content': { 'application/json': { 'schema': { '$ref': '#/components/schemas/AdminUserDTO' } } } },
+              'responses': { '200': { 'description': 'OK' } },
+              'security': [{ 'Authorization': ['global'] }],
+            },
+        },
+      '/api/account/change-password':
+        {
+          'post':
+            {
+              'tags': ['account-resource'],
+              'summary': 'changePassword',
+              'operationId': 'changePasswordUsingPOST_1',
+              'parameters':
+                [
+                  {
+                    'name': 'X-TENANT-ID',
+                    'in': 'header',
+                    'description': 'X-TENANT-ID',
+                    'required': false,
+                    'schema': { 'type': 'string' },
+                  },
+                ],
+              'requestBody': { 'content': { 'application/json': { 'schema': { '$ref': '#/components/schemas/PasswordChangeDTO' } } } },
+              'responses': { '200': { 'description': 'OK' } },
+              'security': [{ 'Authorization': ['global'] }],
+            },
+        },
+      '/api/account/reset-password/finish':
+        {
+          'post':
+            {
+              'tags': ['account-resource'],
+              'summary': 'finishPasswordReset',
+              'operationId': 'finishPasswordResetUsingPOST_1',
+              'parameters':
+                [
+                  {
+                    'name': 'X-TENANT-ID',
+                    'in': 'header',
+                    'description': 'X-TENANT-ID',
+                    'required': false,
+                    'schema': { 'type': 'string' },
+                  },
+                ],
+              'requestBody': { 'content': { 'application/json': { 'schema': { '$ref': '#/components/schemas/KeyAndPasswordVM' } } } },
+              'responses': { '200': { 'description': 'OK' } },
+              'security': [{ 'Authorization': ['global'] }],
+            },
+        },
+      '/api/account/reset-password/init':
+        {
+          'post':
+            {
+              'tags': ['account-resource'],
+              'summary': 'requestPasswordReset',
+              'operationId': 'requestPasswordResetUsingPOST_1',
+              'parameters':
+                [
+                  {
+                    'name': 'X-TENANT-ID',
+                    'in': 'header',
+                    'description': 'X-TENANT-ID',
+                    'required': false,
+                    'schema': { 'type': 'string' },
+                  },
+                ],
+              'requestBody': { 'content': { 'application/json': { 'schema': { 'type': 'string' } } } },
+              'responses': { '200': { 'description': 'OK' } },
+              'security': [{ 'Authorization': ['global'] }],
+            },
+        },
+      '/api/activate':
+        {
+          'get':
+            {
+              'tags': ['account-resource'],
+              'summary': 'activateAccount',
+              'operationId': 'activateAccountUsingGET_1',
+              'parameters':
+                [
+                  {
+                    'name': 'X-TENANT-ID',
+                    'in': 'header',
+                    'description': 'X-TENANT-ID',
+                    'required': false,
+                    'schema': { 'type': 'string' },
+                  },
+                  { 'name': 'key', 'in': 'query', 'description': 'key', 'required': true, 'style': 'form', 'schema': { 'type': 'string' } },
+                ],
+              'responses': { '200': { 'description': 'OK' } },
+              'security': [{ 'Authorization': ['global'] }],
+            },
+        },
+      '/api/authenticate':
+        {
+          'get':
+            {
+              'tags': ['account-resource'],
+              'summary': 'isAuthenticated',
+              'operationId': 'isAuthenticatedUsingGET_1',
+              'parameters':
+                [
+                  {
+                    'name': 'X-TENANT-ID',
+                    'in': 'header',
+                    'description': 'X-TENANT-ID',
+                    'required': false,
+                    'schema': { 'type': 'string' },
+                  },
+                ],
+              'responses': { '200': { 'description': 'OK', 'content': { '*/*': { 'schema': { 'type': 'string' } } } } },
+              'security': [{ 'Authorization': ['global'] }],
+            },
+          'post':
+            {
+              'tags': ['user-jwt-controller'],
+              'summary': 'authorize',
+              'operationId': 'authorizeUsingPOST_1',
+              'requestBody': { 'content': { 'application/json': { 'schema': { '$ref': '#/components/schemas/LoginVM' } } } },
+              'responses':
+                { '200': { 'description': 'OK', 'content': { '*/*': { 'schema': { '$ref': '#/components/schemas/JWTToken' } } } } },
+              'security': [{ 'Authorization': ['global'] }],
+            },
+        },
+      '/api/register':
+        {
+          'post':
+            {
+              'tags': ['account-resource'],
+              'summary': 'registerAccount',
+              'operationId': 'registerAccountUsingPOST_1',
+              'parameters':
+                [
+                  {
+                    'name': 'X-TENANT-ID',
+                    'in': 'header',
+                    'description': 'X-TENANT-ID',
+                    'required': false,
+                    'schema': { 'type': 'string' },
+                  },
+                ],
+              'requestBody': { 'content': { 'application/json': { 'schema': { '$ref': '#/components/schemas/ManagedUserVM' } } } },
+              'responses': { '201': { 'description': 'Created' } },
+              'security': [{ 'Authorization': ['global'] }],
+            },
+        },
+      '/api/acl-classes':
+        {
+          'get':
+            {
+              'tags': ['acl-class-resource'],
+              'summary': 'getAllAclClasses',
+              'operationId': 'getAllAclClassesUsingGET_1',
+              'parameters':
+                [
+                  {
+                    'name': 'X-TENANT-ID',
+                    'in': 'header',
+                    'description': 'X-TENANT-ID',
+                    'required': false,
+                    'schema': { 'type': 'string' },
+                  },
+                  {
+                    'name': 'offset',
+                    'in': 'query',
+                    'required': false,
+                    'style': 'form',
+                    'schema': { 'type': 'integer', 'format': 'int64' },
+                  },
+                  {
+                    'name': 'pageNumber',
+                    'in': 'query',
+                    'required': false,
+                    'style': 'form',
+                    'schema': { 'type': 'integer', 'format': 'int32' },
+                  },
+                  {
+                    'name': 'pageSize',
+                    'in': 'query',
+                    'required': false,
+                    'style': 'form',
+                    'schema': { 'type': 'integer', 'format': 'int32' },
+                  },
+                  { 'name': 'paged', 'in': 'query', 'required': false, 'style': 'form', 'schema': { 'type': 'boolean' } },
+                  { 'name': 'sort.sorted', 'in': 'query', 'required': false, 'style': 'form', 'schema': { 'type': 'boolean' } },
+                  { 'name': 'sort.unsorted', 'in': 'query', 'required': false, 'style': 'form', 'schema': { 'type': 'boolean' } },
+                  { 'name': 'unpaged', 'in': 'query', 'required': false, 'style': 'form', 'schema': { 'type': 'boolean' } },
+                ],
+              'responses':
+                {
+                  '200':
+                    {
+                      'description': 'OK',
+                      'content': { '*/*': { 'schema': { 'type': 'array', 'items': { '$ref': '#/components/schemas/AclClassDTO' } } } },
+                    },
+                },
+              'security': [{ 'Authorization': ['global'] }],
+            },
+          'post':
+            {
+              'tags': ['acl-class-resource'],
+              'summary': 'createAclClass',
+              'operationId': 'createAclClassUsingPOST_1',
+              'parameters':
+                [
+                  {
+                    'name': 'X-TENANT-ID',
+                    'in': 'header',
+                    'description': 'X-TENANT-ID',
+                    'required': false,
+                    'schema': { 'type': 'string' },
+                  },
+                ],
+              'requestBody': { 'content': { 'application/json': { 'schema': { '$ref': '#/components/schemas/AclClassDTO' } } } },
+              'responses':
+                { '200': { 'description': 'OK', 'content': { '*/*': { 'schema': { '$ref': '#/components/schemas/AclClassDTO' } } } } },
+              'security': [{ 'Authorization': ['global'] }],
+            },
+        },
+      '/api/acl-classes/{id}':
+        {
+          'get':
+            {
+              'tags': ['acl-class-resource'],
+              'summary': 'getAclClass',
+              'operationId': 'getAclClassUsingGET_1',
+              'parameters':
+                [
+                  {
+                    'name': 'X-TENANT-ID',
+                    'in': 'header',
+                    'description': 'X-TENANT-ID',
+                    'required': false,
+                    'schema': { 'type': 'string' },
+                  },
+                  {
+                    'name': 'id',
+                    'in': 'path',
+                    'description': 'id',
+                    'required': true,
+                    'style': 'simple',
+                    'schema': { 'type': 'integer', 'format': 'int64' },
+                  },
+                ],
+              'responses':
+                { '200': { 'description': 'OK', 'content': { '*/*': { 'schema': { '$ref': '#/components/schemas/AclClassDTO' } } } } },
+              'security': [{ 'Authorization': ['global'] }],
+            },
+          'put':
+            {
+              'tags': ['acl-class-resource'],
+              'summary': 'updateAclClass',
+              'operationId': 'updateAclClassUsingPUT_1',
+              'parameters':
+                [
+                  {
+                    'name': 'X-TENANT-ID',
+                    'in': 'header',
+                    'description': 'X-TENANT-ID',
+                    'required': false,
+                    'schema': { 'type': 'string' },
+                  },
+                  {
+                    'name': 'id',
+                    'in': 'path',
+                    'description': 'id',
+                    'required': true,
+                    'style': 'simple',
+                    'schema': { 'type': 'integer', 'format': 'int64' },
+                  },
+                ],
+              'requestBody': { 'content': { 'application/json': { 'schema': { '$ref': '#/components/schemas/AclClassDTO' } } } },
+              'responses':
+                { '200': { 'description': 'OK', 'content': { '*/*': { 'schema': { '$ref': '#/components/schemas/AclClassDTO' } } } } },
+              'security': [{ 'Authorization': ['global'] }],
+            },
+          'delete':
+            {
+              'tags': ['acl-class-resource'],
+              'summary': 'deleteAclClass',
+              'operationId': 'deleteAclClassUsingDELETE_1',
+              'parameters':
+                [
+                  {
+                    'name': 'X-TENANT-ID',
+                    'in': 'header',
+                    'description': 'X-TENANT-ID',
+                    'required': false,
+                    'schema': { 'type': 'string' },
+                  },
+                  {
+                    'name': 'id',
+                    'in': 'path',
+                    'description': 'id',
+                    'required': true,
+                    'style': 'simple',
+                    'schema': { 'type': 'integer', 'format': 'int64' },
+                  },
+                ],
+              'responses': { '200': { 'description': 'OK' } },
+              'security': [{ 'Authorization': ['global'] }],
+            },
+          'patch':
+            {
+              'tags': ['acl-class-resource'],
+              'summary': 'partialUpdateAclClass',
+              'operationId': 'partialUpdateAclClassUsingPATCH_1',
+              'parameters':
+                [
+                  {
+                    'name': 'X-TENANT-ID',
+                    'in': 'header',
+                    'description': 'X-TENANT-ID',
+                    'required': false,
+                    'schema': { 'type': 'string' },
+                  },
+                  {
+                    'name': 'id',
+                    'in': 'path',
+                    'description': 'id',
+                    'required': true,
+                    'style': 'simple',
+                    'schema': { 'type': 'integer', 'format': 'int64' },
+                  },
+                ],
+              'requestBody':
+                {
+                  'content':
+                    {
+                      'application/json': { 'schema': { '$ref': '#/components/schemas/AclClassDTO' } },
+                      'application/merge-patch+json': { 'schema': { '$ref': '#/components/schemas/AclClassDTO' } },
+                    },
+                },
+              'responses':
+                { '200': { 'description': 'OK', 'content': { '*/*': { 'schema': { '$ref': '#/components/schemas/AclClassDTO' } } } } },
+              'security': [{ 'Authorization': ['global'] }],
+            },
+        },
+      '/api/acl-entries':
+        {
+          'get':
+            {
+              'tags': ['acl-entry-resource'],
+              'summary': 'getAllAclEntries',
+              'operationId': 'getAllAclEntriesUsingGET_1',
+              'parameters':
+                [
+                  {
+                    'name': 'X-TENANT-ID',
+                    'in': 'header',
+                    'description': 'X-TENANT-ID',
+                    'required': false,
+                    'schema': { 'type': 'string' },
+                  },
+                  {
+                    'name': 'offset',
+                    'in': 'query',
+                    'required': false,
+                    'style': 'form',
+                    'schema': { 'type': 'integer', 'format': 'int64' },
+                  },
+                  {
+                    'name': 'pageNumber',
+                    'in': 'query',
+                    'required': false,
+                    'style': 'form',
+                    'schema': { 'type': 'integer', 'format': 'int32' },
+                  },
+                  {
+                    'name': 'pageSize',
+                    'in': 'query',
+                    'required': false,
+                    'style': 'form',
+                    'schema': { 'type': 'integer', 'format': 'int32' },
+                  },
+                  { 'name': 'paged', 'in': 'query', 'required': false, 'style': 'form', 'schema': { 'type': 'boolean' } },
+                  { 'name': 'sort.sorted', 'in': 'query', 'required': false, 'style': 'form', 'schema': { 'type': 'boolean' } },
+                  { 'name': 'sort.unsorted', 'in': 'query', 'required': false, 'style': 'form', 'schema': { 'type': 'boolean' } },
+                  { 'name': 'unpaged', 'in': 'query', 'required': false, 'style': 'form', 'schema': { 'type': 'boolean' } },
+                ],
+              'responses':
+                {
+                  '200':
+                    {
+                      'description': 'OK',
+                      'content': { '*/*': { 'schema': { 'type': 'array', 'items': { '$ref': '#/components/schemas/AclEntryDTO' } } } },
+                    },
+                },
+              'security': [{ 'Authorization': ['global'] }],
+            },
+          'post':
+            {
+              'tags': ['acl-entry-resource'],
+              'summary': 'createAclEntry',
+              'operationId': 'createAclEntryUsingPOST_1',
+              'parameters':
+                [
+                  {
+                    'name': 'X-TENANT-ID',
+                    'in': 'header',
+                    'description': 'X-TENANT-ID',
+                    'required': false,
+                    'schema': { 'type': 'string' },
+                  },
+                ],
+              'requestBody': { 'content': { 'application/json': { 'schema': { '$ref': '#/components/schemas/AclEntryDTO' } } } },
+              'responses':
+                { '200': { 'description': 'OK', 'content': { '*/*': { 'schema': { '$ref': '#/components/schemas/AclEntryDTO' } } } } },
+              'security': [{ 'Authorization': ['global'] }],
+            },
+        },
+      '/api/acl-entries/{id}':
+        {
+          'get':
+            {
+              'tags': ['acl-entry-resource'],
+              'summary': 'getAclEntry',
+              'operationId': 'getAclEntryUsingGET_1',
+              'parameters':
+                [
+                  {
+                    'name': 'X-TENANT-ID',
+                    'in': 'header',
+                    'description': 'X-TENANT-ID',
+                    'required': false,
+                    'schema': { 'type': 'string' },
+                  },
+                  {
+                    'name': 'id',
+                    'in': 'path',
+                    'description': 'id',
+                    'required': true,
+                    'style': 'simple',
+                    'schema': { 'type': 'integer', 'format': 'int64' },
+                  },
+                ],
+              'responses':
+                { '200': { 'description': 'OK', 'content': { '*/*': { 'schema': { '$ref': '#/components/schemas/AclEntryDTO' } } } } },
+              'security': [{ 'Authorization': ['global'] }],
+            },
+          'put':
+            {
+              'tags': ['acl-entry-resource'],
+              'summary': 'updateAclEntry',
+              'operationId': 'updateAclEntryUsingPUT_1',
+              'parameters':
+                [
+                  {
+                    'name': 'X-TENANT-ID',
+                    'in': 'header',
+                    'description': 'X-TENANT-ID',
+                    'required': false,
+                    'schema': { 'type': 'string' },
+                  },
+                  {
+                    'name': 'id',
+                    'in': 'path',
+                    'description': 'id',
+                    'required': true,
+                    'style': 'simple',
+                    'schema': { 'type': 'integer', 'format': 'int64' },
+                  },
+                ],
+              'requestBody': { 'content': { 'application/json': { 'schema': { '$ref': '#/components/schemas/AclEntryDTO' } } } },
+              'responses':
+                { '200': { 'description': 'OK', 'content': { '*/*': { 'schema': { '$ref': '#/components/schemas/AclEntryDTO' } } } } },
+              'security': [{ 'Authorization': ['global'] }],
+            },
+          'delete':
+            {
+              'tags': ['acl-entry-resource'],
+              'summary': 'deleteAclEntry',
+              'operationId': 'deleteAclEntryUsingDELETE_1',
+              'parameters':
+                [
+                  {
+                    'name': 'X-TENANT-ID',
+                    'in': 'header',
+                    'description': 'X-TENANT-ID',
+                    'required': false,
+                    'schema': { 'type': 'string' },
+                  },
+                  {
+                    'name': 'id',
+                    'in': 'path',
+                    'description': 'id',
+                    'required': true,
+                    'style': 'simple',
+                    'schema': { 'type': 'integer', 'format': 'int64' },
+                  },
+                ],
+              'responses': { '200': { 'description': 'OK' } },
+              'security': [{ 'Authorization': ['global'] }],
+            },
+          'patch':
+            {
+              'tags': ['acl-entry-resource'],
+              'summary': 'partialUpdateAclEntry',
+              'operationId': 'partialUpdateAclEntryUsingPATCH_1',
+              'parameters':
+                [
+                  {
+                    'name': 'X-TENANT-ID',
+                    'in': 'header',
+                    'description': 'X-TENANT-ID',
+                    'required': false,
+                    'schema': { 'type': 'string' },
+                  },
+                  {
+                    'name': 'id',
+                    'in': 'path',
+                    'description': 'id',
+                    'required': true,
+                    'style': 'simple',
+                    'schema': { 'type': 'integer', 'format': 'int64' },
+                  },
+                ],
+              'requestBody':
+                {
+                  'content':
+                    {
+                      'application/json': { 'schema': { '$ref': '#/components/schemas/AclEntryDTO' } },
+                      'application/merge-patch+json': { 'schema': { '$ref': '#/components/schemas/AclEntryDTO' } },
+                    },
+                },
+              'responses':
+                { '200': { 'description': 'OK', 'content': { '*/*': { 'schema': { '$ref': '#/components/schemas/AclEntryDTO' } } } } },
+              'security': [{ 'Authorization': ['global'] }],
+            },
+        },
+      '/api/check-role':
+        {
+          'get':
+            {
+              'tags': ['acl-entry-resource'],
+              'summary': 'check',
+              'operationId': 'checkUsingGET_1',
+              'responses': { '200': { 'description': 'OK', 'content': { '*/*': { 'schema': { 'type': 'boolean' } } } } },
+              'security': [{ 'Authorization': ['global'] }],
+            },
+        },
+      '/api/get-acl-entries':
+        {
+          'get':
+            {
+              'tags': ['acl-entry-resource'],
+              'summary': 'getMaskObj',
+              'operationId': 'getMaskObjUsingGET_1',
+              'parameters':
+                [
+                  {
+                    'name': 'X-TENANT-ID',
+                    'in': 'header',
+                    'description': 'X-TENANT-ID',
+                    'required': false,
+                    'schema': { 'type': 'string' },
+                  },
+                  {
+                    'name': 'objE',
+                    'in': 'query',
+                    'description': 'objE',
+                    'required': true,
+                    'style': 'form',
+                    'schema': { 'type': 'string' },
+                  },
+                ],
+              'responses':
+                {
+                  '200':
+                    {
+                      'description': 'OK',
+                      'content': { '*/*': { 'schema': { 'type': 'array', 'items': { '$ref': '#/components/schemas/MaskAndObject' } } } },
+                    },
+                },
+              'security': [{ 'Authorization': ['global'] }],
+            },
+        },
+      '/api/acl-masks':
+        {
+          'get':
+            {
+              'tags': ['acl-mask-resource'],
+              'summary': 'getAllAclMasks',
+              'operationId': 'getAllAclMasksUsingGET_1',
+              'parameters':
+                [
+                  {
+                    'name': 'X-TENANT-ID',
+                    'in': 'header',
+                    'description': 'X-TENANT-ID',
+                    'required': false,
+                    'schema': { 'type': 'string' },
+                  },
+                  {
+                    'name': 'offset',
+                    'in': 'query',
+                    'required': false,
+                    'style': 'form',
+                    'schema': { 'type': 'integer', 'format': 'int64' },
+                  },
+                  {
+                    'name': 'pageNumber',
+                    'in': 'query',
+                    'required': false,
+                    'style': 'form',
+                    'schema': { 'type': 'integer', 'format': 'int32' },
+                  },
+                  {
+                    'name': 'pageSize',
+                    'in': 'query',
+                    'required': false,
+                    'style': 'form',
+                    'schema': { 'type': 'integer', 'format': 'int32' },
+                  },
+                  { 'name': 'paged', 'in': 'query', 'required': false, 'style': 'form', 'schema': { 'type': 'boolean' } },
+                  { 'name': 'sort.sorted', 'in': 'query', 'required': false, 'style': 'form', 'schema': { 'type': 'boolean' } },
+                  { 'name': 'sort.unsorted', 'in': 'query', 'required': false, 'style': 'form', 'schema': { 'type': 'boolean' } },
+                  { 'name': 'unpaged', 'in': 'query', 'required': false, 'style': 'form', 'schema': { 'type': 'boolean' } },
+                ],
+              'responses':
+                {
+                  '200':
+                    {
+                      'description': 'OK',
+                      'content': { '*/*': { 'schema': { 'type': 'array', 'items': { '$ref': '#/components/schemas/AclMaskDTO' } } } },
+                    },
+                },
+              'security': [{ 'Authorization': ['global'] }],
+            },
+          'post':
+            {
+              'tags': ['acl-mask-resource'],
+              'summary': 'createAclMask',
+              'operationId': 'createAclMaskUsingPOST_1',
+              'parameters':
+                [
+                  {
+                    'name': 'X-TENANT-ID',
+                    'in': 'header',
+                    'description': 'X-TENANT-ID',
+                    'required': false,
+                    'schema': { 'type': 'string' },
+                  },
+                ],
+              'requestBody': { 'content': { 'application/json': { 'schema': { '$ref': '#/components/schemas/AclMaskDTO' } } } },
+              'responses':
+                { '200': { 'description': 'OK', 'content': { '*/*': { 'schema': { '$ref': '#/components/schemas/AclMaskDTO' } } } } },
+              'security': [{ 'Authorization': ['global'] }],
+            },
+        },
+      '/api/acl-masks/{id}':
+        {
+          'get':
+            {
+              'tags': ['acl-mask-resource'],
+              'summary': 'getAclMask',
+              'operationId': 'getAclMaskUsingGET_1',
+              'parameters':
+                [
+                  {
+                    'name': 'X-TENANT-ID',
+                    'in': 'header',
+                    'description': 'X-TENANT-ID',
+                    'required': false,
+                    'schema': { 'type': 'string' },
+                  },
+                  {
+                    'name': 'id',
+                    'in': 'path',
+                    'description': 'id',
+                    'required': true,
+                    'style': 'simple',
+                    'schema': { 'type': 'integer', 'format': 'int64' },
+                  },
+                ],
+              'responses':
+                { '200': { 'description': 'OK', 'content': { '*/*': { 'schema': { '$ref': '#/components/schemas/AclMaskDTO' } } } } },
+              'security': [{ 'Authorization': ['global'] }],
+            },
+          'put':
+            {
+              'tags': ['acl-mask-resource'],
+              'summary': 'updateAclMask',
+              'operationId': 'updateAclMaskUsingPUT_1',
+              'parameters':
+                [
+                  {
+                    'name': 'X-TENANT-ID',
+                    'in': 'header',
+                    'description': 'X-TENANT-ID',
+                    'required': false,
+                    'schema': { 'type': 'string' },
+                  },
+                  {
+                    'name': 'id',
+                    'in': 'path',
+                    'description': 'id',
+                    'required': true,
+                    'style': 'simple',
+                    'schema': { 'type': 'integer', 'format': 'int64' },
+                  },
+                ],
+              'requestBody': { 'content': { 'application/json': { 'schema': { '$ref': '#/components/schemas/AclMaskDTO' } } } },
+              'responses':
+                { '200': { 'description': 'OK', 'content': { '*/*': { 'schema': { '$ref': '#/components/schemas/AclMaskDTO' } } } } },
+              'security': [{ 'Authorization': ['global'] }],
+            },
+          'delete':
+            {
+              'tags': ['acl-mask-resource'],
+              'summary': 'deleteAclMask',
+              'operationId': 'deleteAclMaskUsingDELETE_1',
+              'parameters':
+                [
+                  {
+                    'name': 'X-TENANT-ID',
+                    'in': 'header',
+                    'description': 'X-TENANT-ID',
+                    'required': false,
+                    'schema': { 'type': 'string' },
+                  },
+                  {
+                    'name': 'id',
+                    'in': 'path',
+                    'description': 'id',
+                    'required': true,
+                    'style': 'simple',
+                    'schema': { 'type': 'integer', 'format': 'int64' },
+                  },
+                ],
+              'responses': { '200': { 'description': 'OK' } },
+              'security': [{ 'Authorization': ['global'] }],
+            },
+          'patch':
+            {
+              'tags': ['acl-mask-resource'],
+              'summary': 'partialUpdateAclMask',
+              'operationId': 'partialUpdateAclMaskUsingPATCH_1',
+              'parameters':
+                [
+                  {
+                    'name': 'X-TENANT-ID',
+                    'in': 'header',
+                    'description': 'X-TENANT-ID',
+                    'required': false,
+                    'schema': { 'type': 'string' },
+                  },
+                  {
+                    'name': 'id',
+                    'in': 'path',
+                    'description': 'id',
+                    'required': true,
+                    'style': 'simple',
+                    'schema': { 'type': 'integer', 'format': 'int64' },
+                  },
+                ],
+              'requestBody':
+                {
+                  'content':
+                    {
+                      'application/json': { 'schema': { '$ref': '#/components/schemas/AclMaskDTO' } },
+                      'application/merge-patch+json': { 'schema': { '$ref': '#/components/schemas/AclMaskDTO' } },
+                    },
+                },
+              'responses':
+                { '200': { 'description': 'OK', 'content': { '*/*': { 'schema': { '$ref': '#/components/schemas/AclMaskDTO' } } } } },
+              'security': [{ 'Authorization': ['global'] }],
+            },
+        },
+      '/api/acl-object-identities':
+        {
+          'get':
+            {
+              'tags': ['acl-object-identity-resource'],
+              'summary': 'getAllAclObjectIdentities',
+              'operationId': 'getAllAclObjectIdentitiesUsingGET_1',
+              'parameters':
+                [
+                  {
+                    'name': 'X-TENANT-ID',
+                    'in': 'header',
+                    'description': 'X-TENANT-ID',
+                    'required': false,
+                    'schema': { 'type': 'string' },
+                  },
+                  {
+                    'name': 'offset',
+                    'in': 'query',
+                    'required': false,
+                    'style': 'form',
+                    'schema': { 'type': 'integer', 'format': 'int64' },
+                  },
+                  {
+                    'name': 'pageNumber',
+                    'in': 'query',
+                    'required': false,
+                    'style': 'form',
+                    'schema': { 'type': 'integer', 'format': 'int32' },
+                  },
+                  {
+                    'name': 'pageSize',
+                    'in': 'query',
+                    'required': false,
+                    'style': 'form',
+                    'schema': { 'type': 'integer', 'format': 'int32' },
+                  },
+                  { 'name': 'paged', 'in': 'query', 'required': false, 'style': 'form', 'schema': { 'type': 'boolean' } },
+                  { 'name': 'sort.sorted', 'in': 'query', 'required': false, 'style': 'form', 'schema': { 'type': 'boolean' } },
+                  { 'name': 'sort.unsorted', 'in': 'query', 'required': false, 'style': 'form', 'schema': { 'type': 'boolean' } },
+                  { 'name': 'unpaged', 'in': 'query', 'required': false, 'style': 'form', 'schema': { 'type': 'boolean' } },
+                ],
+              'responses':
+                {
+                  '200':
+                    {
+                      'description': 'OK',
+                      'content':
+                        { '*/*': { 'schema': { 'type': 'array', 'items': { '$ref': '#/components/schemas/AclObjectIdentityDTO' } } } },
+                    },
+                },
+              'security': [{ 'Authorization': ['global'] }],
+            },
+          'post':
+            {
+              'tags': ['acl-object-identity-resource'],
+              'summary': 'createAclObjectIdentity',
+              'operationId': 'createAclObjectIdentityUsingPOST_1',
+              'parameters':
+                [
+                  {
+                    'name': 'X-TENANT-ID',
+                    'in': 'header',
+                    'description': 'X-TENANT-ID',
+                    'required': false,
+                    'schema': { 'type': 'string' },
+                  },
+                ],
+              'requestBody': { 'content': { 'application/json': { 'schema': { '$ref': '#/components/schemas/AclObjectIdentityDTO' } } } },
+              'responses':
+                {
+                  '200':
+                    { 'description': 'OK', 'content': { '*/*': { 'schema': { '$ref': '#/components/schemas/AclObjectIdentityDTO' } } } },
+                },
+              'security': [{ 'Authorization': ['global'] }],
+            },
+        },
+      '/api/acl-object-identities/{id}':
+        {
+          'get':
+            {
+              'tags': ['acl-object-identity-resource'],
+              'summary': 'getAclObjectIdentity',
+              'operationId': 'getAclObjectIdentityUsingGET_1',
+              'parameters':
+                [
+                  {
+                    'name': 'X-TENANT-ID',
+                    'in': 'header',
+                    'description': 'X-TENANT-ID',
+                    'required': false,
+                    'schema': { 'type': 'string' },
+                  },
+                  {
+                    'name': 'id',
+                    'in': 'path',
+                    'description': 'id',
+                    'required': true,
+                    'style': 'simple',
+                    'schema': { 'type': 'integer', 'format': 'int64' },
+                  },
+                ],
+              'responses':
+                {
+                  '200':
+                    { 'description': 'OK', 'content': { '*/*': { 'schema': { '$ref': '#/components/schemas/AclObjectIdentityDTO' } } } },
+                },
+              'security': [{ 'Authorization': ['global'] }],
+            },
+          'put':
+            {
+              'tags': ['acl-object-identity-resource'],
+              'summary': 'updateAclObjectIdentity',
+              'operationId': 'updateAclObjectIdentityUsingPUT_1',
+              'parameters':
+                [
+                  {
+                    'name': 'X-TENANT-ID',
+                    'in': 'header',
+                    'description': 'X-TENANT-ID',
+                    'required': false,
+                    'schema': { 'type': 'string' },
+                  },
+                  {
+                    'name': 'id',
+                    'in': 'path',
+                    'description': 'id',
+                    'required': true,
+                    'style': 'simple',
+                    'schema': { 'type': 'integer', 'format': 'int64' },
+                  },
+                ],
+              'requestBody': { 'content': { 'application/json': { 'schema': { '$ref': '#/components/schemas/AclObjectIdentityDTO' } } } },
+              'responses':
+                {
+                  '200':
+                    { 'description': 'OK', 'content': { '*/*': { 'schema': { '$ref': '#/components/schemas/AclObjectIdentityDTO' } } } },
+                },
+              'security': [{ 'Authorization': ['global'] }],
+            },
+          'delete':
+            {
+              'tags': ['acl-object-identity-resource'],
+              'summary': 'deleteAclObjectIdentity',
+              'operationId': 'deleteAclObjectIdentityUsingDELETE_1',
+              'parameters':
+                [
+                  {
+                    'name': 'X-TENANT-ID',
+                    'in': 'header',
+                    'description': 'X-TENANT-ID',
+                    'required': false,
+                    'schema': { 'type': 'string' },
+                  },
+                  {
+                    'name': 'id',
+                    'in': 'path',
+                    'description': 'id',
+                    'required': true,
+                    'style': 'simple',
+                    'schema': { 'type': 'integer', 'format': 'int64' },
+                  },
+                ],
+              'responses': { '200': { 'description': 'OK' } },
+              'security': [{ 'Authorization': ['global'] }],
+            },
+          'patch':
+            {
+              'tags': ['acl-object-identity-resource'],
+              'summary': 'partialUpdateAclObjectIdentity',
+              'operationId': 'partialUpdateAclObjectIdentityUsingPATCH_1',
+              'parameters':
+                [
+                  {
+                    'name': 'X-TENANT-ID',
+                    'in': 'header',
+                    'description': 'X-TENANT-ID',
+                    'required': false,
+                    'schema': { 'type': 'string' },
+                  },
+                  {
+                    'name': 'id',
+                    'in': 'path',
+                    'description': 'id',
+                    'required': true,
+                    'style': 'simple',
+                    'schema': { 'type': 'integer', 'format': 'int64' },
+                  },
+                ],
+              'requestBody':
+                {
+                  'content':
+                    {
+                      'application/json': { 'schema': { '$ref': '#/components/schemas/AclObjectIdentityDTO' } },
+                      'application/merge-patch+json': { 'schema': { '$ref': '#/components/schemas/AclObjectIdentityDTO' } },
+                    },
+                },
+              'responses':
+                {
+                  '200':
+                    { 'description': 'OK', 'content': { '*/*': { 'schema': { '$ref': '#/components/schemas/AclObjectIdentityDTO' } } } },
+                },
+              'security': [{ 'Authorization': ['global'] }],
+            },
+        },
+      '/api/acl-sids':
+        {
+          'get':
+            {
+              'tags': ['acl-sid-resource'],
+              'summary': 'getAllAclSids',
+              'operationId': 'getAllAclSidsUsingGET_1',
+              'parameters':
+                [
+                  {
+                    'name': 'X-TENANT-ID',
+                    'in': 'header',
+                    'description': 'X-TENANT-ID',
+                    'required': false,
+                    'schema': { 'type': 'string' },
+                  },
+                  {
+                    'name': 'offset',
+                    'in': 'query',
+                    'required': false,
+                    'style': 'form',
+                    'schema': { 'type': 'integer', 'format': 'int64' },
+                  },
+                  {
+                    'name': 'pageNumber',
+                    'in': 'query',
+                    'required': false,
+                    'style': 'form',
+                    'schema': { 'type': 'integer', 'format': 'int32' },
+                  },
+                  {
+                    'name': 'pageSize',
+                    'in': 'query',
+                    'required': false,
+                    'style': 'form',
+                    'schema': { 'type': 'integer', 'format': 'int32' },
+                  },
+                  { 'name': 'paged', 'in': 'query', 'required': false, 'style': 'form', 'schema': { 'type': 'boolean' } },
+                  { 'name': 'sort.sorted', 'in': 'query', 'required': false, 'style': 'form', 'schema': { 'type': 'boolean' } },
+                  { 'name': 'sort.unsorted', 'in': 'query', 'required': false, 'style': 'form', 'schema': { 'type': 'boolean' } },
+                  { 'name': 'unpaged', 'in': 'query', 'required': false, 'style': 'form', 'schema': { 'type': 'boolean' } },
+                ],
+              'responses':
+                {
+                  '200':
+                    {
+                      'description': 'OK',
+                      'content': { '*/*': { 'schema': { 'type': 'array', 'items': { '$ref': '#/components/schemas/AclSidDTO' } } } },
+                    },
+                },
+              'security': [{ 'Authorization': ['global'] }],
+            },
+          'post':
+            {
+              'tags': ['acl-sid-resource'],
+              'summary': 'createAclSid',
+              'operationId': 'createAclSidUsingPOST_1',
+              'parameters':
+                [
+                  {
+                    'name': 'X-TENANT-ID',
+                    'in': 'header',
+                    'description': 'X-TENANT-ID',
+                    'required': false,
+                    'schema': { 'type': 'string' },
+                  },
+                ],
+              'requestBody': { 'content': { 'application/json': { 'schema': { '$ref': '#/components/schemas/AclSidDTO' } } } },
+              'responses':
+                { '200': { 'description': 'OK', 'content': { '*/*': { 'schema': { '$ref': '#/components/schemas/AclSidDTO' } } } } },
+              'security': [{ 'Authorization': ['global'] }],
+            },
+        },
+      '/api/acl-sids/{id}':
+        {
+          'get':
+            {
+              'tags': ['acl-sid-resource'],
+              'summary': 'getAclSid',
+              'operationId': 'getAclSidUsingGET_1',
+              'parameters':
+                [
+                  {
+                    'name': 'X-TENANT-ID',
+                    'in': 'header',
+                    'description': 'X-TENANT-ID',
+                    'required': false,
+                    'schema': { 'type': 'string' },
+                  },
+                  {
+                    'name': 'id',
+                    'in': 'path',
+                    'description': 'id',
+                    'required': true,
+                    'style': 'simple',
+                    'schema': { 'type': 'integer', 'format': 'int64' },
+                  },
+                ],
+              'responses':
+                { '200': { 'description': 'OK', 'content': { '*/*': { 'schema': { '$ref': '#/components/schemas/AclSidDTO' } } } } },
+              'security': [{ 'Authorization': ['global'] }],
+            },
+          'put':
+            {
+              'tags': ['acl-sid-resource'],
+              'summary': 'updateAclSid',
+              'operationId': 'updateAclSidUsingPUT_1',
+              'parameters':
+                [
+                  {
+                    'name': 'X-TENANT-ID',
+                    'in': 'header',
+                    'description': 'X-TENANT-ID',
+                    'required': false,
+                    'schema': { 'type': 'string' },
+                  },
+                  {
+                    'name': 'id',
+                    'in': 'path',
+                    'description': 'id',
+                    'required': true,
+                    'style': 'simple',
+                    'schema': { 'type': 'integer', 'format': 'int64' },
+                  },
+                ],
+              'requestBody': { 'content': { 'application/json': { 'schema': { '$ref': '#/components/schemas/AclSidDTO' } } } },
+              'responses':
+                { '200': { 'description': 'OK', 'content': { '*/*': { 'schema': { '$ref': '#/components/schemas/AclSidDTO' } } } } },
+              'security': [{ 'Authorization': ['global'] }],
+            },
+          'delete':
+            {
+              'tags': ['acl-sid-resource'],
+              'summary': 'deleteAclSid',
+              'operationId': 'deleteAclSidUsingDELETE_1',
+              'parameters':
+                [
+                  {
+                    'name': 'X-TENANT-ID',
+                    'in': 'header',
+                    'description': 'X-TENANT-ID',
+                    'required': false,
+                    'schema': { 'type': 'string' },
+                  },
+                  {
+                    'name': 'id',
+                    'in': 'path',
+                    'description': 'id',
+                    'required': true,
+                    'style': 'simple',
+                    'schema': { 'type': 'integer', 'format': 'int64' },
+                  },
+                ],
+              'responses': { '200': { 'description': 'OK' } },
+              'security': [{ 'Authorization': ['global'] }],
+            },
+          'patch':
+            {
+              'tags': ['acl-sid-resource'],
+              'summary': 'partialUpdateAclSid',
+              'operationId': 'partialUpdateAclSidUsingPATCH_1',
+              'parameters':
+                [
+                  {
+                    'name': 'X-TENANT-ID',
+                    'in': 'header',
+                    'description': 'X-TENANT-ID',
+                    'required': false,
+                    'schema': { 'type': 'string' },
+                  },
+                  {
+                    'name': 'id',
+                    'in': 'path',
+                    'description': 'id',
+                    'required': true,
+                    'style': 'simple',
+                    'schema': { 'type': 'integer', 'format': 'int64' },
+                  },
+                ],
+              'requestBody':
+                {
+                  'content':
+                    {
+                      'application/json': { 'schema': { '$ref': '#/components/schemas/AclSidDTO' } },
+                      'application/merge-patch+json': { 'schema': { '$ref': '#/components/schemas/AclSidDTO' } },
+                    },
+                },
+              'responses':
+                { '200': { 'description': 'OK', 'content': { '*/*': { 'schema': { '$ref': '#/components/schemas/AclSidDTO' } } } } },
+              'security': [{ 'Authorization': ['global'] }],
+            },
+        },
+      '/api/permission/authority':
+        {
+          'post':
+            {
+              'tags': ['permission-controller'],
+              'summary': 'addPermissionForAuthority',
+              'operationId': 'addPermissionForAuthorityUsingPOST_1',
+              'parameters':
+                [
+                  {
+                    'name': 'X-TENANT-ID',
+                    'in': 'header',
+                    'description': 'X-TENANT-ID',
+                    'required': false,
+                    'schema': { 'type': 'string' },
+                  },
+                ],
+              'requestBody': { 'content': { 'application/json': { 'schema': { '$ref': '#/components/schemas/PermissionDto' } } } },
+              'responses': { '200': { 'description': 'OK', 'content': { '*/*': { 'schema': { 'type': 'string' } } } } },
+              'security': [{ 'Authorization': ['global'] }],
+            },
+        },
+      '/api/permission/check':
+        {
+          'post':
+            {
+              'tags': ['permission-controller'],
+              'summary': 'checkPermission',
+              'operationId': 'checkPermissionUsingPOST_1',
+              'parameters':
+                [
+                  {
+                    'name': 'X-TENANT-ID',
+                    'in': 'header',
+                    'description': 'X-TENANT-ID',
+                    'required': false,
+                    'schema': { 'type': 'string' },
+                  },
+                ],
+              'requestBody': { 'content': { 'application/json': { 'schema': { '$ref': '#/components/schemas/CheckPermissionDto' } } } },
+              'responses': { '200': { 'description': 'OK', 'content': { '*/*': { 'schema': { 'type': 'boolean' } } } } },
+              'security': [{ 'Authorization': ['global'] }],
+            },
+        },
+      '/api/permission/user':
+        {
+          'post':
+            {
+              'tags': ['permission-controller'],
+              'summary': 'addPermissionForUser',
+              'operationId': 'addPermissionForUserUsingPOST_1',
+              'parameters':
+                [
+                  {
+                    'name': 'X-TENANT-ID',
+                    'in': 'header',
+                    'description': 'X-TENANT-ID',
+                    'required': false,
+                    'schema': { 'type': 'string' },
+                  },
+                ],
+              'requestBody': { 'content': { 'application/json': { 'schema': { '$ref': '#/components/schemas/PermissionDto' } } } },
+              'responses': { '200': { 'description': 'OK', 'content': { '*/*': { 'schema': { 'type': 'string' } } } } },
+              'security': [{ 'Authorization': ['global'] }],
+            },
+        },
+      '/api/authorities':
+        {
+          'get':
+            {
+              'tags': ['public-user-resource'],
+              'summary': 'getAuthorities',
+              'operationId': 'getAuthoritiesUsingGET_1',
+              'responses':
+                { '200': { 'description': 'OK', 'content': { '*/*': { 'schema': { 'type': 'array', 'items': { 'type': 'string' } } } } } },
+              'security': [{ 'Authorization': ['global'] }],
+            },
+        },
+      '/api/users':
+        {
+          'get':
+            {
+              'tags': ['public-user-resource'],
+              'summary': 'getAllPublicUsers',
+              'operationId': 'getAllPublicUsersUsingGET_1',
+              'parameters':
+                [
+                  {
+                    'name': 'offset',
+                    'in': 'query',
+                    'required': false,
+                    'style': 'form',
+                    'schema': { 'type': 'integer', 'format': 'int64' },
+                  },
+                  {
+                    'name': 'pageNumber',
+                    'in': 'query',
+                    'required': false,
+                    'style': 'form',
+                    'schema': { 'type': 'integer', 'format': 'int32' },
+                  },
+                  {
+                    'name': 'pageSize',
+                    'in': 'query',
+                    'required': false,
+                    'style': 'form',
+                    'schema': { 'type': 'integer', 'format': 'int32' },
+                  },
+                  { 'name': 'paged', 'in': 'query', 'required': false, 'style': 'form', 'schema': { 'type': 'boolean' } },
+                  { 'name': 'sort.sorted', 'in': 'query', 'required': false, 'style': 'form', 'schema': { 'type': 'boolean' } },
+                  { 'name': 'sort.unsorted', 'in': 'query', 'required': false, 'style': 'form', 'schema': { 'type': 'boolean' } },
+                  { 'name': 'unpaged', 'in': 'query', 'required': false, 'style': 'form', 'schema': { 'type': 'boolean' } },
+                ],
+              'responses':
+                {
+                  '200':
+                    {
+                      'description': 'OK',
+                      'content': { '*/*': { 'schema': { 'type': 'array', 'items': { '$ref': '#/components/schemas/UserDTO' } } } },
+                    },
+                },
+              'security': [{ 'Authorization': ['global'] }],
+            },
+        },
+      '/api/tenants':
+        {
+          'get':
+            {
+              'tags': ['tenant-resource'],
+              'summary': 'getAllTenants',
+              'operationId': 'getAllTenantsUsingGET_1',
+              'parameters':
+                [
+                  {
+                    'name': 'offset',
+                    'in': 'query',
+                    'required': false,
+                    'style': 'form',
+                    'schema': { 'type': 'integer', 'format': 'int64' },
+                  },
+                  {
+                    'name': 'pageNumber',
+                    'in': 'query',
+                    'required': false,
+                    'style': 'form',
+                    'schema': { 'type': 'integer', 'format': 'int32' },
+                  },
+                  {
+                    'name': 'pageSize',
+                    'in': 'query',
+                    'required': false,
+                    'style': 'form',
+                    'schema': { 'type': 'integer', 'format': 'int32' },
+                  },
+                  { 'name': 'paged', 'in': 'query', 'required': false, 'style': 'form', 'schema': { 'type': 'boolean' } },
+                  { 'name': 'sort.sorted', 'in': 'query', 'required': false, 'style': 'form', 'schema': { 'type': 'boolean' } },
+                  { 'name': 'sort.unsorted', 'in': 'query', 'required': false, 'style': 'form', 'schema': { 'type': 'boolean' } },
+                  { 'name': 'unpaged', 'in': 'query', 'required': false, 'style': 'form', 'schema': { 'type': 'boolean' } },
+                ],
+              'responses':
+                {
+                  '200':
+                    {
+                      'description': 'OK',
+                      'content': { '*/*': { 'schema': { 'type': 'array', 'items': { '$ref': '#/components/schemas/TenantDTO' } } } },
+                    },
+                },
+              'security': [{ 'Authorization': ['global'] }],
+            },
+          'post':
+            {
+              'tags': ['tenant-resource'],
+              'summary': 'createTenant',
+              'operationId': 'createTenantUsingPOST_1',
+              'requestBody': { 'content': { 'application/json': { 'schema': { '$ref': '#/components/schemas/TenantDTO' } } } },
+              'responses':
+                { '200': { 'description': 'OK', 'content': { '*/*': { 'schema': { '$ref': '#/components/schemas/TenantDTO' } } } } },
+              'security': [{ 'Authorization': ['global'] }],
+            },
+        },
+      '/api/tenants/{id}':
+        {
+          'get':
+            {
+              'tags': ['tenant-resource'],
+              'summary': 'getTenant',
+              'operationId': 'getTenantUsingGET_1',
+              'parameters':
+                [
+                  {
+                    'name': 'id',
+                    'in': 'path',
+                    'description': 'id',
+                    'required': true,
+                    'style': 'simple',
+                    'schema': { 'type': 'integer', 'format': 'int64' },
+                  },
+                ],
+              'responses':
+                { '200': { 'description': 'OK', 'content': { '*/*': { 'schema': { '$ref': '#/components/schemas/TenantDTO' } } } } },
+              'security': [{ 'Authorization': ['global'] }],
+            },
+          'put':
+            {
+              'tags': ['tenant-resource'],
+              'summary': 'updateTenant',
+              'operationId': 'updateTenantUsingPUT_1',
+              'parameters':
+                [
+                  {
+                    'name': 'id',
+                    'in': 'path',
+                    'description': 'id',
+                    'required': true,
+                    'style': 'simple',
+                    'schema': { 'type': 'integer', 'format': 'int64' },
+                  },
+                ],
+              'requestBody': { 'content': { 'application/json': { 'schema': { '$ref': '#/components/schemas/TenantDTO' } } } },
+              'responses':
+                { '200': { 'description': 'OK', 'content': { '*/*': { 'schema': { '$ref': '#/components/schemas/TenantDTO' } } } } },
+              'security': [{ 'Authorization': ['global'] }],
+            },
+          'delete':
+            {
+              'tags': ['tenant-resource'],
+              'summary': 'deleteTenant',
+              'operationId': 'deleteTenantUsingDELETE_1',
+              'parameters':
+                [
+                  {
+                    'name': 'id',
+                    'in': 'path',
+                    'description': 'id',
+                    'required': true,
+                    'style': 'simple',
+                    'schema': { 'type': 'integer', 'format': 'int64' },
+                  },
+                ],
+              'responses': { '200': { 'description': 'OK' } },
+              'security': [{ 'Authorization': ['global'] }],
+            },
+          'patch':
+            {
+              'tags': ['tenant-resource'],
+              'summary': 'partialUpdateTenant',
+              'operationId': 'partialUpdateTenantUsingPATCH_1',
+              'parameters':
+                [
+                  {
+                    'name': 'id',
+                    'in': 'path',
+                    'description': 'id',
+                    'required': true,
+                    'style': 'simple',
+                    'schema': { 'type': 'integer', 'format': 'int64' },
+                  },
+                ],
+              'requestBody':
+                {
+                  'content':
+                    {
+                      'application/json': { 'schema': { '$ref': '#/components/schemas/TenantDTO' } },
+                      'application/merge-patch+json': { 'schema': { '$ref': '#/components/schemas/TenantDTO' } },
+                    },
+                },
+              'responses':
+                { '200': { 'description': 'OK', 'content': { '*/*': { 'schema': { '$ref': '#/components/schemas/TenantDTO' } } } } },
+              'security': [{ 'Authorization': ['global'] }],
+            },
+        },
+      '/api/admin/users':
+        {
+          'get':
+            {
+              'tags': ['user-resource'],
+              'summary': 'getAllUsers',
+              'operationId': 'getAllUsersUsingGET_1',
+              'parameters':
+                [
+                  {
+                    'name': 'X-TENANT-ID',
+                    'in': 'header',
+                    'description': 'X-TENANT-ID',
+                    'required': false,
+                    'schema': { 'type': 'string' },
+                  },
+                  {
+                    'name': 'offset',
+                    'in': 'query',
+                    'required': false,
+                    'style': 'form',
+                    'schema': { 'type': 'integer', 'format': 'int64' },
+                  },
+                  {
+                    'name': 'pageNumber',
+                    'in': 'query',
+                    'required': false,
+                    'style': 'form',
+                    'schema': { 'type': 'integer', 'format': 'int32' },
+                  },
+                  {
+                    'name': 'pageSize',
+                    'in': 'query',
+                    'required': false,
+                    'style': 'form',
+                    'schema': { 'type': 'integer', 'format': 'int32' },
+                  },
+                  { 'name': 'paged', 'in': 'query', 'required': false, 'style': 'form', 'schema': { 'type': 'boolean' } },
+                  { 'name': 'sort.sorted', 'in': 'query', 'required': false, 'style': 'form', 'schema': { 'type': 'boolean' } },
+                  { 'name': 'sort.unsorted', 'in': 'query', 'required': false, 'style': 'form', 'schema': { 'type': 'boolean' } },
+                  { 'name': 'unpaged', 'in': 'query', 'required': false, 'style': 'form', 'schema': { 'type': 'boolean' } },
+                ],
+              'responses':
+                {
+                  '200':
+                    {
+                      'description': 'OK',
+                      'content': { '*/*': { 'schema': { 'type': 'array', 'items': { '$ref': '#/components/schemas/AdminUserDTO' } } } },
+                    },
+                },
+              'security': [{ 'Authorization': ['global'] }],
+            },
+          'put':
+            {
+              'tags': ['user-resource'],
+              'summary': 'updateUser',
+              'operationId': 'updateUserUsingPUT_1',
+              'parameters':
+                [
+                  {
+                    'name': 'X-TENANT-ID',
+                    'in': 'header',
+                    'description': 'X-TENANT-ID',
+                    'required': false,
+                    'schema': { 'type': 'string' },
+                  },
+                ],
+              'requestBody': { 'content': { 'application/json': { 'schema': { '$ref': '#/components/schemas/AdminUserDTO' } } } },
+              'responses':
+                { '200': { 'description': 'OK', 'content': { '*/*': { 'schema': { '$ref': '#/components/schemas/AdminUserDTO' } } } } },
+              'security': [{ 'Authorization': ['global'] }],
+            },
+          'post':
+            {
+              'tags': ['user-resource'],
+              'summary': 'createUser',
+              'operationId': 'createUserUsingPOST_1',
+              'parameters':
+                [
+                  {
+                    'name': 'X-TENANT-ID',
+                    'in': 'header',
+                    'description': 'X-TENANT-ID',
+                    'required': false,
+                    'schema': { 'type': 'string' },
+                  },
+                ],
+              'requestBody': { 'content': { 'application/json': { 'schema': { '$ref': '#/components/schemas/AdminUserDTO' } } } },
+              'responses': { '200': { 'description': 'OK', 'content': { '*/*': { 'schema': { '$ref': '#/components/schemas/User' } } } } },
+              'security': [{ 'Authorization': ['global'] }],
+            },
+        },
+      '/api/admin/users/{login}':
+        {
+          'get':
+            {
+              'tags': ['user-resource'],
+              'summary': 'getUser',
+              'operationId': 'getUserUsingGET_1',
+              'parameters':
+                [
+                  {
+                    'name': 'X-TENANT-ID',
+                    'in': 'header',
+                    'description': 'X-TENANT-ID',
+                    'required': false,
+                    'schema': { 'type': 'string' },
+                  },
+                  {
+                    'name': 'login',
+                    'in': 'path',
+                    'description': 'login',
+                    'required': true,
+                    'style': 'simple',
+                    'schema':
+                      {
+                        'pattern': "^(?>[a-zA-Z0-9!$&*+=?^_`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*)|(?>[_.@A-Za-z0-9-]+)$",
+                        'type': 'string',
+                      },
+                  },
+                ],
+              'responses':
+                { '200': { 'description': 'OK', 'content': { '*/*': { 'schema': { '$ref': '#/components/schemas/AdminUserDTO' } } } } },
+              'security': [{ 'Authorization': ['global'] }],
+            },
+          'delete':
+            {
+              'tags': ['user-resource'],
+              'summary': 'deleteUser',
+              'operationId': 'deleteUserUsingDELETE_1',
+              'parameters':
+                [
+                  {
+                    'name': 'X-TENANT-ID',
+                    'in': 'header',
+                    'description': 'X-TENANT-ID',
+                    'required': false,
+                    'schema': { 'type': 'string' },
+                  },
+                  {
+                    'name': 'login',
+                    'in': 'path',
+                    'description': 'login',
+                    'required': true,
+                    'style': 'simple',
+                    'schema':
+                      {
+                        'pattern': "^(?>[a-zA-Z0-9!$&*+=?^_`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*)|(?>[_.@A-Za-z0-9-]+)$",
+                        'type': 'string',
+                      },
+                  },
+                ],
+              'responses': { '200': { 'description': 'OK' } },
+              'security': [{ 'Authorization': ['global'] }],
+            },
+        },
+    },
+  'components':
+    {
+      'schemas':
+        {
+          'AclClassDTO':
+            {
+              'title': 'AclClassDTO',
+              'required': ['classIdType', 'className'],
+              'type': 'object',
+              'properties':
+                { 'classIdType': { 'type': 'string' }, 'className': { 'type': 'string' }, 'id': { 'type': 'integer', 'format': 'int64' } },
+            },
+          'AclEntryDTO':
+            {
+              'title': 'AclEntryDTO',
+              'required': ['aceOrder'],
+              'type': 'object',
+              'properties':
+                {
+                  'aceOrder': { 'type': 'integer', 'format': 'int32' },
+                  'aclObjectIdentity': { '$ref': '#/components/schemas/AclObjectIdentityDTO' },
+                  'aclSid': { '$ref': '#/components/schemas/AclSidDTO' },
+                  'auditFailure': { 'type': 'boolean' },
+                  'auditSuccess': { 'type': 'boolean' },
+                  'granting': { 'type': 'boolean' },
+                  'id': { 'type': 'integer', 'format': 'int64' },
+                  'mask': { '$ref': '#/components/schemas/AclMaskDTO' },
+                },
+            },
+          'AclMaskDTO':
+            {
+              'title': 'AclMaskDTO',
+              'type': 'object',
+              'properties': { 'id': { 'type': 'integer', 'format': 'int64' }, 'name': { 'type': 'string' } },
+            },
+          'AclObjectIdentityDTO':
+            {
+              'title': 'AclObjectIdentityDTO',
+              'required': ['objectIdIdentity', 'parentObject'],
+              'type': 'object',
+              'properties':
+                {
+                  'aclClass': { '$ref': '#/components/schemas/AclClassDTO' },
+                  'entriesInheriting': { 'type': 'boolean' },
+                  'id': { 'type': 'integer', 'format': 'int64' },
+                  'objectIdIdentity': { 'type': 'string' },
+                  'ownerSid': { 'type': 'integer', 'format': 'int32' },
+                  'parentObject': { 'type': 'integer', 'format': 'int32' },
+                },
+            },
+          'AclSidDTO':
+            {
+              'title': 'AclSidDTO',
+              'required': ['sid'],
+              'type': 'object',
+              'properties': { 'id': { 'type': 'integer', 'format': 'int64' }, 'sid': { 'type': 'string' } },
+            },
+          'AdminUserDTO':
+            {
+              'title': 'AdminUserDTO',
+              'required': ['login'],
+              'type': 'object',
+              'properties':
+                {
+                  'activated': { 'type': 'boolean' },
+                  'authorities': { 'uniqueItems': true, 'type': 'array', 'items': { 'type': 'string' } },
+                  'createdBy': { 'type': 'string' },
+                  'createdDate': { 'type': 'string', 'format': 'date-time' },
+                  'email': { 'maxLength': 254, 'minLength': 5, 'type': 'string' },
+                  'firstName': { 'maxLength': 50, 'minLength': 0, 'type': 'string' },
+                  'id': { 'type': 'integer', 'format': 'int64' },
+                  'imageUrl': { 'maxLength': 256, 'minLength': 0, 'type': 'string' },
+                  'langKey': { 'maxLength': 10, 'minLength': 2, 'type': 'string' },
+                  'lastModifiedBy': { 'type': 'string' },
+                  'lastModifiedDate': { 'type': 'string', 'format': 'date-time' },
+                  'lastName': { 'maxLength': 50, 'minLength': 0, 'type': 'string' },
+                  'login':
+                    {
+                      'maxLength': 50,
+                      'minLength': 1,
+                      'pattern': "^(?>[a-zA-Z0-9!$&*+=?^_`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*)|(?>[_.@A-Za-z0-9-]+)$",
+                      'type': 'string',
+                    },
+                },
+            },
+          'CheckPermissionDto':
+            {
+              'title': 'CheckPermissionDto',
+              'type': 'object',
+              'properties':
+                { 'customObjectIdentity': { '$ref': '#/components/schemas/CustomObjectIdentity' }, 'permission': { 'type': 'object' } },
+            },
+          'CustomObjectIdentity':
+            {
+              'title': 'CustomObjectIdentity',
+              'type': 'object',
+              'properties': { 'identifier': { '$ref': '#/components/schemas/Serializable' }, 'type': { 'type': 'string' } },
+            },
+          'JWTToken': { 'title': 'JWTToken', 'type': 'object', 'properties': { 'id_token': { 'type': 'string' } } },
+          'KeyAndPasswordVM':
+            {
+              'title': 'KeyAndPasswordVM',
+              'type': 'object',
+              'properties': { 'key': { 'type': 'string' }, 'newPassword': { 'type': 'string' } },
+            },
+          'LoginVM':
+            {
+              'title': 'LoginVM',
+              'required': ['password', 'username'],
+              'type': 'object',
+              'properties':
+                {
+                  'password': { 'maxLength': 100, 'minLength': 4, 'type': 'string' },
+                  'rememberMe': { 'type': 'boolean' },
+                  'username': { 'maxLength': 50, 'minLength': 1, 'type': 'string' },
+                },
+            },
+          'ManagedUserVM':
+            {
+              'title': 'ManagedUserVM',
+              'required': ['login'],
+              'type': 'object',
+              'properties':
+                {
+                  'activated': { 'type': 'boolean' },
+                  'authorities': { 'uniqueItems': true, 'type': 'array', 'items': { 'type': 'string' } },
+                  'createdBy': { 'type': 'string' },
+                  'createdDate': { 'type': 'string', 'format': 'date-time' },
+                  'email': { 'maxLength': 254, 'minLength': 5, 'type': 'string' },
+                  'firstName': { 'maxLength': 50, 'minLength': 0, 'type': 'string' },
+                  'id': { 'type': 'integer', 'format': 'int64' },
+                  'imageUrl': { 'maxLength': 256, 'minLength': 0, 'type': 'string' },
+                  'langKey': { 'maxLength': 10, 'minLength': 2, 'type': 'string' },
+                  'lastModifiedBy': { 'type': 'string' },
+                  'lastModifiedDate': { 'type': 'string', 'format': 'date-time' },
+                  'lastName': { 'maxLength': 50, 'minLength': 0, 'type': 'string' },
+                  'login':
+                    {
+                      'maxLength': 50,
+                      'minLength': 1,
+                      'pattern': "^(?>[a-zA-Z0-9!$&*+=?^_`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*)|(?>[_.@A-Za-z0-9-]+)$",
+                      'type': 'string',
+                    },
+                  'password': { 'maxLength': 100, 'minLength': 4, 'type': 'string' },
+                },
+            },
+          'MaskAndObject':
+            {
+              'title': 'MaskAndObject',
+              'type': 'object',
+              'properties': { 'mask': { 'type': 'integer', 'format': 'int32' }, 'objId': { 'type': 'integer', 'format': 'int32' } },
+            },
+          'PasswordChangeDTO':
+            {
+              'title': 'PasswordChangeDTO',
+              'type': 'object',
+              'properties': { 'currentPassword': { 'type': 'string' }, 'newPassword': { 'type': 'string' } },
+            },
+          'PermissionDto':
+            {
+              'title': 'PermissionDto',
+              'type': 'object',
+              'properties':
+                {
+                  'className': { 'type': 'string' },
+                  'id': { 'type': 'integer', 'format': 'int64' },
+                  'permission': { 'type': 'integer', 'format': 'int32' },
+                  'sid': { 'type': 'string' },
+                },
+            },
+          'Serializable': { 'title': 'Serializable', 'type': 'object' },
+          'TenantDTO':
+            {
+              'title': 'TenantDTO',
+              'type': 'object',
+              'properties':
+                { 'id': { 'type': 'integer', 'format': 'int64' }, 'schema': { 'type': 'string' }, 'tenantId': { 'type': 'string' } },
+            },
+          'User':
+            {
+              'title': 'User',
+              'required': ['activated', 'login'],
+              'type': 'object',
+              'properties':
+                {
+                  'activated': { 'type': 'boolean' },
+                  'email': { 'maxLength': 254, 'minLength': 5, 'type': 'string' },
+                  'firstName': { 'maxLength': 50, 'minLength': 0, 'type': 'string' },
+                  'id': { 'type': 'integer', 'format': 'int64' },
+                  'imageUrl': { 'maxLength': 256, 'minLength': 0, 'type': 'string' },
+                  'langKey': { 'maxLength': 10, 'minLength': 2, 'type': 'string' },
+                  'lastName': { 'maxLength': 50, 'minLength': 0, 'type': 'string' },
+                  'login':
+                    {
+                      'maxLength': 50,
+                      'minLength': 1,
+                      'pattern': "^(?>[a-zA-Z0-9!$&*+=?^_`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*)|(?>[_.@A-Za-z0-9-]+)$",
+                      'type': 'string',
+                    },
+                  'resetDate': { 'type': 'string', 'format': 'date-time' },
+                },
+            },
+          'UserDTO':
+            {
+              'title': 'UserDTO',
+              'type': 'object',
+              'properties': { 'id': { 'type': 'integer', 'format': 'int64' }, 'login': { 'type': 'string' } },
+            },
+        },
+      'securitySchemes': { 'Authorization': { 'type': 'apiKey', 'name': 'Authorization', 'in': 'header' } },
+    },
+}
