@@ -24,6 +24,9 @@ public interface AclEntryRepository extends JpaRepository<AclEntry, Long> {
     @Query(value = "Select * from acl_entry where acl_object_identity = ?1 and sid = ?2 and mask = ?3", nativeQuery = true)
     Optional<AclEntry> findByObjectIdentitySidAndMask(int objectIdentity, int sid, int mask);
 
+    @Query(value = "Select * from acl_entry where acl_object_identity in ?1 and sid in ?2 and mask in ?3", nativeQuery = true)
+    List<AclEntry> findByObjectIdentitySidAndMaskList(List<Integer> objectIdentity, List<Integer> sid, List<Integer> mask);
+
     @Query(
         value = "select * \n" +
         "from acl_entry ae\n" +

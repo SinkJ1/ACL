@@ -1,5 +1,6 @@
 package sinkj1.security.web.rest;
 
+import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.acls.domain.BasePermission;
 import org.springframework.security.acls.model.Permission;
@@ -10,6 +11,7 @@ import sinkj1.security.config.AclPermissionEvaluator;
 import sinkj1.security.service.CastingService;
 import sinkj1.security.service.PermissionService;
 import sinkj1.security.service.dto.CheckPermissionDto;
+import sinkj1.security.service.dto.DeletePermissionDto;
 import sinkj1.security.service.dto.PermissionDto;
 
 @RestController
@@ -55,6 +57,24 @@ public class PermissionController {
             convertFromIntToBasePermission(permissionDto.getPermission()),
             permissionDto.getSid()
         );
+        return ResponseEntity.ok("ok");
+    }
+
+    @PostMapping("/permissions/user")
+    public ResponseEntity<String> addPermissionsForUser(
+        @RequestHeader(value = "X-TENANT-ID", required = false) String tenantId,
+        @RequestBody List<PermissionDto> permissionDtos
+    ) {
+        permissionService.addPermissionsForUser(permissionDtos);
+        return ResponseEntity.ok("ok");
+    }
+
+    @PostMapping("/delete-permission/user")
+    public ResponseEntity<String> deletePermissionForUser(
+        @RequestHeader(value = "X-TENANT-ID", required = false) String tenantId,
+        @RequestBody DeletePermissionDto deletePermissionDto
+    ) {
+        permissionService.deletePermission(deletePermissionDto);
         return ResponseEntity.ok("ok");
     }
 
