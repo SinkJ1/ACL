@@ -2,6 +2,7 @@ package sinkj1.security.service;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.acls.domain.BasePermission;
 import org.springframework.security.acls.domain.ObjectIdentityImpl;
 import org.springframework.security.acls.model.*;
 import org.springframework.stereotype.Service;
@@ -42,7 +43,9 @@ public class PermissionService {
         addPermissionForSid(id, className, permission, aclSid);
     }
 
-    public void deletePermission(DeletePermissionDto deletePermissionDto) {}
+    public void deletePermission(DeletePermissionDto deletePermissionDto) {
+        deletePermissionAtSid(deletePermissionDto);
+    }
 
     private void addPermissionForSid(Long id, String className, Permission permission, AclSid sid) {
         final TransactionTemplate tt = new TransactionTemplate(transactionManager);
@@ -62,7 +65,15 @@ public class PermissionService {
             new TransactionCallbackWithoutResult() {
                 @Override
                 protected void doInTransactionWithoutResult(TransactionStatus status) {
-                    aclService.createPermissions(permissionDtos);
+                    for (PermissionDto permissionDto : permissionDtos) {
+                        AclSid aclSid = new AclSid(permissionDto.getSid());
+                        aclService.createPermission(
+                            permissionDto.getId(),
+                            permissionDto.getClassName(),
+                            convertFromIntToBasePermission(permissionDto.getPermission()),
+                            aclSid
+                        );
+                    }
                 }
             }
         );
@@ -78,5 +89,20 @@ public class PermissionService {
                 }
             }
         );
+    }
+
+    private Permission convertFromIntToBasePermission(int permission) {
+        switch (permission) {
+            case 2:
+                return BasePermission.WRITE;
+            case 4:
+                return BasePermission.CREATE;
+            case 8:
+                return BasePermission.DELETE;
+            case 16:
+                return BasePermission.ADMINISTRATION;
+            default:
+                return BasePermission.READ;
+        }
     }
 }
