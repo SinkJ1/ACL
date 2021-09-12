@@ -7,7 +7,7 @@ export interface IAclEntry {
   granting?: boolean | null;
   aclSid?: IAclSid | null;
   aclObjectIdentity?: IAclObjectIdentity | null;
-  aclMask?: IAclMask | null;
+  mask?: IAclMask | null;
 }
 
 export class AclEntry implements IAclEntry {
@@ -16,7 +16,7 @@ export class AclEntry implements IAclEntry {
     public granting?: boolean | null,
     public aclSid?: IAclSid | null,
     public aclObjectIdentity?: IAclObjectIdentity | null,
-    public aclMask?: IAclMask | null
+    public mask?: IAclMask | null
   ) {
     this.granting = this.granting ?? false;
   }

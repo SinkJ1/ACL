@@ -18,13 +18,10 @@ export class AclObjectIdentityUpdateComponent implements OnInit {
   isSaving = false;
 
   aclClassesSharedCollection: IAclClass[] = [];
-
+  headers: any;
   editForm = this.fb.group({
     id: [],
     objectIdIdentity: [null, [Validators.required]],
-    parentObject: [null, [Validators.required]],
-    ownerSid: [],
-    entriesInheriting: [],
     aclClass: [],
   });
 
@@ -33,7 +30,9 @@ export class AclObjectIdentityUpdateComponent implements OnInit {
     protected aclClassService: AclClassService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
-  ) {}
+  ) {
+    this.headers = { 'X-TENANT-ID': sessionStorage.getItem('X-TENANT-ID') };
+  }
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ aclObjectIdentity }) => {
@@ -51,9 +50,9 @@ export class AclObjectIdentityUpdateComponent implements OnInit {
     this.isSaving = true;
     const aclObjectIdentity = this.createFromForm();
     if (aclObjectIdentity.id !== undefined) {
-      this.subscribeToSaveResponse(this.aclObjectIdentityService.update(aclObjectIdentity));
+      this.subscribeToSaveResponse(this.aclObjectIdentityService.update(aclObjectIdentity, this.headers));
     } else {
-      this.subscribeToSaveResponse(this.aclObjectIdentityService.create(aclObjectIdentity));
+      this.subscribeToSaveResponse(this.aclObjectIdentityService.create(aclObjectIdentity, this.headers));
     }
   }
 
@@ -97,15 +96,9 @@ export class AclObjectIdentityUpdateComponent implements OnInit {
   }
 
   protected loadRelationshipsOptions(): void {
-    this.aclClassService
-      .query()
-      .pipe(map((res: HttpResponse<IAclClass[]>) => res.body ?? []))
-      .pipe(
-        map((aclClasses: IAclClass[]) =>
-          this.aclClassService.addAclClassToCollectionIfMissing(aclClasses, this.editForm.get('aclClass')!.value)
-        )
-      )
-      .subscribe((aclClasses: IAclClass[]) => (this.aclClassesSharedCollection = aclClasses));
+    this.aclClassService.query({}, this.headers).subscribe((res: HttpResponse<IAclClass[]>) => {
+      this.aclClassesSharedCollection = res.body!;
+    });
   }
 
   protected createFromForm(): IAclObjectIdentity {
@@ -113,9 +106,9 @@ export class AclObjectIdentityUpdateComponent implements OnInit {
       ...new AclObjectIdentity(),
       id: this.editForm.get(['id'])!.value,
       objectIdIdentity: this.editForm.get(['objectIdIdentity'])!.value,
-      parentObject: this.editForm.get(['parentObject'])!.value,
-      ownerSid: this.editForm.get(['ownerSid'])!.value,
-      entriesInheriting: this.editForm.get(['entriesInheriting'])!.value,
+      parentObject: 1051,
+      ownerSid: null,
+      entriesInheriting: true,
       aclClass: this.editForm.get(['aclClass'])!.value,
     };
   }

@@ -20,7 +20,7 @@ import { AclMaskService } from 'app/entities/acl-mask/service/acl-mask.service';
 })
 export class AclEntryUpdateComponent implements OnInit {
   isSaving = false;
-
+  headers: any;
   aclSidsSharedCollection: IAclSid[] = [];
   aclObjectIdentitiesSharedCollection: IAclObjectIdentity[] = [];
   aclMasksSharedCollection: IAclMask[] = [];
@@ -40,7 +40,9 @@ export class AclEntryUpdateComponent implements OnInit {
     protected aclMaskService: AclMaskService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
-  ) {}
+  ) {
+    this.headers = { 'X-TENANT-ID': sessionStorage.getItem('X-TENANT-ID') };
+  }
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ aclEntry }) => {
@@ -58,9 +60,9 @@ export class AclEntryUpdateComponent implements OnInit {
     this.isSaving = true;
     const aclEntry = this.createFromForm();
     if (aclEntry.id !== undefined) {
-      this.subscribeToSaveResponse(this.aclEntryService.update(aclEntry));
+      this.subscribeToSaveResponse(this.aclEntryService.update(aclEntry, this.headers));
     } else {
-      this.subscribeToSaveResponse(this.aclEntryService.create(aclEntry));
+      this.subscribeToSaveResponse(this.aclEntryService.create(aclEntry, this.headers));
     }
   }
 
@@ -101,7 +103,7 @@ export class AclEntryUpdateComponent implements OnInit {
       granting: aclEntry.granting,
       aclSid: aclEntry.aclSid,
       aclObjectIdentity: aclEntry.aclObjectIdentity,
-      aclMask: aclEntry.aclMask,
+      mask: aclEntry.mask,
     });
 
     this.aclSidsSharedCollection = this.aclSidService.addAclSidToCollectionIfMissing(this.aclSidsSharedCollection, aclEntry.aclSid);
@@ -109,46 +111,31 @@ export class AclEntryUpdateComponent implements OnInit {
       this.aclObjectIdentitiesSharedCollection,
       aclEntry.aclObjectIdentity
     );
-    this.aclMasksSharedCollection = this.aclMaskService.addAclMaskToCollectionIfMissing(this.aclMasksSharedCollection, aclEntry.aclMask);
+    this.aclMasksSharedCollection = this.aclMaskService.addAclMaskToCollectionIfMissing(this.aclMasksSharedCollection, aclEntry.mask);
   }
 
   protected loadRelationshipsOptions(): void {
-    this.aclSidService
-      .query()
-      .pipe(map((res: HttpResponse<IAclSid[]>) => res.body ?? []))
-      .pipe(map((aclSids: IAclSid[]) => this.aclSidService.addAclSidToCollectionIfMissing(aclSids, this.editForm.get('aclSid')!.value)))
-      .subscribe((aclSids: IAclSid[]) => (this.aclSidsSharedCollection = aclSids));
+    this.aclSidService.query({}, this.headers).subscribe((res: HttpResponse<IAclSid[]>) => {
+      this.aclSidsSharedCollection = res.body!;
+    });
 
-    this.aclObjectIdentityService
-      .query()
-      .pipe(map((res: HttpResponse<IAclObjectIdentity[]>) => res.body ?? []))
-      .pipe(
-        map((aclObjectIdentities: IAclObjectIdentity[]) =>
-          this.aclObjectIdentityService.addAclObjectIdentityToCollectionIfMissing(
-            aclObjectIdentities,
-            this.editForm.get('aclObjectIdentity')!.value
-          )
-        )
-      )
-      .subscribe((aclObjectIdentities: IAclObjectIdentity[]) => (this.aclObjectIdentitiesSharedCollection = aclObjectIdentities));
+    this.aclObjectIdentityService.query({}, this.headers).subscribe((res: HttpResponse<IAclObjectIdentity[]>) => {
+      this.aclObjectIdentitiesSharedCollection = res.body!;
+    });
 
-    this.aclMaskService
-      .query()
-      .pipe(map((res: HttpResponse<IAclMask[]>) => res.body ?? []))
-      .pipe(
-        map((aclMasks: IAclMask[]) => this.aclMaskService.addAclMaskToCollectionIfMissing(aclMasks, this.editForm.get('aclMask')!.value))
-      )
-      .subscribe((aclMasks: IAclMask[]) => (this.aclMasksSharedCollection = aclMasks));
+    this.aclMaskService.query({}, this.headers).subscribe((res: HttpResponse<IAclMask[]>) => {
+      this.aclMasksSharedCollection = res.body!;
+    });
   }
 
   protected createFromForm(): IAclEntry {
     return {
       ...new AclEntry(),
       id: this.editForm.get(['id'])!.value,
-      granting: this.editForm.get(['granting'])!.value,
+      granting: true,
       aclSid: this.editForm.get(['aclSid'])!.value,
       aclObjectIdentity: this.editForm.get(['aclObjectIdentity'])!.value,
-      aclMask: this.editForm.get(['aclMask'])!.value,
+      mask: this.editForm.get(['aclMask'])!.value,
     };
   }
 }

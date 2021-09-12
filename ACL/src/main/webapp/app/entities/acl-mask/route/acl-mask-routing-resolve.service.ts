@@ -9,12 +9,15 @@ import { AclMaskService } from '../service/acl-mask.service';
 
 @Injectable({ providedIn: 'root' })
 export class AclMaskRoutingResolveService implements Resolve<IAclMask> {
-  constructor(protected service: AclMaskService, protected router: Router) {}
+  headers: any;
+  constructor(protected service: AclMaskService, protected router: Router) {
+    this.headers = { 'X-TENANT-ID': sessionStorage.getItem('X-TENANT-ID') };
+  }
 
   resolve(route: ActivatedRouteSnapshot): Observable<IAclMask> | Observable<never> {
     const id = route.params['id'];
     if (id) {
-      return this.service.find(id).pipe(
+      return this.service.find(id, this.headers).pipe(
         mergeMap((aclMask: HttpResponse<AclMask>) => {
           if (aclMask.body) {
             return of(aclMask.body);

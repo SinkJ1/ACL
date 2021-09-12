@@ -9,12 +9,15 @@ import { AclSidService } from '../service/acl-sid.service';
 
 @Injectable({ providedIn: 'root' })
 export class AclSidRoutingResolveService implements Resolve<IAclSid> {
-  constructor(protected service: AclSidService, protected router: Router) {}
+  headers: any;
+  constructor(protected service: AclSidService, protected router: Router) {
+    this.headers = { 'X-TENANT-ID': sessionStorage.getItem('X-TENANT-ID') };
+  }
 
   resolve(route: ActivatedRouteSnapshot): Observable<IAclSid> | Observable<never> {
     const id = route.params['id'];
     if (id) {
-      return this.service.find(id).pipe(
+      return this.service.find(id, this.headers).pipe(
         mergeMap((aclSid: HttpResponse<AclSid>) => {
           if (aclSid.body) {
             return of(aclSid.body);

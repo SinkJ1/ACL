@@ -9,15 +9,17 @@ import { AclMaskService } from '../service/acl-mask.service';
 })
 export class AclMaskDeleteDialogComponent {
   aclMask?: IAclMask;
-
-  constructor(protected aclMaskService: AclMaskService, protected activeModal: NgbActiveModal) {}
+  headers: any;
+  constructor(protected aclMaskService: AclMaskService, protected activeModal: NgbActiveModal) {
+    this.headers = { 'X-TENANT-ID': sessionStorage.getItem('X-TENANT-ID') };
+  }
 
   cancel(): void {
     this.activeModal.dismiss();
   }
 
   confirmDelete(id: number): void {
-    this.aclMaskService.delete(id).subscribe(() => {
+    this.aclMaskService.delete(id, this.headers).subscribe(() => {
       this.activeModal.close('deleted');
     });
   }

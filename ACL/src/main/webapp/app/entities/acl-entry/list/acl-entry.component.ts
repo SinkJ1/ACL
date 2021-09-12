@@ -8,6 +8,7 @@ import { ASC, DESC, ITEMS_PER_PAGE } from 'app/config/pagination.constants';
 import { AclEntryService } from '../service/acl-entry.service';
 import { AclEntryDeleteDialogComponent } from '../delete/acl-entry-delete-dialog.component';
 import { ParseLinks } from 'app/core/util/parse-links.service';
+import { ITenant } from '../../tenant/tenant.model';
 
 @Component({
   selector: 'jhi-acl-entry',
@@ -21,6 +22,8 @@ export class AclEntryComponent implements OnInit {
   page: number;
   predicate: string;
   ascending: boolean;
+  headers: any;
+  tenants: ITenant[];
 
   constructor(protected aclEntryService: AclEntryService, protected modalService: NgbModal, protected parseLinks: ParseLinks) {
     this.aclEntries = [];
@@ -31,17 +34,52 @@ export class AclEntryComponent implements OnInit {
     };
     this.predicate = 'id';
     this.ascending = true;
+    this.tenants = [];
+    this.headers = { 'X-TENANT-ID': 'public' };
+    this.loadTeanants();
+  }
+
+  async getData(url = ''): Promise<ITenant[]> {
+    const check = sessionStorage.getItem('jhi-authenticationToken');
+    let token = `Bearer ${check ? check : ''}`;
+    token = token.replace('"', '');
+    token = token.replace('"', '');
+    const response: any = await fetch(url, {
+      method: 'GET',
+      headers: {
+        Authorization: token,
+      },
+    });
+
+    const data: ITenant[] = await response.json();
+    return data;
+  }
+
+  changeShema(e: any): any {
+    this.headers = { 'X-TENANT-ID': e.target.value };
+    this.aclEntries = [];
+    this.loadAll();
+    sessionStorage.setItem('X-TENANT-ID', e.target.value);
+  }
+
+  loadTeanants(): void {
+    this.getData('http://localhost:8080/api/get-all-tenants').then(data => {
+      this.tenants = data;
+    });
   }
 
   loadAll(): void {
     this.isLoading = true;
 
     this.aclEntryService
-      .query({
-        page: this.page,
-        size: this.itemsPerPage,
-        sort: this.sort(),
-      })
+      .query(
+        {
+          page: this.page,
+          size: this.itemsPerPage,
+          sort: this.sort(),
+        },
+        this.headers
+      )
       .subscribe(
         (res: HttpResponse<IAclEntry[]>) => {
           this.isLoading = false;
@@ -94,6 +132,7 @@ export class AclEntryComponent implements OnInit {
   protected paginateAclEntries(data: IAclEntry[] | null, headers: HttpHeaders): void {
     this.links = this.parseLinks.parse(headers.get('link') ?? '');
     if (data) {
+      console.log(data);
       for (const d of data) {
         this.aclEntries.push(d);
       }

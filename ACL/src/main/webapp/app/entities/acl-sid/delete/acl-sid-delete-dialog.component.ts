@@ -9,15 +9,18 @@ import { AclSidService } from '../service/acl-sid.service';
 })
 export class AclSidDeleteDialogComponent {
   aclSid?: IAclSid;
+  headers: any;
 
-  constructor(protected aclSidService: AclSidService, protected activeModal: NgbActiveModal) {}
+  constructor(protected aclSidService: AclSidService, protected activeModal: NgbActiveModal) {
+    this.headers = { 'X-TENANT-ID': sessionStorage.getItem('X-TENANT-ID') };
+  }
 
   cancel(): void {
     this.activeModal.dismiss();
   }
 
   confirmDelete(id: number): void {
-    this.aclSidService.delete(id).subscribe(() => {
+    this.aclSidService.delete(id, this.headers).subscribe(() => {
       this.activeModal.close('deleted');
     });
   }

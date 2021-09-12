@@ -17,6 +17,10 @@
         <fa-icon icon="plus"></fa-icon>
         <span jhiTranslate="securityApp.aclEntry.home.createLabel"> Create a new Acl Entry </span>
       </button>
+      <select *ngIf="tenants && tenants!.length > 0" (change)="changeShema($event)">
+        <option>public</option>
+        <option *ngFor="let tenant of tenants">{{ tenant.schema }}</option>
+      </select>
     </div>
   </h2>
 
@@ -33,16 +37,13 @@
       <thead>
         <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="reset.bind(this)">
           <th scope="col" jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="granting">
-            <span jhiTranslate="securityApp.aclEntry.granting">Granting</span> <fa-icon icon="sort"></fa-icon>
-          </th>
           <th scope="col" jhiSortBy="aclSid.sid">
             <span jhiTranslate="securityApp.aclEntry.aclSid">Acl Sid</span> <fa-icon icon="sort"></fa-icon>
           </th>
           <th scope="col" jhiSortBy="aclObjectIdentity.id">
             <span jhiTranslate="securityApp.aclEntry.aclObjectIdentity">Acl Object Identity</span> <fa-icon icon="sort"></fa-icon>
           </th>
-          <th scope="col" jhiSortBy="aclMask.mask">
+          <th scope="col" jhiSortBy="aclMask.id">
             <span jhiTranslate="securityApp.aclEntry.aclMask">Acl Mask</span> <fa-icon icon="sort"></fa-icon>
           </th>
           <th scope="col"></th>
@@ -53,7 +54,6 @@
           <td>
             <a [routerLink]="['/acl-entry', aclEntry.id, 'view']">{{ aclEntry.id }}</a>
           </td>
-          <td>{{ aclEntry.granting }}</td>
           <td>
             <div *ngIf="aclEntry.aclSid">
               <a [routerLink]="['/acl-sid', aclEntry.aclSid?.id, 'view']">{{ aclEntry.aclSid?.sid }}</a>
@@ -65,8 +65,8 @@
             </div>
           </td>
           <td>
-            <div *ngIf="aclEntry.aclMask">
-              <a [routerLink]="['/acl-mask', aclEntry.aclMask?.id, 'view']">{{ aclEntry.aclMask?.name }}</a>
+            <div *ngIf="aclEntry.mask">
+              <a [routerLink]="['/acl-mask', aclEntry.mask?.id, 'view']">{{ aclEntry.mask?.name }}</a>
             </div>
           </td>
           <td class="text-right">

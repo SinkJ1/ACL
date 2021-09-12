@@ -14,13 +14,15 @@ import { AclClassService } from '../service/acl-class.service';
 })
 export class AclClassUpdateComponent implements OnInit {
   isSaving = false;
-
+  headers: any;
   editForm = this.fb.group({
     id: [],
     className: [null, [Validators.required]],
   });
 
-  constructor(protected aclClassService: AclClassService, protected activatedRoute: ActivatedRoute, protected fb: FormBuilder) {}
+  constructor(protected aclClassService: AclClassService, protected activatedRoute: ActivatedRoute, protected fb: FormBuilder) {
+    this.headers = { 'X-TENANT-ID': sessionStorage.getItem('X-TENANT-ID') };
+  }
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ aclClass }) => {
@@ -36,9 +38,9 @@ export class AclClassUpdateComponent implements OnInit {
     this.isSaving = true;
     const aclClass = this.createFromForm();
     if (aclClass.id !== undefined) {
-      this.subscribeToSaveResponse(this.aclClassService.update(aclClass));
+      this.subscribeToSaveResponse(this.aclClassService.update(aclClass, this.headers));
     } else {
-      this.subscribeToSaveResponse(this.aclClassService.create(aclClass));
+      this.subscribeToSaveResponse(this.aclClassService.create(aclClass, this.headers));
     }
   }
 

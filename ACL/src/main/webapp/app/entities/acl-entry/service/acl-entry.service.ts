@@ -16,31 +16,35 @@ export class AclEntryService {
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
-  create(aclEntry: IAclEntry): Observable<EntityResponseType> {
-    return this.http.post<IAclEntry>(this.resourceUrl, aclEntry, { observe: 'response' });
+  create(aclEntry: IAclEntry, headers: any): Observable<EntityResponseType> {
+    return this.http.post<IAclEntry>(this.resourceUrl, aclEntry, { observe: 'response', headers });
   }
 
-  update(aclEntry: IAclEntry): Observable<EntityResponseType> {
-    return this.http.put<IAclEntry>(`${this.resourceUrl}/${getAclEntryIdentifier(aclEntry) as number}`, aclEntry, { observe: 'response' });
-  }
-
-  partialUpdate(aclEntry: IAclEntry): Observable<EntityResponseType> {
-    return this.http.patch<IAclEntry>(`${this.resourceUrl}/${getAclEntryIdentifier(aclEntry) as number}`, aclEntry, {
+  update(aclEntry: IAclEntry, headers: any): Observable<EntityResponseType> {
+    return this.http.put<IAclEntry>(`${this.resourceUrl}/${getAclEntryIdentifier(aclEntry) as number}`, aclEntry, {
       observe: 'response',
+      headers,
     });
   }
 
-  find(id: number): Observable<EntityResponseType> {
-    return this.http.get<IAclEntry>(`${this.resourceUrl}/${id}`, { observe: 'response' });
+  partialUpdate(aclEntry: IAclEntry, headers: any): Observable<EntityResponseType> {
+    return this.http.patch<IAclEntry>(`${this.resourceUrl}/${getAclEntryIdentifier(aclEntry) as number}`, aclEntry, {
+      observe: 'response',
+      headers,
+    });
   }
 
-  query(req?: any): Observable<EntityArrayResponseType> {
+  find(id: number, headers: any): Observable<EntityResponseType> {
+    return this.http.get<IAclEntry>(`${this.resourceUrl}/${id}`, { observe: 'response', headers });
+  }
+
+  query(req?: any, headers?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
-    return this.http.get<IAclEntry[]>(this.resourceUrl, { params: options, observe: 'response' });
+    return this.http.get<IAclEntry[]>(this.resourceUrl, { params: options, observe: 'response', headers });
   }
 
-  delete(id: number): Observable<HttpResponse<{}>> {
-    return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
+  delete(id: number, headers: any): Observable<HttpResponse<{}>> {
+    return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response', headers });
   }
 
   addAclEntryToCollectionIfMissing(aclEntryCollection: IAclEntry[], ...aclEntriesToCheck: (IAclEntry | null | undefined)[]): IAclEntry[] {

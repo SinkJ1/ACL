@@ -14,9 +14,6 @@ public class AclClassDTO implements Serializable {
     @NotNull
     private String className;
 
-    @NotNull
-    private String classIdType;
-
     public Long getId() {
         return id;
     }
@@ -31,14 +28,6 @@ public class AclClassDTO implements Serializable {
 
     public void setClassName(String className) {
         this.className = className;
-    }
-
-    public String getClassIdType() {
-        return classIdType;
-    }
-
-    public void setClassIdType(String classIdType) {
-        this.classIdType = classIdType;
     }
 
     @Override
@@ -68,7 +57,6 @@ public class AclClassDTO implements Serializable {
         return "AclClassDTO{" +
             "id=" + getId() +
             ", className='" + getClassName() + "'" +
-            ", classIdType='" + getClassIdType() + "'" +
             "}";
     }
 }

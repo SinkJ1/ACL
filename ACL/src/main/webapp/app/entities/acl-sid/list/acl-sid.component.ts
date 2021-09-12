@@ -8,6 +8,8 @@ import { ASC, DESC, ITEMS_PER_PAGE } from 'app/config/pagination.constants';
 import { AclSidService } from '../service/acl-sid.service';
 import { AclSidDeleteDialogComponent } from '../delete/acl-sid-delete-dialog.component';
 import { ParseLinks } from 'app/core/util/parse-links.service';
+import { ITenant } from '../../tenant/tenant.model';
+import { FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'jhi-acl-sid',
@@ -21,8 +23,16 @@ export class AclSidComponent implements OnInit {
   page: number;
   predicate: string;
   ascending: boolean;
+  headers: any;
+  tenants: ITenant[];
+  tenantValue: string;
 
-  constructor(protected aclSidService: AclSidService, protected modalService: NgbModal, protected parseLinks: ParseLinks) {
+  constructor(
+    protected aclSidService: AclSidService,
+    protected modalService: NgbModal,
+    protected parseLinks: ParseLinks,
+    protected fb: FormBuilder
+  ) {
     this.aclSids = [];
     this.itemsPerPage = ITEMS_PER_PAGE;
     this.page = 0;
@@ -31,17 +41,54 @@ export class AclSidComponent implements OnInit {
     };
     this.predicate = 'id';
     this.ascending = true;
+    this.tenants = [];
+    this.headers = { 'X-TENANT-ID': 'public' };
+    this.loadTeanants();
+    this.loadAll();
+    this.tenantValue = '';
+  }
+
+  async getData(url = ''): Promise<ITenant[]> {
+    const check = sessionStorage.getItem('jhi-authenticationToken');
+    let token = `Bearer ${check ? check : ''}`;
+    token = token.replace('"', '');
+    token = token.replace('"', '');
+    const response: any = await fetch(url, {
+      method: 'GET',
+      headers: {
+        Authorization: token,
+      },
+    });
+
+    const data: ITenant[] = await response.json();
+    return data;
+  }
+
+  changeShema(e: any): any {
+    this.headers = { 'X-TENANT-ID': e.target.value };
+    this.tenantValue = e.target.value;
+    this.aclSids = [];
+    this.loadAll();
+    sessionStorage.setItem('X-TENANT-ID', e.target.value);
+  }
+
+  loadTeanants(): void {
+    this.getData('http://localhost:8080/api/get-all-tenants').then(data => {
+      this.tenants = data;
+    });
   }
 
   loadAll(): void {
     this.isLoading = true;
-
     this.aclSidService
-      .query({
-        page: this.page,
-        size: this.itemsPerPage,
-        sort: this.sort(),
-      })
+      .query(
+        {
+          page: this.page,
+          size: this.itemsPerPage,
+          sort: this.sort(),
+        },
+        this.headers
+      )
       .subscribe(
         (res: HttpResponse<IAclSid[]>) => {
           this.isLoading = false;

@@ -18,6 +18,12 @@ public interface AclEntryRepository extends JpaRepository<AclEntry, Long> {
     )
     List<AclEntry> findByMaskAndAclObjectIdentityNative(String objectIdIdentity, String name, List<String> authoritiesStrings);
 
+    @Query(
+        value = "Select * from acl_entry aclE inner join acl_sid aclS on aclS.id = aclE.sid    inner join acl_object_identity aclob on aclob.id = aclE.acl_object_identity   inner join acl_class ack on ack.id = aclob.object_id_class where ack.class like ?1 and aclS.sid like ?2",
+        nativeQuery = true
+    )
+    List<AclEntry> findByMaskAndAclObjectIdentityByUserNameNative(String objectIdIdentity, String name);
+
     @Query(value = "Select * from acl_entry where acl_object_identity = ?1 and ace_order = ?2", nativeQuery = true)
     Optional<AclEntry> findByObjectIdentityAndAceOrder(int objectIdentity, int aceOrder);
 

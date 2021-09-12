@@ -10,6 +10,11 @@ import { RouterModule } from '@angular/router';
         loadChildren: () => import('./acl-sid/acl-sid.module').then(m => m.AclSidModule),
       },
       {
+        path: 'acl-mask',
+        data: { pageTitle: 'securityApp.aclMask.home.title' },
+        loadChildren: () => import('./acl-mask/acl-mask.module').then(m => m.AclMaskModule),
+      },
+      {
         path: 'acl-class',
         data: { pageTitle: 'securityApp.aclClass.home.title' },
         loadChildren: () => import('./acl-class/acl-class.module').then(m => m.AclClassModule),
@@ -18,11 +23,6 @@ import { RouterModule } from '@angular/router';
         path: 'acl-object-identity',
         data: { pageTitle: 'securityApp.aclObjectIdentity.home.title' },
         loadChildren: () => import('./acl-object-identity/acl-object-identity.module').then(m => m.AclObjectIdentityModule),
-      },
-      {
-        path: 'acl-mask',
-        data: { pageTitle: 'securityApp.aclMask.home.title' },
-        loadChildren: () => import('./acl-mask/acl-mask.module').then(m => m.AclMaskModule),
       },
       {
         path: 'acl-entry',

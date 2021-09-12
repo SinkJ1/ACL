@@ -1,13 +1,12 @@
 package sinkj1.security.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import javax.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
+import javax.persistence.*;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * A AclMask.
@@ -31,6 +30,13 @@ public class AclMask implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "aclSid", "aclObjectIdentity", "aclMask" }, allowSetters = true)
     private Set<AclEntry> aclEntries = new HashSet<>();
+
+    public AclMask() {}
+
+    public AclMask(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {

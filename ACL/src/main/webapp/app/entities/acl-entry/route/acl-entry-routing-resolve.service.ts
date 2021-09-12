@@ -9,12 +9,15 @@ import { AclEntryService } from '../service/acl-entry.service';
 
 @Injectable({ providedIn: 'root' })
 export class AclEntryRoutingResolveService implements Resolve<IAclEntry> {
-  constructor(protected service: AclEntryService, protected router: Router) {}
+  headers: any;
+  constructor(protected service: AclEntryService, protected router: Router) {
+    this.headers = { 'X-TENANT-ID': sessionStorage.getItem('X-TENANT-ID') };
+  }
 
   resolve(route: ActivatedRouteSnapshot): Observable<IAclEntry> | Observable<never> {
     const id = route.params['id'];
     if (id) {
-      return this.service.find(id).pipe(
+      return this.service.find(id, this.headers).pipe(
         mergeMap((aclEntry: HttpResponse<AclEntry>) => {
           if (aclEntry.body) {
             return of(aclEntry.body);

@@ -8,9 +8,9 @@
       "entities": {
         "main": "Entities",
         "aclSid": "Acl Sid",
+        "aclMask": "Acl Mask",
         "aclClass": "Acl Class",
         "aclObjectIdentity": "Acl Object Identity",
-        "aclMask": "Acl Mask",
         "aclEntry": "Acl Entry",
         "tenant": "Tenant",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"

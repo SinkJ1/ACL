@@ -26,6 +26,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import sinkj1.security.domain.AclEntry;
 import sinkj1.security.domain.MaskAndObject;
 import sinkj1.security.repository.AclEntryRepository;
 import sinkj1.security.service.AclEntryService;
@@ -169,6 +170,9 @@ public class AclEntryResource {
     ) {
         log.debug("REST request to get a page of AclEntries");
         Page<AclEntryDTO> page = aclEntryService.findAll(pageable);
+        for (AclEntryDTO aclEntry : page) {
+            System.out.println(aclEntry);
+        }
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
@@ -185,15 +189,6 @@ public class AclEntryResource {
         @PathVariable Long id
     ) throws SQLException {
         log.debug("REST request to get AclEntry : {}", id);
-
-        Connection connection = dataSource.getConnection();
-        System.out.println(dataSource.getConnection().getSchema());
-        PreparedStatement statement = connection.prepareStatement("select * from acl_class where id = 1");
-        ResultSet rs = statement.executeQuery();
-        while (rs.next()) {
-            System.out.println(rs.getString(2));
-        }
-
         Optional<AclEntryDTO> aclEntryDTO = aclEntryService.findOne(id);
         return ResponseUtil.wrapOrNotFound(aclEntryDTO);
     }
@@ -215,6 +210,15 @@ public class AclEntryResource {
             .noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
+    }
+
+    @GetMapping("/get-acl-entries-by-user/{name}")
+    public ResponseEntity<List<MaskAndObject>> getMaskObjByName(
+        @RequestHeader(value = "X-TENANT-ID", required = false) String tenantId,
+        @RequestParam("objE") String objE,
+        @PathVariable String name
+    ) {
+        return ResponseEntity.ok(aclEntryService.getMaskAndObjectIdByUser(objE, name));
     }
 
     @GetMapping("/get-acl-entries")

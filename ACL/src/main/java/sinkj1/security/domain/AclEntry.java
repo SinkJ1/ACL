@@ -134,11 +134,14 @@ public class AclEntry implements Serializable {
     }
 
     // prettier-ignore
+
     @Override
     public String toString() {
         return "AclEntry{" +
-            "id=" + getId() +
-            ", granting='" + getGranting() + "'" +
-            "}";
+            "id=" + id +
+            ", aclSid=" + aclSid +
+            ", aclObjectIdentity=" + aclObjectIdentity +
+            ", aclMask=" + aclMask +
+            '}';
     }
 }

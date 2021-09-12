@@ -51,58 +51,6 @@
             </small>
           </div>
         </div>
-
-        <div class="form-group">
-          <label class="form-control-label" jhiTranslate="securityApp.aclObjectIdentity.parentObject" for="field_parentObject"
-            >Parent Object</label
-          >
-          <input
-            type="number"
-            class="form-control"
-            name="parentObject"
-            id="field_parentObject"
-            data-cy="parentObject"
-            formControlName="parentObject"
-          />
-          <div
-            *ngIf="editForm.get('parentObject')!.invalid && (editForm.get('parentObject')!.dirty || editForm.get('parentObject')!.touched)"
-          >
-            <small
-              class="form-text text-danger"
-              *ngIf="editForm.get('parentObject')?.errors?.required"
-              jhiTranslate="entity.validation.required"
-            >
-              This field is required.
-            </small>
-            <small
-              class="form-text text-danger"
-              [hidden]="!editForm.get('parentObject')?.errors?.number"
-              jhiTranslate="entity.validation.number"
-            >
-              This field should be a number.
-            </small>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label" jhiTranslate="securityApp.aclObjectIdentity.ownerSid" for="field_ownerSid">Owner Sid</label>
-          <input type="number" class="form-control" name="ownerSid" id="field_ownerSid" data-cy="ownerSid" formControlName="ownerSid" />
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label" jhiTranslate="securityApp.aclObjectIdentity.entriesInheriting" for="field_entriesInheriting"
-            >Entries Inheriting</label
-          >
-          <input
-            type="checkbox"
-            class="form-check"
-            name="entriesInheriting"
-            id="field_entriesInheriting"
-            data-cy="entriesInheriting"
-            formControlName="entriesInheriting"
-          />
-        </div>
-
         <div class="form-group">
           <label class="form-control-label" jhiTranslate="securityApp.aclObjectIdentity.aclClass" for="field_aclClass">Acl Class</label>
           <select class="form-control" id="field_aclClass" data-cy="aclClass" name="aclClass" formControlName="aclClass">

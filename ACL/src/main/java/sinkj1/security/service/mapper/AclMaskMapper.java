@@ -15,5 +15,6 @@ public interface AclMaskMapper extends EntityMapper<AclMaskDTO, AclMask> {
     @Named("id")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
+    @Mapping(target = "name", source = "name")
     AclMaskDTO toDtoId(AclMask aclMask);
 }

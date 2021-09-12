@@ -16,29 +16,35 @@ export class AclMaskService {
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
-  create(aclMask: IAclMask): Observable<EntityResponseType> {
-    return this.http.post<IAclMask>(this.resourceUrl, aclMask, { observe: 'response' });
+  create(aclMask: IAclMask, headers: any): Observable<EntityResponseType> {
+    return this.http.post<IAclMask>(this.resourceUrl, aclMask, { observe: 'response', headers });
   }
 
-  update(aclMask: IAclMask): Observable<EntityResponseType> {
-    return this.http.put<IAclMask>(`${this.resourceUrl}/${getAclMaskIdentifier(aclMask) as number}`, aclMask, { observe: 'response' });
+  update(aclMask: IAclMask, headers: any): Observable<EntityResponseType> {
+    return this.http.put<IAclMask>(`${this.resourceUrl}/${getAclMaskIdentifier(aclMask) as number}`, aclMask, {
+      observe: 'response',
+      headers,
+    });
   }
 
-  partialUpdate(aclMask: IAclMask): Observable<EntityResponseType> {
-    return this.http.patch<IAclMask>(`${this.resourceUrl}/${getAclMaskIdentifier(aclMask) as number}`, aclMask, { observe: 'response' });
+  partialUpdate(aclMask: IAclMask, headers: any): Observable<EntityResponseType> {
+    return this.http.patch<IAclMask>(`${this.resourceUrl}/${getAclMaskIdentifier(aclMask) as number}`, aclMask, {
+      observe: 'response',
+      headers,
+    });
   }
 
-  find(id: number): Observable<EntityResponseType> {
-    return this.http.get<IAclMask>(`${this.resourceUrl}/${id}`, { observe: 'response' });
+  find(id: number, headers: any): Observable<EntityResponseType> {
+    return this.http.get<IAclMask>(`${this.resourceUrl}/${id}`, { observe: 'response', headers });
   }
 
-  query(req?: any): Observable<EntityArrayResponseType> {
+  query(req?: any, headers?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
-    return this.http.get<IAclMask[]>(this.resourceUrl, { params: options, observe: 'response' });
+    return this.http.get<IAclMask[]>(this.resourceUrl, { params: options, observe: 'response', headers });
   }
 
-  delete(id: number): Observable<HttpResponse<{}>> {
-    return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
+  delete(id: number, headers: any): Observable<HttpResponse<{}>> {
+    return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response', headers });
   }
 
   addAclMaskToCollectionIfMissing(aclMaskCollection: IAclMask[], ...aclMasksToCheck: (IAclMask | null | undefined)[]): IAclMask[] {

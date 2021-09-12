@@ -8,6 +8,7 @@ import { ASC, DESC, ITEMS_PER_PAGE } from 'app/config/pagination.constants';
 import { AclObjectIdentityService } from '../service/acl-object-identity.service';
 import { AclObjectIdentityDeleteDialogComponent } from '../delete/acl-object-identity-delete-dialog.component';
 import { ParseLinks } from 'app/core/util/parse-links.service';
+import { ITenant } from '../../tenant/tenant.model';
 
 @Component({
   selector: 'jhi-acl-object-identity',
@@ -21,6 +22,8 @@ export class AclObjectIdentityComponent implements OnInit {
   page: number;
   predicate: string;
   ascending: boolean;
+  headers: any;
+  tenants: ITenant[];
 
   constructor(
     protected aclObjectIdentityService: AclObjectIdentityService,
@@ -35,17 +38,52 @@ export class AclObjectIdentityComponent implements OnInit {
     };
     this.predicate = 'id';
     this.ascending = true;
+    this.headers = { 'X-TENANT-ID': 'public' };
+    this.tenants = [];
+    this.loadTeanants();
+  }
+
+  async getData(url = ''): Promise<ITenant[]> {
+    const check = sessionStorage.getItem('jhi-authenticationToken');
+    let token = `Bearer ${check ? check : ''}`;
+    token = token.replace('"', '');
+    token = token.replace('"', '');
+    const response: any = await fetch(url, {
+      method: 'GET',
+      headers: {
+        Authorization: token,
+      },
+    });
+
+    const data: ITenant[] = await response.json();
+    return data;
+  }
+
+  changeShema(e: any): any {
+    this.headers = { 'X-TENANT-ID': e.target.value };
+    this.aclObjectIdentities = [];
+    this.loadAll();
+    sessionStorage.setItem('X-TENANT-ID', e.target.value);
+  }
+
+  loadTeanants(): void {
+    this.getData('http://localhost:8080/api/get-all-tenants').then(data => {
+      this.tenants = data;
+    });
   }
 
   loadAll(): void {
     this.isLoading = true;
 
     this.aclObjectIdentityService
-      .query({
-        page: this.page,
-        size: this.itemsPerPage,
-        sort: this.sort(),
-      })
+      .query(
+        {
+          page: this.page,
+          size: this.itemsPerPage,
+          sort: this.sort(),
+        },
+        this.headers
+      )
       .subscribe(
         (res: HttpResponse<IAclObjectIdentity[]>) => {
           this.isLoading = false;

@@ -14,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sinkj1.security.domain.AclEntry;
+import sinkj1.security.domain.AclMask;
 import sinkj1.security.domain.MaskAndObject;
 import sinkj1.security.repository.AclEntryRepository;
 import sinkj1.security.service.AclEntryService;
@@ -42,6 +43,7 @@ public class AclEntryServiceImpl implements AclEntryService {
     public AclEntryDTO save(AclEntryDTO aclEntryDTO) {
         log.debug("Request to save AclEntry : {}", aclEntryDTO);
         AclEntry aclEntry = aclEntryMapper.toEntity(aclEntryDTO);
+        aclEntry.setAclMask(new AclMask(aclEntryDTO.getMask().getId(), aclEntryDTO.getMask().getName()));
         aclEntry = aclEntryRepository.save(aclEntry);
         return aclEntryMapper.toDto(aclEntry);
     }
@@ -93,6 +95,18 @@ public class AclEntryServiceImpl implements AclEntryService {
             authentication.getName(),
             authoritiesStrings
         );
+        return objectList
+            .stream()
+            .map(
+                aclEntry ->
+                    new MaskAndObject(aclEntry.getAclObjectIdentity().getObjectIdIdentity(), (int) (long) aclEntry.getAclMask().getId())
+            )
+            .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<MaskAndObject> getMaskAndObjectIdByUser(String objectIdIdentity, String userName) {
+        List<AclEntry> objectList = aclEntryRepository.findByMaskAndAclObjectIdentityByUserNameNative(objectIdIdentity, userName);
         return objectList
             .stream()
             .map(

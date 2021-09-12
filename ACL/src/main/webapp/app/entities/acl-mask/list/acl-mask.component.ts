@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-
+import { ITenant } from '../../tenant/tenant.model';
 import { IAclMask } from '../acl-mask.model';
 
 import { ASC, DESC, ITEMS_PER_PAGE } from 'app/config/pagination.constants';
@@ -21,6 +21,8 @@ export class AclMaskComponent implements OnInit {
   page: number;
   predicate: string;
   ascending: boolean;
+  headers: any;
+  tenants: ITenant[];
 
   constructor(protected aclMaskService: AclMaskService, protected modalService: NgbModal, protected parseLinks: ParseLinks) {
     this.aclMasks = [];
@@ -30,18 +32,24 @@ export class AclMaskComponent implements OnInit {
       last: 0,
     };
     this.predicate = 'id';
+    this.headers = { 'X-TENANT-ID': 'public' };
     this.ascending = true;
+    this.tenants = [];
+    this.loadTeanants();
   }
 
   loadAll(): void {
     this.isLoading = true;
 
     this.aclMaskService
-      .query({
-        page: this.page,
-        size: this.itemsPerPage,
-        sort: this.sort(),
-      })
+      .query(
+        {
+          page: this.page,
+          size: this.itemsPerPage,
+          sort: this.sort(),
+        },
+        this.headers
+      )
       .subscribe(
         (res: HttpResponse<IAclMask[]>) => {
           this.isLoading = false;
@@ -51,6 +59,35 @@ export class AclMaskComponent implements OnInit {
           this.isLoading = false;
         }
       );
+  }
+
+  async getData(url = ''): Promise<ITenant[]> {
+    const check = sessionStorage.getItem('jhi-authenticationToken');
+    let token = `Bearer ${check ? check : ''}`;
+    token = token.replace('"', '');
+    token = token.replace('"', '');
+    const response: any = await fetch(url, {
+      method: 'GET',
+      headers: {
+        Authorization: token,
+      },
+    });
+
+    const data: ITenant[] = await response.json();
+    return data;
+  }
+
+  changeShema(e: any): any {
+    this.headers = { 'X-TENANT-ID': e.target.value };
+    this.aclMasks = [];
+    this.loadAll();
+    sessionStorage.setItem('X-TENANT-ID', e.target.value);
+  }
+
+  loadTeanants(): void {
+    this.getData('http://localhost:8080/api/get-all-tenants').then(data => {
+      this.tenants = data;
+    });
   }
 
   reset(): void {

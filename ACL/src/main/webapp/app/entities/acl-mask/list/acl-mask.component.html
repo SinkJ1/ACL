@@ -17,6 +17,10 @@
         <fa-icon icon="plus"></fa-icon>
         <span jhiTranslate="securityApp.aclMask.home.createLabel"> Create a new Acl Mask </span>
       </button>
+      <select *ngIf="tenants && tenants!.length > 0" (change)="changeShema($event)">
+        <option>public</option>
+        <option *ngFor="let tenant of tenants">{{ tenant.schema }}</option>
+      </select>
     </div>
   </h2>
 

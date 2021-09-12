@@ -14,13 +14,15 @@ import { AclSidService } from '../service/acl-sid.service';
 })
 export class AclSidUpdateComponent implements OnInit {
   isSaving = false;
-
+  headers: any;
   editForm = this.fb.group({
     id: [],
     sid: [null, [Validators.required]],
   });
 
-  constructor(protected aclSidService: AclSidService, protected activatedRoute: ActivatedRoute, protected fb: FormBuilder) {}
+  constructor(protected aclSidService: AclSidService, protected activatedRoute: ActivatedRoute, protected fb: FormBuilder) {
+    this.headers = { 'X-TENANT-ID': sessionStorage.getItem('X-TENANT-ID') };
+  }
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ aclSid }) => {
@@ -36,9 +38,9 @@ export class AclSidUpdateComponent implements OnInit {
     this.isSaving = true;
     const aclSid = this.createFromForm();
     if (aclSid.id !== undefined) {
-      this.subscribeToSaveResponse(this.aclSidService.update(aclSid));
+      this.subscribeToSaveResponse(this.aclSidService.update(aclSid, this.headers));
     } else {
-      this.subscribeToSaveResponse(this.aclSidService.create(aclSid));
+      this.subscribeToSaveResponse(this.aclSidService.create(aclSid, this.headers));
     }
   }
 

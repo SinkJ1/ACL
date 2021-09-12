@@ -53,5 +53,7 @@ public interface AclEntryService {
 
     List<MaskAndObject> getMaskAndObjectId(String objectIdIdentity);
 
+    List<MaskAndObject> getMaskAndObjectIdByUser(String objectIdIdentity, String userName);
+
     Optional<AclEntry> findEntryForUser(List<Integer> mask, int objectIdentity, String className, List<String> userAuthority);
 }

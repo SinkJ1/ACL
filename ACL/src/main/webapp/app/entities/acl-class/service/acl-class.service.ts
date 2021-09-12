@@ -16,31 +16,35 @@ export class AclClassService {
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
-  create(aclClass: IAclClass): Observable<EntityResponseType> {
-    return this.http.post<IAclClass>(this.resourceUrl, aclClass, { observe: 'response' });
+  create(aclClass: IAclClass, headers: any): Observable<EntityResponseType> {
+    return this.http.post<IAclClass>(this.resourceUrl, aclClass, { observe: 'response', headers });
   }
 
-  update(aclClass: IAclClass): Observable<EntityResponseType> {
-    return this.http.put<IAclClass>(`${this.resourceUrl}/${getAclClassIdentifier(aclClass) as number}`, aclClass, { observe: 'response' });
-  }
-
-  partialUpdate(aclClass: IAclClass): Observable<EntityResponseType> {
-    return this.http.patch<IAclClass>(`${this.resourceUrl}/${getAclClassIdentifier(aclClass) as number}`, aclClass, {
+  update(aclClass: IAclClass, headers: any): Observable<EntityResponseType> {
+    return this.http.put<IAclClass>(`${this.resourceUrl}/${getAclClassIdentifier(aclClass) as number}`, aclClass, {
       observe: 'response',
+      headers,
     });
   }
 
-  find(id: number): Observable<EntityResponseType> {
-    return this.http.get<IAclClass>(`${this.resourceUrl}/${id}`, { observe: 'response' });
+  partialUpdate(aclClass: IAclClass, headers: any): Observable<EntityResponseType> {
+    return this.http.patch<IAclClass>(`${this.resourceUrl}/${getAclClassIdentifier(aclClass) as number}`, aclClass, {
+      observe: 'response',
+      headers,
+    });
   }
 
-  query(req?: any): Observable<EntityArrayResponseType> {
+  find(id: number, headers: any): Observable<EntityResponseType> {
+    return this.http.get<IAclClass>(`${this.resourceUrl}/${id}`, { observe: 'response', headers });
+  }
+
+  query(req?: any, headers?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
-    return this.http.get<IAclClass[]>(this.resourceUrl, { params: options, observe: 'response' });
+    return this.http.get<IAclClass[]>(this.resourceUrl, { params: options, observe: 'response', headers });
   }
 
-  delete(id: number): Observable<HttpResponse<{}>> {
-    return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
+  delete(id: number, headers: any): Observable<HttpResponse<{}>> {
+    return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response', headers });
   }
 
   addAclClassToCollectionIfMissing(aclClassCollection: IAclClass[], ...aclClassesToCheck: (IAclClass | null | undefined)[]): IAclClass[] {

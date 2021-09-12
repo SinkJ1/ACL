@@ -17,6 +17,10 @@
         <fa-icon icon="plus"></fa-icon>
         <span jhiTranslate="securityApp.aclObjectIdentity.home.createLabel"> Create a new Acl Object Identity </span>
       </button>
+      <select *ngIf="tenants && tenants!.length > 0" (change)="changeShema($event)">
+        <option>public</option>
+        <option *ngFor="let tenant of tenants">{{ tenant.schema }}</option>
+      </select>
     </div>
   </h2>
 
@@ -36,15 +40,6 @@
           <th scope="col" jhiSortBy="objectIdIdentity">
             <span jhiTranslate="securityApp.aclObjectIdentity.objectIdIdentity">Object Id Identity</span> <fa-icon icon="sort"></fa-icon>
           </th>
-          <th scope="col" jhiSortBy="parentObject">
-            <span jhiTranslate="securityApp.aclObjectIdentity.parentObject">Parent Object</span> <fa-icon icon="sort"></fa-icon>
-          </th>
-          <th scope="col" jhiSortBy="ownerSid">
-            <span jhiTranslate="securityApp.aclObjectIdentity.ownerSid">Owner Sid</span> <fa-icon icon="sort"></fa-icon>
-          </th>
-          <th scope="col" jhiSortBy="entriesInheriting">
-            <span jhiTranslate="securityApp.aclObjectIdentity.entriesInheriting">Entries Inheriting</span> <fa-icon icon="sort"></fa-icon>
-          </th>
           <th scope="col" jhiSortBy="aclClass.className">
             <span jhiTranslate="securityApp.aclObjectIdentity.aclClass">Acl Class</span> <fa-icon icon="sort"></fa-icon>
           </th>
@@ -57,9 +52,6 @@
             <a [routerLink]="['/acl-object-identity', aclObjectIdentity.id, 'view']">{{ aclObjectIdentity.id }}</a>
           </td>
           <td>{{ aclObjectIdentity.objectIdIdentity }}</td>
-          <td>{{ aclObjectIdentity.parentObject }}</td>
-          <td>{{ aclObjectIdentity.ownerSid }}</td>
-          <td>{{ aclObjectIdentity.entriesInheriting }}</td>
           <td>
             <div *ngIf="aclObjectIdentity.aclClass">
               <a [routerLink]="['/acl-class', aclObjectIdentity.aclClass?.id, 'view']">{{ aclObjectIdentity.aclClass?.className }}</a>

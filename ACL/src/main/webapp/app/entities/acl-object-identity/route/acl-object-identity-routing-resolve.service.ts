@@ -9,12 +9,15 @@ import { AclObjectIdentityService } from '../service/acl-object-identity.service
 
 @Injectable({ providedIn: 'root' })
 export class AclObjectIdentityRoutingResolveService implements Resolve<IAclObjectIdentity> {
-  constructor(protected service: AclObjectIdentityService, protected router: Router) {}
+  headers: any;
+  constructor(protected service: AclObjectIdentityService, protected router: Router) {
+    this.headers = { 'X-TENANT-ID': sessionStorage.getItem('X-TENANT-ID') };
+  }
 
   resolve(route: ActivatedRouteSnapshot): Observable<IAclObjectIdentity> | Observable<never> {
     const id = route.params['id'];
     if (id) {
-      return this.service.find(id).pipe(
+      return this.service.find(id, this.headers).pipe(
         mergeMap((aclObjectIdentity: HttpResponse<AclObjectIdentity>) => {
           if (aclObjectIdentity.body) {
             return of(aclObjectIdentity.body);

@@ -11,16 +11,9 @@ public class AclEntryDTO implements Serializable {
 
     private Long id;
 
-    @NotNull
-    private Integer aceOrder;
-
     private AclMaskDTO mask;
 
     private Boolean granting;
-
-    private Boolean auditSuccess;
-
-    private Boolean auditFailure;
 
     private AclSidDTO aclSid;
 
@@ -32,14 +25,6 @@ public class AclEntryDTO implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Integer getAceOrder() {
-        return aceOrder;
-    }
-
-    public void setAceOrder(Integer aceOrder) {
-        this.aceOrder = aceOrder;
     }
 
     public AclMaskDTO getMask() {
@@ -56,22 +41,6 @@ public class AclEntryDTO implements Serializable {
 
     public void setGranting(Boolean granting) {
         this.granting = granting;
-    }
-
-    public Boolean getAuditSuccess() {
-        return auditSuccess;
-    }
-
-    public void setAuditSuccess(Boolean auditSuccess) {
-        this.auditSuccess = auditSuccess;
-    }
-
-    public Boolean getAuditFailure() {
-        return auditFailure;
-    }
-
-    public void setAuditFailure(Boolean auditFailure) {
-        this.auditFailure = auditFailure;
     }
 
     public AclSidDTO getAclSid() {
@@ -116,11 +85,8 @@ public class AclEntryDTO implements Serializable {
     public String toString() {
         return "AclEntryDTO{" +
             "id=" + getId() +
-            ", aceOrder=" + getAceOrder() +
             ", mask=" + getMask() +
             ", granting='" + getGranting() + "'" +
-            ", auditSuccess='" + getAuditSuccess() + "'" +
-            ", auditFailure='" + getAuditFailure() + "'" +
             ", aclSid=" + getAclSid() +
             ", aclObjectIdentity=" + getAclObjectIdentity() +
             "}";

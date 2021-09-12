@@ -19,8 +19,11 @@ export class AclMaskUpdateComponent implements OnInit {
     id: [],
     name: [],
   });
+  headers: any;
 
-  constructor(protected aclMaskService: AclMaskService, protected activatedRoute: ActivatedRoute, protected fb: FormBuilder) {}
+  constructor(protected aclMaskService: AclMaskService, protected activatedRoute: ActivatedRoute, protected fb: FormBuilder) {
+    this.headers = { 'X-TENANT-ID': sessionStorage.getItem('X-TENANT-ID') };
+  }
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ aclMask }) => {
@@ -36,9 +39,9 @@ export class AclMaskUpdateComponent implements OnInit {
     this.isSaving = true;
     const aclMask = this.createFromForm();
     if (aclMask.id !== undefined) {
-      this.subscribeToSaveResponse(this.aclMaskService.update(aclMask));
+      this.subscribeToSaveResponse(this.aclMaskService.update(aclMask, this.headers));
     } else {
-      this.subscribeToSaveResponse(this.aclMaskService.create(aclMask));
+      this.subscribeToSaveResponse(this.aclMaskService.create(aclMask, this.headers));
     }
   }
 

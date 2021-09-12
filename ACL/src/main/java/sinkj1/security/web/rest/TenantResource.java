@@ -1,7 +1,5 @@
 package sinkj1.security.web.rest;
 
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.Authorization;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.sql.SQLException;
@@ -21,6 +19,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import sinkj1.security.repository.TenantRepository;
 import sinkj1.security.service.TenantService;
 import sinkj1.security.service.dto.TenantDTO;
+import sinkj1.security.service.mapper.TenantMapper;
 import sinkj1.security.web.rest.errors.BadRequestAlertException;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.PaginationUtil;
@@ -39,10 +38,13 @@ public class TenantResource {
 
     private final TenantService tenantService;
 
+    private final TenantMapper tenantMapper;
+
     private final TenantRepository tenantRepository;
 
-    public TenantResource(TenantService tenantService, TenantRepository tenantRepository) {
+    public TenantResource(TenantService tenantService, TenantMapper tenantMapper, TenantRepository tenantRepository) {
         this.tenantService = tenantService;
+        this.tenantMapper = tenantMapper;
         this.tenantRepository = tenantRepository;
     }
 
@@ -148,6 +150,13 @@ public class TenantResource {
         Page<TenantDTO> page = tenantService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    @GetMapping("/get-all-tenants")
+    public ResponseEntity<List<TenantDTO>> getAllTenants() {
+        log.debug("REST request to get a page of Tenants");
+        List<TenantDTO> list = tenantMapper.toDto(tenantRepository.findAll());
+        return ResponseEntity.ok().body(list);
     }
 
     /**

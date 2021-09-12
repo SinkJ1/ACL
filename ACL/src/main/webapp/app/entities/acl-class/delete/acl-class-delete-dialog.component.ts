@@ -9,15 +9,17 @@ import { AclClassService } from '../service/acl-class.service';
 })
 export class AclClassDeleteDialogComponent {
   aclClass?: IAclClass;
-
-  constructor(protected aclClassService: AclClassService, protected activeModal: NgbActiveModal) {}
+  headers: any;
+  constructor(protected aclClassService: AclClassService, protected activeModal: NgbActiveModal) {
+    this.headers = { 'X-TENANT-ID': sessionStorage.getItem('X-TENANT-ID') };
+  }
 
   cancel(): void {
     this.activeModal.dismiss();
   }
 
   confirmDelete(id: number): void {
-    this.aclClassService.delete(id).subscribe(() => {
+    this.aclClassService.delete(id, this.headers).subscribe(() => {
       this.activeModal.close('deleted');
     });
   }

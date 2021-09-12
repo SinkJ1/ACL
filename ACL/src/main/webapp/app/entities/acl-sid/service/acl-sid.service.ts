@@ -16,29 +16,32 @@ export class AclSidService {
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
-  create(aclSid: IAclSid): Observable<EntityResponseType> {
-    return this.http.post<IAclSid>(this.resourceUrl, aclSid, { observe: 'response' });
+  create(aclSid: IAclSid, headers: any): Observable<EntityResponseType> {
+    return this.http.post<IAclSid>(this.resourceUrl, aclSid, { observe: 'response', headers });
   }
 
-  update(aclSid: IAclSid): Observable<EntityResponseType> {
-    return this.http.put<IAclSid>(`${this.resourceUrl}/${getAclSidIdentifier(aclSid) as number}`, aclSid, { observe: 'response' });
+  update(aclSid: IAclSid, headers: any): Observable<EntityResponseType> {
+    return this.http.put<IAclSid>(`${this.resourceUrl}/${getAclSidIdentifier(aclSid) as number}`, aclSid, { observe: 'response', headers });
   }
 
-  partialUpdate(aclSid: IAclSid): Observable<EntityResponseType> {
-    return this.http.patch<IAclSid>(`${this.resourceUrl}/${getAclSidIdentifier(aclSid) as number}`, aclSid, { observe: 'response' });
+  partialUpdate(aclSid: IAclSid, headers: any): Observable<EntityResponseType> {
+    return this.http.patch<IAclSid>(`${this.resourceUrl}/${getAclSidIdentifier(aclSid) as number}`, aclSid, {
+      observe: 'response',
+      headers,
+    });
   }
 
-  find(id: number): Observable<EntityResponseType> {
-    return this.http.get<IAclSid>(`${this.resourceUrl}/${id}`, { observe: 'response' });
+  find(id: number, headers: any): Observable<EntityResponseType> {
+    return this.http.get<IAclSid>(`${this.resourceUrl}/${id}`, { observe: 'response', headers });
   }
 
-  query(req?: any): Observable<EntityArrayResponseType> {
+  query(req?: any, headers?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
-    return this.http.get<IAclSid[]>(this.resourceUrl, { params: options, observe: 'response' });
+    return this.http.get<IAclSid[]>(this.resourceUrl, { params: options, observe: 'response', headers });
   }
 
-  delete(id: number): Observable<HttpResponse<{}>> {
-    return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
+  delete(id: number, headers: any): Observable<HttpResponse<{}>> {
+    return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response', headers });
   }
 
   addAclSidToCollectionIfMissing(aclSidCollection: IAclSid[], ...aclSidsToCheck: (IAclSid | null | undefined)[]): IAclSid[] {

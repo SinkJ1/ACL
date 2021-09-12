@@ -14,10 +14,6 @@
         <dd>
           <span>{{ aclEntry.id }}</span>
         </dd>
-        <dt><span jhiTranslate="securityApp.aclEntry.granting">Granting</span></dt>
-        <dd>
-          <span>{{ aclEntry.granting }}</span>
-        </dd>
         <dt><span jhiTranslate="securityApp.aclEntry.aclSid">Acl Sid</span></dt>
         <dd>
           <div *ngIf="aclEntry.aclSid">
@@ -32,8 +28,8 @@
         </dd>
         <dt><span jhiTranslate="securityApp.aclEntry.aclMask">Acl Mask</span></dt>
         <dd>
-          <div *ngIf="aclEntry.aclMask">
-            <a [routerLink]="['/acl-mask', aclEntry.aclMask?.id, 'view']">{{ aclEntry.aclMask?.name }}</a>
+          <div *ngIf="aclEntry.mask">
+            <a [routerLink]="['/acl-mask', aclEntry.mask?.id, 'view']">{{ aclEntry.mask?.name }}</a>
           </div>
         </dd>
       </dl>
