@@ -32,6 +32,11 @@ public class PermissionController {
         this.castingService = castingService;
     }
 
+    @GetMapping("/permission/entities")
+    public ResponseEntity<String> getEntitiesForUser(@RequestHeader(value = "X-TENANT-ID", required = false) String tenantId) {
+        return ResponseEntity.ok("ok");
+    }
+
     @PostMapping("/permission/authority")
     public ResponseEntity<String> addPermissionForAuthority(
         @RequestHeader(value = "X-TENANT-ID", required = false) String tenantId,

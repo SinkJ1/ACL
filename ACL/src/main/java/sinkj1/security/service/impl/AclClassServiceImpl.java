@@ -1,10 +1,16 @@
 package sinkj1.security.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sinkj1.security.domain.AclClass;
@@ -74,5 +80,14 @@ public class AclClassServiceImpl implements AclClassService {
     public void delete(Long id) {
         log.debug("Request to delete AclClass : {}", id);
         aclClassRepository.deleteById(id);
+    }
+
+    @Override
+    public List<String> getAclClassViewForUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        List<GrantedAuthority> authorities = new ArrayList<>(authentication.getAuthorities());
+        List<String> authoritiesStrings = authorities.stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
+        authoritiesStrings.add(authentication.getName());
+        return aclClassRepository.getAclClassViewForUser(authoritiesStrings);
     }
 }

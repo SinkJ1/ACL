@@ -166,6 +166,12 @@ public class AclClassResource {
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
+    @GetMapping("/acl-classes-for-user")
+    public ResponseEntity<List<String>> getAllAclClassesForUser(@RequestHeader(value = "X-TENANT-ID", required = false) String tenantId) {
+        List<String> aclClassDTOs = aclClassService.getAclClassViewForUser();
+        return ResponseEntity.ok().body(aclClassDTOs);
+    }
+
     /**
      * {@code GET  /acl-classes/:id} : get the "id" aclClass.
      *

@@ -67,7 +67,7 @@ export class AclObjectIdentityComponent implements OnInit {
   }
 
   loadTeanants(): void {
-    this.getData('https://practice.sqilsoft.by/internship/yury_sinkevich/acl/get-all-tenants').then(data => {
+    this.getData('https://practice.sqilsoft.by/internship/yury_sinkevich/acl/api/get-all-tenants').then(data => {
       this.tenants = data;
     });
   }
